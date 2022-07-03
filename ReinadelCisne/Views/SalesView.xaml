@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="ReinadelCisne.Views.SalesView">
+    <ContentPage.Content>
+        <StackLayout>
+            <Label Text="Fecha inicio:" />
+
+            <DatePicker x:Name="startDatePicker"
+                    Format="D"
+                    Margin="30, 0, 0, 30"/>
+
+            <Label Text="Fecha fin:" />
+
+            <DatePicker x:Name="endDatePicker"
+                    MinimumDate="{Binding Source={x:Reference startDatePicker},
+                                          Path=Date}"
+                    Format="D"
+                    Margin="30, 0, 0, 30"/>
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

@@ -1,0 +1,85 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:ReinadelCisne.ViewModels"
+             x:Class="ReinadelCisne.Views.InOtherCost">
+    <ContentPage.BindingContext>
+        <vm:InOtherCostVM/>
+    </ContentPage.BindingContext>
+    <Shell.BackButtonBehavior>
+        <BackButtonBehavior Command="{Binding goback}"/>
+    </Shell.BackButtonBehavior>
+    <ContentPage.Content>
+        <Grid Margin="7" RowDefinitions="Auto, Auto, Auto, Auto, Auto, Auto, Auto, 0.8, 2*, 0.8, Auto">
+            <Label Text="Ingresando Otros Costos" HorizontalOptions="Center" Padding="7" FontSize="20" FontAttributes="Bold" TextColor="Black" Grid.Row="0" Grid.ColumnSpan="2"/>
+
+            <Label Text="Descripción" FontSize="17" FontAttributes="Bold" TextColor="Black" Grid.Row="1"/>
+            <Entry Placeholder="nombre"
+                   ClearButtonVisibility="WhileEditing"
+                   FontSize="Small" 
+                   Text="{Binding Description, Mode=TwoWay}" Grid.Row="2" Grid.ColumnSpan="2"/>
+
+            <Label Text="Costo $" HorizontalOptions="End" VerticalOptions="Center" FontSize="17" FontAttributes="Bold" TextColor="Black" Grid.Row="3" Grid.Column="0"/>
+            <Entry Placeholder="Costo"
+                   ClearButtonVisibility="WhileEditing"
+                   Keyboard="Numeric"
+                   Text="{Binding Cost, Mode=TwoWay}" Grid.Row="3" Grid.Column="1"/>
+
+            <Label Text="Elementos" Grid.Row="5" Grid.Column="0"/>
+            <Label Text="{Binding LongList}" Grid.Row="6" Grid.Column="0"/>
+            <Label Text="$ Total otros costos" Grid.Row="5" HorizontalOptions="End" Grid.Column="1" FontSize="15" FontAttributes="Bold" TextColor="Black"/>
+            <Label Text="{Binding Count}" Grid.Row="6" Grid.Column="1" HorizontalOptions="End" FontSize="17" FontAttributes="Bold" TextColor="Black"/>
+
+            <BoxView Color="#096BAF" Grid.Row="7" Grid.ColumnSpan="2"
+             HorizontalOptions="Fill" />
+            
+            <RefreshView IsRefreshing="{Binding IsRefreshing}"
+                             Command="{Binding Path=RefreshCommand}" Grid.Row="8" Grid.ColumnSpan="2">
+                <CollectionView ItemsSource="{Binding OtherCosts, Mode=OneWay}" SelectionMode="None" x:Name="listaOtrosCostos">
+                    <CollectionView.ItemsLayout>
+                        <GridItemsLayout Orientation="Vertical" VerticalItemSpacing="7"/>
+                    </CollectionView.ItemsLayout>
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <Frame BorderColor="Black" Padding="3" CornerRadius="7" BackgroundColor="Transparent">
+                                <SwipeView BackgroundColor="Transparent">
+                                    <SwipeView.RightItems>
+                                        <SwipeItems>
+                                            <SwipeItem Text="Eliminar"
+                                                   BackgroundColor="Red"
+                                                   Command="{Binding Path=BindingContext.DeleteCommand,Source={x:Reference listaOtrosCostos}}" CommandParameter="{Binding .}"
+                                                   />
+                                            <SwipeItem Text="Modificar"
+                                                   BackgroundColor="Blue"
+                                                   Command="{Binding Path=BindingContext.ModifyCommand,Source={x:Reference listaOtrosCostos}}" CommandParameter="{Binding .}"
+                                                   />
+                                        </SwipeItems>
+                                    </SwipeView.RightItems>
+                                    <Grid Padding="10" HorizontalOptions="CenterAndExpand" RowDefinitions="Auto" ColumnDefinitions="55, 2*, 50, Auto, Auto">
+                                        <Label Grid.Column="0" Grid.Row="0" Text="Descrip:"/>
+                                        <Label Grid.Column="1" Grid.Row="0" Text="{Binding DescriptionOC}" TextColor="#102949" FontSize="16"/>
+                                        <Label Grid.Column="2" Grid.Row="0" Text="Valor:"/>
+                                        <Label Grid.Column="3" Grid.Row="0" Text="{Binding CostOC}" TextColor="#102949" FontSize="16"/>
+                                        <Label Grid.Column="4" Grid.Row="0" Text="$" TextColor="#102949" FontSize="16"/>
+                                    </Grid>
+                                </SwipeView>
+                            </Frame>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+            </RefreshView>
+            
+            <BoxView Color="#096BAF" Grid.Row="9" Grid.ColumnSpan="2"
+             HorizontalOptions="Fill" />
+            
+            <StackLayout Orientation="Horizontal" HorizontalOptions="CenterAndExpand" Grid.Row="10" Grid.ColumnSpan="2">
+                <Button Text="Cancelar"
+                    Command="{Binding CancelCommand}"/>
+                <Button Text="Añadir" 
+                    Command="{Binding AddCommand}"/>
+                <Button Text="Finalizar" 
+                    Command="{Binding FinshCommand}"/>
+            </StackLayout>
+        </Grid>        
+    </ContentPage.Content>
+</ContentPage>

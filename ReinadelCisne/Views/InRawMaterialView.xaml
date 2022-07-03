@@ -1,0 +1,117 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:ReinadelCisne.ViewModels"
+             x:Class="ReinadelCisne.Views.InRawMaterialView">
+    <ContentPage.BindingContext>
+        <vm:InRawMaterialVM/>
+    </ContentPage.BindingContext>
+    <Shell.BackButtonBehavior>
+        <BackButtonBehavior Command="{Binding goback}"/>
+    </Shell.BackButtonBehavior>
+    <ContentPage.Content>
+        <Grid RowDefinitions="Auto, Auto, Auto, Auto, Auto, Auto, Auto, Auto, 0.8, 2*, 0.8, Auto" ColumnDefinitions="60" Margin="7">
+            <Label Grid.ColumnSpan="3" Text="Ingresando Materia Prima" TextColor="Black" FontAttributes="Bold" HorizontalOptions="Center" Padding="7" FontSize="20"/>
+
+            <Label Grid.Row="1" Grid.Column="0" Text="Cant." FontSize="17" FontAttributes="Bold" TextColor="Black"/>
+            <Entry Grid.Row="2" Grid.Column="0" Placeholder="Cantidad"
+                   ClearButtonVisibility="WhileEditing"
+                   Keyboard="Numeric"
+                   Text="{Binding AmountRM, Mode=TwoWay}"/>
+
+            <Label Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" Text="Nombre de Material" FontSize="17" FontAttributes="Bold" TextColor="Black"/>
+            <Entry Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="2" Placeholder="Aqui materia prima"
+                        ClearButtonVisibility="WhileEditing"
+                        FontSize="Small" 
+                        Text="{Binding NameRM, Mode=TwoWay}"/>
+
+            <Label Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" Text="Unidad de medida" FontSize="17" FontAttributes="Bold" TextColor="Black"/>
+            <Entry Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" Placeholder="Unidad de medida"
+                        ClearButtonVisibility="WhileEditing"                        
+                        Text="{Binding UnitMeasurementRM, Mode=TwoWay}" PlaceholderColor="#98C54D"/>
+
+            <Label Grid.Row="3" Grid.Column="2" Text="Costo U." FontSize="17" FontAttributes="Bold" TextColor="Black"/>
+            <Entry Grid.Row="4" Grid.Column="2" Placeholder="Costo"
+                        ClearButtonVisibility="WhileEditing"
+                        Keyboard="Numeric"
+                        Text="{Binding CostRM, Mode=TwoWay}"/>
+            
+
+            <StackLayout Orientation="Horizontal" Grid.Row="5" Grid.ColumnSpan="2" RadioButtonGroup.SelectedValue="{Binding TypeRM}">
+                <RadioButton Content="Directa"
+                     TextColor="Red"
+                     Value="Directa"
+                     GroupName="MaterPrim"
+                             FontSize="15"/>
+                <RadioButton Content="Indirecta"
+                     TextColor="Green"
+                     Value="Indirecta"
+                     GroupName="MaterPrim"
+                             FontSize="15"/>
+            </StackLayout>                   
+            
+            <Label Text="Elementos" Grid.Row="6" Grid.Column="0" FontSize="12"/>
+            <Label Text="{Binding LongList}" Grid.Row="7" Grid.Column="0"/>
+            <Label Text="Total $ Materia Prima" Grid.Row="6" Grid.Column="2" FontSize="15" FontAttributes="Bold" TextColor="Black"/>
+            <Label Text="{Binding Count}" Grid.Row="7" Grid.Column="2" FontSize="17" FontAttributes="Bold" TextColor="Black"/>
+
+            <BoxView Color="#096BAF" Grid.Row="8" Grid.ColumnSpan="3"
+             HorizontalOptions="Fill" />
+            
+            <RefreshView IsRefreshing="{Binding IsRefreshing}"
+                             Command="{Binding Path=RefreshCommand}"  Grid.Row="9" Grid.ColumnSpan="3">
+                <CollectionView ItemsSource="{Binding ListRawMl, Mode=OneWay}" SelectionMode="None" x:Name="listaMateriaPrima"> 
+                    <CollectionView.ItemsLayout>
+                        <GridItemsLayout Orientation="Vertical" VerticalItemSpacing="3"/>
+                    </CollectionView.ItemsLayout>
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <Frame BorderColor="Black" Padding="3" CornerRadius="13" BackgroundColor="Transparent">
+                                <SwipeView BackgroundColor="Transparent">
+                                    <SwipeView.RightItems>
+                                        <SwipeItems>
+                                            <SwipeItem Text="Eliminar"
+                                                   BackgroundColor="Red"
+                                                   Command="{Binding Path=BindingContext.DeleteCommand,Source={x:Reference listaMateriaPrima}}" CommandParameter="{Binding .}"
+                                                   />
+                                            <SwipeItem Text="Modificar"
+                                                   BackgroundColor="Blue"
+                                                   Command="{Binding Path=BindingContext.ModifyCommand,Source={x:Reference listaMateriaPrima}}" CommandParameter="{Binding .}"
+                                                   />
+                                        </SwipeItems>
+                                    </SwipeView.RightItems>
+                                    <Grid Margin="0" Padding="4" HorizontalOptions="CenterAndExpand" RowDefinitions="Auto, Auto" ColumnDefinitions="50, Auto, 55, Auto, 10">
+
+                                        <Label Grid.Column="2" Grid.Row="0" Text="Materia"/>
+                                        <Label Grid.Column="3" Grid.Row="0" Text="{Binding NameRM}" TextColor="#102949" FontSize="16"/>
+                                        <Label Grid.Column="0" Grid.Row="1" Text="Unidad"/>
+                                        <Label Grid.Column="1" Grid.Row="1" Text="{Binding UnitMeasurementRM}" TextColor="#102949" FontSize="16"/>
+                                        <Label Grid.Column="2" Grid.Row="1" Text="Costo U."/>
+                                        <Label Grid.Column="3" Grid.Row="1" Text="{Binding CostoRM}" TextColor="#102949" FontSize="16"/>
+                                        <Label Grid.Column="4" Grid.Row="1" Text="$" TextColor="#102949" FontSize="16"/>
+                                        <Label Grid.Column="0" Grid.Row="0" Text="Cant."/>
+                                        <Label Grid.Column="1" Grid.Row="0" Text="{Binding AmountRM}" TextColor="#102949" FontSize="16"/>
+                                    </Grid>
+                                </SwipeView>
+                            </Frame>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+            </RefreshView>
+
+            <BoxView Color="#096BAF" Grid.Row="10" Grid.ColumnSpan="3"
+             HorizontalOptions="Fill" />
+
+            <StackLayout Orientation="Horizontal" Grid.Row="11" Grid.ColumnSpan="3" HorizontalOptions="CenterAndExpand">
+                
+                <Button Text="Cancelar"
+                    Command="{Binding CancelRM}"/>
+                <Button Text="Añadir" 
+                    Command="{Binding AddRM}"/>
+                <Button Text="Finalizar"
+                    Command="{Binding FinishRM}"/>
+            </StackLayout>
+            
+        </Grid>
+    </ContentPage.Content>
+</ContentPage>

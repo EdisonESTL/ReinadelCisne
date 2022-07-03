@@ -1,0 +1,94 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:ReinadelCisne.ViewModels"
+             x:Class="ReinadelCisne.Views.InWorkForce">
+    <ContentPage.BindingContext>
+        <vm:InWorkForceVM/>
+    </ContentPage.BindingContext>
+    <Shell.BackButtonBehavior>
+        <BackButtonBehavior Command="{Binding goback}"/>
+    </Shell.BackButtonBehavior>
+    <ContentPage.Content>
+        <Grid RowDefinitions="Auto, Auto, Auto, Auto, Auto, Auto, Auto, 0.8, 2*, 0.8, Auto" ColumnDefinitions="70" Margin="7">
+            <Label Text="Ingresando Mano de Obra" HorizontalOptions="Center" Padding="7" TextColor="Black" FontAttributes="Bold" FontSize="20" Grid.Row="0" Grid.ColumnSpan="2"/>
+
+            <Label Text="Nombre puesto" TextColor="Black" FontAttributes="Bold" FontSize="17" Grid.Row="1" Grid.Column="1"/>
+            <Entry Placeholder="Profesional"
+                        ClearButtonVisibility="WhileEditing"
+                        FontSize="Small" 
+                        Text="{Binding Profesional, Mode=TwoWay}" Grid.Row="2" Grid.Column="1"/>
+
+            <Label Text="Cant." TextColor="Black" FontAttributes="Bold" FontSize="17" Grid.Row="1" Grid.Column="0"/>
+            <Entry Placeholder="Cuantidad de profesionales necesrios"
+                        ClearButtonVisibility="WhileEditing"
+                   Keyboard="Numeric"
+                        Text="{Binding NumberProf, Mode=TwoWay}" Grid.Row="2" Grid.Column="0"/>
+
+            <Label Text="Pago/Salario" TextColor="Black" FontAttributes="Bold" FontSize="17" Grid.Row="3" Grid.Column="1"/>
+            <Entry Placeholder="Sueldo unitario"
+                        ClearButtonVisibility="WhileEditing"
+                        Keyboard="Numeric"
+                        Text="{Binding Salary, Mode=TwoWay}" Grid.Row="4" Grid.Column="1"/>
+
+            <Label Text="Elementos" Grid.Row="5" Grid.Column="0"/>
+            <Label Text="{Binding LongList}" Grid.Row="6" Grid.Column="0"/>
+            <Label Text="$ Total mano de obra" Grid.Row="5" Grid.Column="1" TextColor="Black" FontAttributes="Bold" FontSize="15" HorizontalOptions="End"/>
+            <Label Text="{Binding Count}" Grid.Row="6" Grid.Column="1" TextColor="Black" FontAttributes="Bold" FontSize="17" HorizontalOptions="End"/>
+            
+            <BoxView Color="#096BAF" Grid.Row="7" Grid.ColumnSpan="2"
+             HorizontalOptions="Fill" />
+
+            <RefreshView IsRefreshing="{Binding IsRefreshing}"
+                             Command="{Binding Path=RefreshCommand}" Grid.Row="8" Grid.ColumnSpan="2">
+                <CollectionView ItemsSource="{Binding Works, Mode=OneWay}" SelectionMode="None" x:Name="listaManoObra">
+                    <CollectionView.ItemsLayout>
+                        <GridItemsLayout Orientation="Vertical" VerticalItemSpacing="10"/>
+                    </CollectionView.ItemsLayout>
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <Frame BorderColor="Black" Padding="3" CornerRadius="7" BackgroundColor="Transparent">
+                                <SwipeView BackgroundColor="Transparent">
+                                    <SwipeView.RightItems>
+                                        <SwipeItems>
+                                            <SwipeItem Text="Eliminar"
+                                                   BackgroundColor="Red"
+                                                   Command="{Binding Path=BindingContext.DeleteCommand,Source={x:Reference listaManoObra}}" CommandParameter="{Binding .}"
+                                                   />
+                                            <SwipeItem Text="Modificar"
+                                                   BackgroundColor="Blue"
+                                                   Command="{Binding Path=BindingContext.ModifyCommand,Source={x:Reference listaManoObra}}" CommandParameter="{Binding .}"
+                                                   />
+                                        </SwipeItems>
+                                    </SwipeView.RightItems>
+                                    <Grid Margin="2" Padding="0" HorizontalOptions="CenterAndExpand" RowDefinitions="Auto, Auto" ColumnDefinitions="50, 2*, 50, Auto, Auto">                                        
+                                        <Label Grid.Column="0" Grid.Row="0" Text="Puesto"/>
+                                        <Label Grid.Column="1" Grid.Row="0" Text="{Binding Profesional}" TextColor="#102949" FontSize="16"/>
+                                        <Label Grid.Column="2" Grid.Row="0" Text="Salario"/>
+                                        <Label Grid.Column="3" Grid.Row="0" Text="{Binding UnitSalary}" TextColor="#102949" FontSize="16"/>
+                                        <Label Grid.Column="4" Grid.Row="0" Text="$" TextColor="#102949" FontSize="16"/>
+                                        <Label Grid.Column="0" Grid.Row="1" Text="Cant."/>
+                                        <Label Grid.Column="1" Grid.Row="1" Text="{Binding Amount}" TextColor="#102949" FontSize="16"/>
+                                        
+                                    </Grid>
+                                </SwipeView>
+                            </Frame>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+            </RefreshView>
+            
+            <BoxView Color="#096BAF" Grid.Row="9" Grid.ColumnSpan="2"
+             HorizontalOptions="Fill" />
+            
+            <StackLayout Orientation="Horizontal" HorizontalOptions="CenterAndExpand" Grid.Row="10" Grid.ColumnSpan="2">
+                <Button Text="Cancelar"
+                    Command="{Binding CancelCommand}" Grid.Row="13"/>
+                <Button Text="Añadir" 
+                    Command="{Binding AddWFCommand}" Grid.Row="13"/>                
+                <Button Text="Finalizar"
+                    Command="{Binding FinshCommand}" Grid.Row="13"/>
+            </StackLayout>
+        </Grid>
+    </ContentPage.Content>
+</ContentPage>

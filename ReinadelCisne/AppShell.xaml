@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Shell xmlns="http://xamarin.com/schemas/2014/forms"
+       xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+       xmlns:views="clr-namespace:ReinadelCisne.Views"
+       x:Class="ReinadelCisne.AppShell">
+    <FlyoutItem Title="Inicio">
+        <ShellContent ContentTemplate="{DataTemplate views:GoView}" Route="RGo"/>
+    </FlyoutItem>
+    <FlyoutItem Title="Stock">
+        <ShellContent ContentTemplate="{DataTemplate views:StockView}" Route="RStock"/>
+    </FlyoutItem>
+    <FlyoutItem Title="Ventas">
+        <ShellContent ContentTemplate="{DataTemplate views:SalesView}" Route="RSales"/>
+    </FlyoutItem>
+    <FlyoutItem Title="Materia Prima">
+        <ShellContent ContentTemplate="{DataTemplate views:RawMaterial}" Route="RRaw"/>
+    </FlyoutItem>
+    
+</Shell>
