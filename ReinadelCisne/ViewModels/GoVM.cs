@@ -43,8 +43,8 @@ namespace ReinadelCisne.ViewModels
             }
         }
         public ObservableCollection<ProductModel> ListPS { get; private set; } = new ObservableCollection<ProductModel>();
-        public List<ProductModel> ListOrder { get; set; } = new List<ProductModel>();
         
+        private List<OrderModel> Order { get; set; } = new List<OrderModel>();
         //Actualiza lista de prodcutos a vender
         public ICommand RefreshCommand => new Command(() =>
         {
@@ -59,8 +59,10 @@ namespace ReinadelCisne.ViewModels
         public ICommand SelectedCommand => new Command((obj) =>
         {
             ProductModel prods = obj as ProductModel;
-            ListOrder.Add(prods);
-            SumarOrden(prods);            
+            
+            
+            //ListOrder.Add(prods);
+            SumarOrden(prods);
         });
 
         //Limpiar
@@ -72,24 +74,25 @@ namespace ReinadelCisne.ViewModels
         //Guarda la venta
         public ICommand NewCommand => new Command(() =>
         {
-            if (ListOrder != null)
+            if (Order != null)
             {                
                 SaleModel d = new SaleModel();
                 d.DateSale = DateTime.Now;
                 d.TotalSale = Cuenta;
-                var f = App.Database.SaveSale(d);
-
-                d.Orders = new List<ProductModel>();
                 
-                foreach(var s in ListOrder)
+                App.Database.SaveSale(d);
+                d.Orders = new List<OrderModel>();
+
+                foreach (var obj in Order)
                 {
-                    d.Orders.Add(s);
+                    App.Database.SaveOrder(obj);
+                    d.Orders.Add(obj);
                     App.Database.UpdateRealtionSales(d);
-                }
+                }                
                                 
                 ClearOrder();
                 d = null;
-                //RefreshCommand();
+                ListProductStock();
             }            
         });
 
@@ -126,16 +129,17 @@ namespace ReinadelCisne.ViewModels
         {
             var res = await Shell.Current.DisplayPromptAsync(selectedPS.NameProduct, "Cuantos desea?", initialValue: "1", maxLength: 2, keyboard: Keyboard.Numeric);
             
-            OrderModel order = new OrderModel
+            if (!string.IsNullOrEmpty(res))
             {
-                AmountProduct = int.Parse(res)
-            };
+                OrderModel pedido = new OrderModel
+                {
+                    ProductModelId = selectedPS.Id,
+                    AmountProduct = int.Parse(res)
+                };
 
-            if (res != null)
-            {
                 Cuenta += selectedPS.PriceProduct * int.Parse(res);
-                
-                await App.Database.SaveOrder(order);
+
+                Order.Add(pedido);
             }
         }
 
@@ -143,7 +147,7 @@ namespace ReinadelCisne.ViewModels
         private void ClearOrder()
         {
             Cuenta = 0.00;
-            ListOrder.Clear();
+            Order.Clear();
         }
     }
 }

@@ -12,6 +12,9 @@
     <FlyoutItem Title="Ventas">
         <ShellContent ContentTemplate="{DataTemplate views:SalesView}" Route="RSales"/>
     </FlyoutItem>
+    <FlyoutItem Title="Compras">
+        <ShellContent ContentTemplate="{DataTemplate views:ShoppingView}" Route="RShopping"/>
+    </FlyoutItem>
     <FlyoutItem Title="Materia Prima">
         <ShellContent ContentTemplate="{DataTemplate views:RawMaterial}" Route="RRaw"/>
     </FlyoutItem>

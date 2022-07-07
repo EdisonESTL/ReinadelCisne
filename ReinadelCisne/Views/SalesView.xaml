@@ -1,22 +1,43 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:ReinadelCisne.ViewModels"
              x:Class="ReinadelCisne.Views.SalesView">
+    <ContentPage.BindingContext>
+        <vm:SalesVM/>
+    </ContentPage.BindingContext>
     <ContentPage.Content>
-        <StackLayout>
-            <Label Text="Fecha inicio:" />
-
-            <DatePicker x:Name="startDatePicker"
-                    Format="D"
-                    Margin="30, 0, 0, 30"/>
-
-            <Label Text="Fecha fin:" />
-
-            <DatePicker x:Name="endDatePicker"
-                    MinimumDate="{Binding Source={x:Reference startDatePicker},
-                                          Path=Date}"
-                    Format="D"
-                    Margin="30, 0, 0, 30"/>
-        </StackLayout>
+        <Grid Margin="20" RowSpacing="20" Padding="0" RowDefinitions="Auto, 0.8, 2*, Auto, Auto" HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand">            
+            <Button BackgroundColor="#0EFFF9" BorderColor="#096BAF" BorderWidth="1" Text="Día" Command="{Binding DayCommand}" Grid.Column="0" Grid.Row="0" HorizontalOptions="CenterAndExpand" VerticalOptions="Center"/>
+            <Button BackgroundColor="#0EFFF9" BorderColor="#096BAF" BorderWidth="1" Text="Mes" Command="{Binding MounthCommand}" Grid.Column="1" Grid.Row="0" HorizontalOptions="CenterAndExpand"/>
+            <Button BackgroundColor="#0EFFF9" BorderColor="#096BAF" BorderWidth="1" Text="Año" Command="{Binding YearCommand}" Grid.Column="2" Grid.Row="0" HorizontalOptions="CenterAndExpand"/>
+            <BoxView Color="#096BAF" Grid.Row="1" Grid.ColumnSpan="3"
+             HorizontalOptions="Fill" />
+            <CollectionView ItemsSource="{Binding Ventas, Mode=OneWay}" SelectionMode="None" x:Name="listaMateriaPrima" Grid.ColumnSpan="3" Grid.Row="2">
+                <CollectionView.ItemsLayout>
+                    <LinearItemsLayout Orientation="Vertical" ItemSpacing="7"/>
+                </CollectionView.ItemsLayout>
+                <CollectionView.Header>
+                    <Grid ColumnDefinitions="120, 2*, 2*">
+                        <Label Text="Producto/Servicio" FontSize="17" FontAttributes="Bold" TextColor="Black" Grid.Column="0" HorizontalTextAlignment="Center"/>
+                        <Label Text="Unidades Vendidas" FontSize="17" FontAttributes="Bold" TextColor="Black" Grid.Column="1" HorizontalTextAlignment="Center"/>
+                        <Label Text="Total" FontSize="17" FontAttributes="Bold" TextColor="Black" Grid.Column="2" HorizontalTextAlignment="Center"/>
+                    </Grid>
+                </CollectionView.Header>
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Grid Padding="0" ColumnDefinitions="120, 2*, 2*">
+                            <Label Grid.Column="0" Text="{Binding Name}" HorizontalTextAlignment="Center"/>
+                            <Label Grid.Column="1" Text="{Binding canT}" HorizontalTextAlignment="Center"/>
+                            <Label Grid.Column="2" Text="{Binding TT}" HorizontalTextAlignment="Center"/>
+                        </Grid>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+            <Label Text="Total vendido" Grid.Row="3" Grid.ColumnSpan="2" FontSize="17" FontAttributes="Bold" TextColor="Black"/>
+            <Label Text="{Binding SalesTotal}" Grid.Row="3" Grid.Column="2"/>
+            <Label Text="Total comprado" Grid.Row="4" Grid.ColumnSpan="2"/>
+            <Label Text="0" Grid.Row="4" Grid.Column="2"/>
+        </Grid>
     </ContentPage.Content>
 </ContentPage>

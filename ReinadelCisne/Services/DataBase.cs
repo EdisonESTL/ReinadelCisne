@@ -5,9 +5,8 @@ using SQLite;
 using ReinadelCisne.Models;
 using System.Threading.Tasks;
 using SQLiteNetExtensionsAsync.Extensions;
-using SQLiteNetExtensions.Attributes;
-using SQLiteNetExtensions.Exceptions;
-using SQLiteNetExtensions.Extensions;
+using System.Linq;
+using System.Data;
 
 namespace ReinadelCisne.Services
 {
@@ -52,7 +51,7 @@ namespace ReinadelCisne.Services
             return g;
         }
 
-        public Task<int> DeleteProduct(ProductModel obj)
+        public Task DeleteProduct(ProductModel obj)
         {
             return _database.DeleteAsync(obj);
         }
@@ -80,12 +79,17 @@ namespace ReinadelCisne.Services
             return _database.GetAllWithChildrenAsync<SaleModel>();
         }
 
-        public Task<int> DeleteSale(SaleModel sale)
+        public Task<List<OrderModel>> ListOrders()
         {
-            return _database.DeleteAsync(sale);
+            return _database.GetAllWithChildrenAsync<OrderModel>();
         }
 
-        public Task<int> SaveOrder(OrderModel order)
+        public Task DeleteSale(SaleModel sale)
+        {
+            return _database.DeleteAsync(sale, recursive: true);
+        }
+
+        public Task SaveOrder(OrderModel order)
         {
             return _database.InsertAsync(order);
         }
@@ -94,6 +98,20 @@ namespace ReinadelCisne.Services
         {
             return _database.UpdateWithChildrenAsync(sale);
         }
+
+        /*public Task<SaleModel> GetVentasDate(DateTime dateI, DateTime dateF)
+        {
+            var Sales = ListSales();
+            var Orders = ListOrders();
+            var Products = ListProduct();
+            var fg = from o in Orders
+                     join s in Sales on o equals
+                     join p in Products
+                     where s.DateSale >= dateI && s.DateSale <= dateF
+                     select s;
+
+            return fg;
+        }*/
         //Procesos de Materia prima
         public Task<int> SaveListRM(ListRMModel listRawMaterial)
         {
@@ -234,9 +252,7 @@ namespace ReinadelCisne.Services
 
         public Task UpdateListOC(ListOCModel listOC)
         {
-            var t = _database.UpdateWithChildrenAsync(listOC);
-
-            return t;
+            return _database.UpdateWithChildrenAsync(listOC);            
         }
 
         public Task<List<ListOCModel>> GetListsOC()

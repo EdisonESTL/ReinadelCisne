@@ -10,8 +10,10 @@
     <ContentPage.Content>
         <Grid RowDefinitions="Auto, Auto, Auto, 0.8, Auto, Auto, Auto, Auto, Auto, 0.8, Auto, Auto, 0.8, Auto" Margin="7" RowSpacing="4">
             <Label Text="Ingreso de Producto/Servicio" HorizontalOptions="Center" Grid.Row="0" Grid.ColumnSpan="2" FontSize="Subtitle"/>
+            
             <BoxView Color="#096BAF" Grid.Row="3" Grid.ColumnSpan="2" VerticalOptions="End"
              HorizontalOptions="Fill" />
+            
             <Label Text="Nombre:" Grid.Row="1"/>            
             <Entry Text="{Binding NamePS, Mode=TwoWay}" Placeholder="Aquí escribe el nombre" Grid.Row="2" Grid.ColumnSpan="2"/>
   
@@ -35,15 +37,13 @@
 
             <BoxView Color="#096BAF" Grid.Row="12" Grid.ColumnSpan="2" VerticalOptions="End"/>
             
-            <StackLayout Grid.Row="13" Grid.ColumnSpan="2">
-                <Grid ColumnDefinitions="Auto, Auto, Auto" HorizontalOptions="Center">
-                    <Button Text="Cancelar"
+            <StackLayout Grid.Row="13" Grid.ColumnSpan="2" VerticalOptions="End" Orientation="Horizontal" HorizontalOptions="Center">
+                <Button Text="Cancelar"
                     Command="{Binding Cancel}" Grid.Column="0"/>
-                    <Button Text="Guardar"
+                <Button Text="Guardar"
                     Command="{Binding Save}" Grid.Column="1"/>
-                    <Button Text="Registro"
+                <Button Text="Registro"
                     Command="{Binding Registration}" Grid.Column="2"/>
-                </Grid>                               
             </StackLayout>
         </Grid>
     </ContentPage.Content>

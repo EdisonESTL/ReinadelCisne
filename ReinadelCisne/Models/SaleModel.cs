@@ -13,7 +13,7 @@ namespace ReinadelCisne.Models
         public DateTime DateSale { get; set; }
         public double TotalSale { get; set; }
 
-        [ManyToMany(typeof(OrderModel))]
-        public List<ProductModel> Orders {get; set;}
+        [OneToMany("SaleModeld", CascadeOperations = CascadeOperation.CascadeDelete)]
+        public List<OrderModel> Orders {get; set;}
     }
 }

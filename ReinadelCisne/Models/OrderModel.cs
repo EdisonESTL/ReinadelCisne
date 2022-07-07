@@ -8,6 +8,9 @@ namespace ReinadelCisne.Models
 {
     public class OrderModel
     {
+        [PrimaryKey, AutoIncrement]
+        public int Id { get; set; }
+
         [ForeignKey(typeof(SaleModel))]
         public int SaleModeld { get; set; }
 

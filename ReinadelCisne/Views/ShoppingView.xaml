@@ -1,0 +1,99 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:ReinadelCisne.ViewModels"
+             x:Class="ReinadelCisne.Views.ShoppingView">
+    <ContentPage.BindingContext>
+        <vm:ShoppingVM/>
+    </ContentPage.BindingContext>
+    <ContentPage.Content>
+        <Grid RowDefinitions="Auto, Auto, Auto, Auto, Auto, Auto, Auto, Auto, Auto, 2*, Auto" RowSpacing="3" Margin="7">
+            <Label Text="Registrando Compra" Grid.Row="0" Grid.ColumnSpan="3" HorizontalOptions="Center"/>
+
+            <Label Text="Fecha" Grid.Row="1"/>
+            <Label Text="{Binding Date}" Grid.Row="1" Grid.Column="1"/>
+            
+            <Label Text="Numero comprobante" Grid.Row="2" Grid.Column="0"/>
+            <Entry Placeholder="0*" Text="{Binding InvoiceNumber}" Grid.Row="2" Grid.Column="1"/>
+
+            <Label Text="Total" Grid.Row="1" Grid.Column="2" HorizontalOptions="Center"/>
+            <Label Text="{Binding TotalInv}" Grid.Row="2" Grid.Column="2" HorizontalOptions="Center" VerticalOptions="Center"/>
+            
+            <Label Text="Almacén" Grid.Row="3" Grid.Column="0"/>
+            <Entry Placeholder="tienda abc*" Text="{Binding NameEstablishment}" Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="2"/>
+            
+            <Label Text="Cantidad" Grid.Row="4" Grid.Column="0"/>
+            <Entry Placeholder="3*" Text="{Binding Amount}" Grid.Row="5" Grid.Column="0"/>
+
+            <Label Text="Unidad de medida" Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="2"/>
+            <Entry Placeholder="metro*" Text="{Binding Measurement}" Grid.Row="5" Grid.Column="1" Grid.ColumnSpan="2"/>
+            
+            <Label Text="Descripción" Grid.Row="6" Grid.ColumnSpan="2"/>
+            <Entry Placeholder="cuero*" Text="{Binding Description}" Grid.Row="7" Grid.ColumnSpan="2"/>
+            
+            <Label Text="Costo Unitario" Grid.Row="6" Grid.Column="2"/>
+            <Entry Placeholder="0*" Text="{Binding UnitCost}" Grid.Row="7" Grid.Column="2"/>
+
+            <StackLayout Grid.Row="8" Grid.Column="0" Orientation="Horizontal" VerticalOptions="Center">
+                <Label Text="# Elem." />
+                <Label Text="{Binding LongList}"/>
+            </StackLayout>
+            
+            <Button Text="Añadir" Command="{Binding AddCompra}" Grid.Row="8" Grid.Column="2"/>
+
+            <RefreshView IsRefreshing="{Binding IsRefreshing}"
+                             Command="{Binding Path=RefreshCommand}"  Grid.Row="9" Grid.ColumnSpan="3">
+                <CollectionView ItemsSource="{Binding ListCompra, Mode=OneWay}" SelectionMode="None" x:Name="listaMateriaPrima">
+                    <CollectionView.ItemsLayout>
+                        <GridItemsLayout Orientation="Vertical" VerticalItemSpacing="3"/>
+                    </CollectionView.ItemsLayout>
+                    <CollectionView.Header>
+                        <Grid ColumnDefinitions="50, 120, 50, 2*">
+                            <Label Text="Cant." FontSize="17" FontAttributes="Bold" TextColor="Black" Grid.Column="0" HorizontalTextAlignment="Center"/>
+                            <Label Text="Descripción" FontSize="17" FontAttributes="Bold" TextColor="Black" Grid.Column="1" HorizontalTextAlignment="Center"/>
+                            <Label Text="C/U $" FontSize="17" FontAttributes="Bold" TextColor="Black" Grid.Column="2" HorizontalTextAlignment="Center"/>
+                            <Label Text="Total $" FontSize="17" FontAttributes="Bold" TextColor="Black" Grid.Column="3" HorizontalTextAlignment="Center"/>
+                        </Grid>
+                    </CollectionView.Header>
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <Frame BorderColor="Black" Padding="3" CornerRadius="13" BackgroundColor="Transparent">
+                                <SwipeView BackgroundColor="Transparent">
+                                    <SwipeView.RightItems>
+                                        <SwipeItems>
+                                            <SwipeItem Text="Eliminar"
+                                                   BackgroundColor="Red"
+                                                   Command="{Binding Path=BindingContext.DeleteCommand,Source={x:Reference listaMateriaPrima}}" CommandParameter="{Binding .}"
+                                                   />
+                                            <SwipeItem Text="Modificar"
+                                                   BackgroundColor="Blue"
+                                                   Command="{Binding Path=BindingContext.ModifyCommand,Source={x:Reference listaMateriaPrima}}" CommandParameter="{Binding .}"
+                                                   />
+                                        </SwipeItems>
+                                    </SwipeView.RightItems>
+                                    <Grid ColumnDefinitions="50, 120, 50, 2*">
+                                        <Label Grid.Column="0" Text="{Binding Amount}" TextColor="#102949" FontSize="16" HorizontalTextAlignment="Center"/>
+                                        <Label Grid.Column="1" Text="{Binding Description}" TextColor="#102949" FontSize="16" HorizontalTextAlignment="Center"/>
+                                        <Label Grid.Column="2" Text="{Binding UnitCost}" TextColor="#102949" FontSize="16" HorizontalTextAlignment="Center"/>
+                                        <Label Grid.Column="3" Text="{Binding TotalCost}" TextColor="#102949" FontSize="16" HorizontalTextAlignment="Center"/>
+                                    </Grid>
+                                </SwipeView>
+                            </Frame>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+            </RefreshView>
+            
+
+            <StackLayout Orientation="Horizontal" Grid.Row="10" Grid.ColumnSpan="3" HorizontalOptions="CenterAndExpand" VerticalOptions="End">
+
+                <Button Text="Cancelar"
+                    Command="{Binding CancelRM}"/>
+                <Button Text="Guardar" 
+                    Command="{Binding AddRM}"/>
+                <Button Text="Registro"
+                    Command="{Binding FinishRM}"/>
+            </StackLayout>
+        </Grid>
+    </ContentPage.Content>
+</ContentPage>
