@@ -26,8 +26,72 @@ namespace ReinadelCisne.Services
             _database.CreateTableAsync<ListWFModel>();
             _database.CreateTableAsync<OtherCostModel>();
             _database.CreateTableAsync<ListOCModel>();
+            _database.CreateTableAsync<ShoppingModel>();
+            _database.CreateTableAsync<ShoppingListModel>();
+            _database.CreateTableAsync<ActivityModel>();
         }
 
+        //Procesos Actividades
+        public Task<int> SaveActivity(ActivityModel activity)
+        {
+            if (activity.Id != 0)
+            {
+                return _database.UpdateAsync(activity);
+            }
+            else
+            {
+                return _database.InsertAsync(activity);
+            }
+        }
+        public Task<List<ActivityModel>> ListActivity()
+        {
+            return _database.Table<ActivityModel>().ToListAsync();
+        }
+        //Procesos de Compras
+        public Task<int> SaveShopping(ShoppingModel shopping)
+        {
+            if (shopping.Id != 0)
+            {
+                return _database.UpdateAsync(shopping);
+            }
+            else
+            {
+                return _database.InsertAsync(shopping);
+            }
+        }
+        public Task UpdateRelationsSh(ShoppingModel shopping)
+        {
+            return _database.UpdateWithChildrenAsync(shopping);
+        }
+        public Task<ShoppingModel> GetShopping(int id)
+        {
+            return _database.GetWithChildrenAsync<ShoppingModel>(id);
+        }
+        
+        public Task<int> SaveListShop(ShoppingListModel shoppingList)
+        {
+            if (shoppingList.Id != 0)
+            {
+                return _database.UpdateAsync(shoppingList);
+            }
+            else
+            {
+                return _database.InsertAsync(shoppingList);
+            }
+        }
+        public Task<ShoppingListModel> GetListShopping(int id)
+        {
+            return _database.GetWithChildrenAsync<ShoppingListModel>(id);
+        }
+        
+        public Task<List<ShoppingModel>> ListShopping()
+        {
+            return _database.GetAllWithChildrenAsync<ShoppingModel>();
+        }
+        public Task<List<ShoppingListModel>> ListShoppingList()
+        {
+            return _database.GetAllWithChildrenAsync<ShoppingListModel>();
+        }
         //Procesos de Productos
         public Task<int> SaveProduct(ProductModel product)
         {
@@ -40,7 +104,6 @@ namespace ReinadelCisne.Services
                 return _database.InsertAsync(product);
             }
         }
-
         public Task UpdateRelationsRM(ProductModel product)
         {
             return _database.UpdateWithChildrenAsync(product);
@@ -50,12 +113,10 @@ namespace ReinadelCisne.Services
             var g = _database.GetAllWithChildrenAsync<ProductModel>();
             return g;
         }
-
         public Task DeleteProduct(ProductModel obj)
         {
             return _database.DeleteAsync(obj);
         }
-
         public Task<ProductModel> Get1Product(int idproduct)
         {
             return _database.GetWithChildrenAsync<ProductModel>(idproduct);
@@ -73,46 +134,44 @@ namespace ReinadelCisne.Services
                 return _database.InsertAsync(sale);
             }
         }
-
         public Task<List<SaleModel>> ListSales()
         {
             return _database.GetAllWithChildrenAsync<SaleModel>();
         }
-
         public Task<List<OrderModel>> ListOrders()
         {
             return _database.GetAllWithChildrenAsync<OrderModel>();
         }
-
         public Task DeleteSale(SaleModel sale)
         {
             return _database.DeleteAsync(sale, recursive: true);
         }
-
         public Task SaveOrder(OrderModel order)
         {
             return _database.InsertAsync(order);
         }
-
         public Task UpdateRealtionSales(SaleModel sale)
         {
             return _database.UpdateWithChildrenAsync(sale);
         }
 
-        /*public Task<SaleModel> GetVentasDate(DateTime dateI, DateTime dateF)
-        {
-            var Sales = ListSales();
-            var Orders = ListOrders();
-            var Products = ListProduct();
-            var fg = from o in Orders
-                     join s in Sales on o equals
-                     join p in Products
-                     where s.DateSale >= dateI && s.DateSale <= dateF
-                     select s;
-
-            return fg;
-        }*/
         //Procesos de Materia prima
+        public Task<int> SaveRawMaterial(RawMaterialModel rawMaterial)
+        {
+            if (rawMaterial.Id != 0)
+            {
+                return _database.UpdateAsync(rawMaterial);
+            }
+            else
+            {
+                return _database.InsertAsync(rawMaterial);
+            }
+        }
+        public Task UpdateRealtionRawMat(RawMaterialModel rawMaterial)
+        {
+            return _database.UpdateWithChildrenAsync(rawMaterial);
+        }
+
         public Task<int> SaveListRM(ListRMModel listRawMaterial)
         {
             if (listRawMaterial.Id != 0)
@@ -128,6 +187,7 @@ namespace ReinadelCisne.Services
             }
             
         }
+       
         public Task<ListRMModel> GetListRM(int i)
         {
             return _database.GetWithChildrenAsync<ListRMModel>(i);
@@ -139,21 +199,9 @@ namespace ReinadelCisne.Services
             return _database.GetAllWithChildrenAsync<ListRMModel>();
         }
 
-        public Task<int> SaveRawMaterial(RawMaterialModel rawMaterial)
-        {
-            if (rawMaterial.Id != 0)
-            {
-                return _database.UpdateAsync(rawMaterial);
-            }
-            else
-            {
-                return _database.InsertAsync(rawMaterial);
-            }
-        }
-                
         public Task<List<RawMaterialModel>> GetMR()
         {
-            return _database.Table<RawMaterialModel>().ToListAsync();
+            return _database.GetAllWithChildrenAsync<RawMaterialModel>();
         }
 
         public Task UpdateListRM(ListRMModel listRMModel)

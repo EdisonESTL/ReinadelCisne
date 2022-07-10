@@ -1,0 +1,45 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="ReinadelCisne.Views.ActivityRegistrationView"
+             xmlns:vm="clr-namespace:ReinadelCisne.ViewModels"
+             Title="Registro de Actividades">
+    <ContentPage.BindingContext>
+        <vm:ActivityResgitrationVM/>
+    </ContentPage.BindingContext>
+    <ContentPage.Content>
+        <Grid Margin="7" RowSpacing="7" RowDefinitions="Auto, 0.8, 2*, Auto, Auto" HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand">
+            <Button BackgroundColor="#0EFFF9" BorderColor="#096BAF" BorderWidth="1" Text="Día" Command="{Binding DayActivity}" Grid.Column="0" Grid.Row="0" HorizontalOptions="CenterAndExpand" VerticalOptions="Center"/>
+            <Button BackgroundColor="#0EFFF9" BorderColor="#096BAF" BorderWidth="1" Text="Semana" Command="{Binding WeekActivity}" Grid.Column="1" Grid.Row="0" HorizontalOptions="CenterAndExpand" VerticalOptions="Center"/>
+            <Button BackgroundColor="#0EFFF9" BorderColor="#096BAF" BorderWidth="1" Text="Mes" Command="{Binding MonthActivity}" Grid.Column="2" Grid.Row="0" HorizontalOptions="CenterAndExpand"/>
+
+            <BoxView Color="#096BAF" Grid.Row="1" Grid.ColumnSpan="3" HorizontalOptions="Fill" />
+
+            <CollectionView ItemsSource="{Binding Activities, Mode=OneWay}" SelectionMode="None" x:Name="listaMateriaPrima" 
+                            Grid.ColumnSpan="3" Grid.Row="2" HorizontalOptions="Center">
+                <CollectionView.ItemsLayout>
+                    <LinearItemsLayout Orientation="Vertical" ItemSpacing="7"/>
+                </CollectionView.ItemsLayout>
+                <CollectionView.Header>
+                    <Grid>
+                        <Label Text="Fecha" FontSize="17" FontAttributes="Bold" TextColor="Black" Grid.Column="0" HorizontalTextAlignment="Center"/>
+                        <Label Text="Desde:" FontSize="17" FontAttributes="Bold" TextColor="Black" Grid.Column="1" HorizontalTextAlignment="Center"/>
+                        <Label Text="Hasta:" FontSize="17" FontAttributes="Bold" TextColor="Black" Grid.Column="2" HorizontalTextAlignment="Center"/>
+                    </Grid>
+                </CollectionView.Header>
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Frame BorderColor="DarkGray" HasShadow="True">
+                            <Grid Padding="0">
+                                <DatePicker Date="{Binding DateA}" Format="M" IsEnabled="True" Grid.Column="0"/>
+                                <TimePicker Time="{Binding TimeI}" Format="HH:mm" Grid.Column="1"/>
+                                <TimePicker Time="{Binding TimeF}" Format="HH:mm" Grid.Column="2"/>
+                                <Label Grid.Row="1" Grid.ColumnSpan="3" Text="{Binding Description}" TextColor="Black" FontSize="18" HorizontalTextAlignment="Center"/>
+                            </Grid>
+                        </Frame>                        
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>            
+        </Grid>
+    </ContentPage.Content>
+</ContentPage>

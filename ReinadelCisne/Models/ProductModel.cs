@@ -16,28 +16,25 @@ namespace ReinadelCisne.Models
         public double UtilityProduct { get; set; }
         public double PriceProduct { get; set; }
 
-        //Relacion con Lista de orden
+        //Relacion con OrderModel
         [OneToMany("ProductModelId")]
         public List<OrderModel> Orders { get; set; }
 
-        //Relacion con materia prima
+        //Relacion con ListRMModel
         [ForeignKey(typeof(ListRMModel))]
         public int ListRMModelId { get; set; }
-
         [OneToOne]
         public ListRMModel ListRMModel { get; set; }
 
-        //Relación con Mano de Obra
+        //Relación con ListWFModel
         [ForeignKey(typeof(ListWFModel))]
         public int ListWFModelId { get; set; }
-
         [OneToOne]
         public ListWFModel ListWFModel { get; set; }
 
-        //Relacion con Otros Costos
+        //Relacion con ListOCModel
         [ForeignKey(typeof(ListOCModel))]
         public int ListOCModelId { get; set; }
-
         [OneToOne]
         public ListOCModel ListOCModel { get; set; }
     }

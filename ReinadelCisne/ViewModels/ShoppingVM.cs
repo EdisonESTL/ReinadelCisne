@@ -5,6 +5,7 @@ using System.Text;
 using System.Windows.Input;
 using Xamarin.Forms;
 using ReinadelCisne.Models;
+using System.Threading.Tasks;
 
 namespace ReinadelCisne.ViewModels
 {
@@ -108,6 +109,7 @@ namespace ReinadelCisne.ViewModels
                 OnPropertyChanged();
             }
         }
+        
         private float _count = 0;
         public float Count
         {
@@ -129,7 +131,8 @@ namespace ReinadelCisne.ViewModels
                 OnPropertyChanged();
             }
         }
-        public ObservableCollection<RawMaterialShModel> ListCompra { get; set; } = new ObservableCollection<RawMaterialShModel>();
+
+        public ObservableCollection<RawMaterialModel> ListCompra { get; set; } = new ObservableCollection<RawMaterialModel>();
         
         public ICommand RefreshCommand => new Command(() =>
         {
@@ -139,32 +142,118 @@ namespace ReinadelCisne.ViewModels
 
             IsRefreshing = false;
         });
-
         public ICommand AddCompra => new Command(() =>
         {
-            
-            var dfg = (float)(Amount * Convert.ToDouble(UnitCost));
-
-            RawMaterialShModel shModel = new RawMaterialShModel
+            if(Amount != 0 & !string.IsNullOrEmpty(Description) & !string.IsNullOrEmpty(UnitCost))
             {
-                Amount = Convert.ToDouble(Amount),
-                Measurament = Measurement,
-                Description = Description,
-                UnitCost = UnitCost,
-                TotalCost = dfg
-            };
+                var dfg = (float)(Amount * Convert.ToDouble(UnitCost));
 
-            ListCompra.Add(shModel);
-            LongList = ListCompra.Count;
-            Count += dfg;
-            TotalInv = Count.ToString("N2") + "$";
+                RawMaterialModel shModel = new RawMaterialModel
+                {
+                    AmountRM = Convert.ToDouble(Amount),
+                    UnitMeasurementRM = Measurement,
+                    NameRM = Description,
+                    CostoRM = float.Parse(UnitCost),
+                    TotalCost = dfg
+                };
 
-            Amount = 0;
+                ListCompra.Add(shModel);
+                LongList = ListCompra.Count;
+                Count += dfg;
+                TotalInv = Count.ToString("N2") + "$";
+
+                Amount = 0;
+                Measurement = string.Empty;
+                Description = string.Empty;
+                UnitCost = string.Empty;
+                dfg = 0;
+            }            
+        });
+        public ICommand SaveCompra => new Command(async () =>
+        {
+            if (ListCompra.Count > 0)
+            {
+                ShoppingModel shopping = new ShoppingModel
+                {
+                    ShoppingDate = Date,
+                    NameEstablishment = NameEstablishment,
+                    InvoiceNumber = InvoiceNumber,
+                    TotalShop = Count
+                };
+
+                await App.Database.SaveShopping(shopping);                
+
+                foreach (var obj in ListCompra)
+                {
+                    ShoppingListModel shoppingList = new ShoppingListModel();
+
+                    RawMaterialModel rawMaterial = new RawMaterialModel
+                    {
+                        
+                        NameRM = obj.NameRM,
+                        UnitMeasurementRM = obj.UnitMeasurementRM
+                    };
+
+                    await App.Database.SaveRawMaterial(rawMaterial);
+
+                    shoppingList.Amount = obj.AmountRM;
+                    shoppingList.UnitCost = Convert.ToDouble(obj.CostoRM);
+                    shoppingList.TotalCost = Convert.ToDouble(obj.AmountRM * Convert.ToDouble(obj.CostoRM));
+
+                    await App .Database.SaveListShop(shoppingList);
+
+                    rawMaterial.shoppingList = new List<ShoppingListModel> { shoppingList };
+
+                    await App .Database.UpdateRealtionRawMat(rawMaterial);
+
+                    shopping.shoppingraw = new List<ShoppingListModel> { shoppingList };
+
+                    await App .Database.UpdateRelationsSh(shopping);
+                }                
+
+                await Shell.Current.DisplayAlert("", "si se pudo", "ok");
+
+                //await UpdateStock(shoppingList);
+                //await UpdateWeightedAveragePrice(shoppingList);
+
+                ClearShopping();
+            }
+        });
+
+        private Task UpdateWeightedAveragePrice(ShoppingListModel shoppingList)
+        {
+            throw new NotImplementedException();
+        }
+
+        private Task UpdateStock(ShoppingListModel shoppingList)
+        {
+            throw new NotImplementedException();
+        }
+
+        public ICommand CancelCommand => new Command(() =>
+        {
+            ClearShopping();
+        });
+
+        public ICommand RegistrationComand => new Command(() =>
+        {
+            Shell.Current.GoToAsync("ShoppingRegister");
+        });
+
+        private void ClearShopping()
+        {
+            InvoiceNumber = string.Empty;
+            NameEstablishment = string.Empty;
             Measurement = string.Empty;
             Description = string.Empty;
             UnitCost = string.Empty;
-            dfg = 0;
-        });
+            TotalInv = string.Empty;
+            Amount = 0;
+            Count = 0;
+            LongList = 0;
+            ListCompra.Clear();
+        }
+
         public ShoppingVM()
         {
 

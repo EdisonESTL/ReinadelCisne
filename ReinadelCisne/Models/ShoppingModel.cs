@@ -10,12 +10,12 @@ namespace ReinadelCisne.Models
     {
         [PrimaryKey, AutoIncrement]
         public int Id { get; set; }
-        public DateTime DateShop { get; set; }
+        public DateTime ShoppingDate { get; set; }
         public string NameEstablishment { get; set; }
         public string InvoiceNumber { get; set; }
         public float TotalShop { get; set; }
-
-        [OneToMany(CascadeOperations = CascadeOperation.CascadeDelete)]
-        public List<RawMaterialShModel> rawMaterialShops { get; set; }
+        
+        [OneToMany("ShoppingModelId")]
+        public List<ShoppingListModel> shoppingraw { get; set; }
     }
 }

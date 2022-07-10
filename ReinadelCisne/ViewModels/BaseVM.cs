@@ -17,6 +17,29 @@ namespace ReinadelCisne.ViewModels
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
+        public void WeekDay(DateTime initDate, out DateTime datei, out DateTime datef)
+        {
+            DateTime dateig = default;
+            DateTime datefg = default;
+            string dayDate = initDate.Date.DayOfWeek.ToString();
+            string[] WeekDay = new string[] { "Saturday", "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday" };
+
+            int nday = Array.IndexOf(WeekDay, dayDate);
+
+            for (int i = WeekDay.GetLowerBound(0); i <= WeekDay.GetUpperBound(0); i++)
+            {
+                var d = WeekDay.GetUpperBound(0) - i;
+
+                if (WeekDay[i] == dayDate)
+                {
+                    dateig = initDate.AddDays(-i);
+                    datefg = initDate.AddDays(d);
+                }
+            }
+            datei = dateig;
+            datef = datefg;
+        }
+
         public List<RawMaterialModel> Raws { get; set; }
 
         public void cargarL(List<RawMaterialModel> rawMaterials)

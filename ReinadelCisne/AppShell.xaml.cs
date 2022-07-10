@@ -28,6 +28,9 @@ namespace ReinadelCisne
             Routes.Add("InListRawMaterial", typeof(ListRawMaterialView));
             Routes.Add("InWorkForce", typeof(InWorkForce));
             Routes.Add("InOtherCost", typeof(InOtherCost));
+            Routes.Add("ShoppingRegister", typeof(RegistrationShoppingView));
+            Routes.Add("ShoppingDetail", typeof(ShoppingDetailView));
+            Routes.Add("ActivityRegistration", typeof(ActivityRegistrationView));
             foreach (var item in Routes)
             {
                 Routing.RegisterRoute(item.Key, item.Value);

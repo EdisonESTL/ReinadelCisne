@@ -1,0 +1,50 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:ReinadelCisne.ViewModels"
+             x:Class="ReinadelCisne.Views.ShoppingDetailView">
+    <ContentPage.BindingContext>
+        <vm:ShoppingDetailVM/>
+    </ContentPage.BindingContext>
+    <ContentPage.Content>
+        <Grid RowDefinitions="Auto, Auto, Auto, 2*, Auto">
+            <Label Text="Fecha:" Grid.Row="0" Grid.Column="0"/>
+            <Label Text="{Binding Date, Mode=TwoWay}" Grid.Row="0" Grid.Column="1"/>
+
+            <Label Text="Lugar:" Grid.Row="1" Grid.Column="0"/>
+            <Label Text="{Binding NameEstablishment, Mode=TwoWay}" Grid.Row="1" Grid.Column="1"/>
+
+            <Label Text="N Recibo" Grid.Row="2" Grid.Column="0"/>
+            <Label Text="{Binding InvoiceNumber, Mode=TwoWay}" Grid.Row="2" Grid.Column="1"/>
+
+            <CollectionView ItemsSource="{Binding ShopsRMs}" Grid.Row="3" Grid.ColumnSpan="2">
+                <CollectionView.ItemsLayout>
+                    <LinearItemsLayout Orientation="Vertical" ItemSpacing="7"/>
+                </CollectionView.ItemsLayout>
+                <CollectionView.Header>
+                    <Grid>
+                        <Label Text="Cant." FontSize="11" FontAttributes="Bold" TextColor="Black" Grid.Column="0" HorizontalTextAlignment="Center"/>
+                        <Label Text="medida" FontSize="11" FontAttributes="Bold" TextColor="Black" Grid.Column="1" HorizontalTextAlignment="Center"/>
+                        <Label Text="descripcion" FontSize="11" FontAttributes="Bold" TextColor="Black" Grid.Column="2" HorizontalTextAlignment="Center"/>
+                        <Label Text="C/U" FontSize="11" FontAttributes="Bold" TextColor="Black" Grid.Column="3" HorizontalTextAlignment="Center"/>
+                        <Label Text="C/T" FontSize="11" FontAttributes="Bold" TextColor="Black" Grid.Column="4" HorizontalTextAlignment="Center"/>
+                    </Grid>
+                </CollectionView.Header>
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Grid Padding="0">
+                            <Label Grid.Column="0" Text="{Binding Cantidad}" HorizontalTextAlignment="Center"/>
+                            <Label Grid.Column="1" Text="{Binding UnidMedida}" HorizontalTextAlignment="Center"/>
+                            <Label Grid.Column="2" Text="{Binding Material}" HorizontalTextAlignment="Center"/>
+                            <Label Grid.Column="3" Text="{Binding CostoU}" HorizontalTextAlignment="Center"/>
+                            <Label Grid.Column="4" Text="{Binding CostoT}" HorizontalTextAlignment="Center"/>
+                        </Grid>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+            
+            <Label Text="Total:" Grid.Row="4" Grid.Column="0"/>
+            <Label Text="{Binding TotalInv, Mode=TwoWay}" Grid.Row="4" Grid.Column="1"/>
+        </Grid>
+    </ContentPage.Content>
+</ContentPage>

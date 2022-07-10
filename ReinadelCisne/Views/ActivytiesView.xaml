@@ -1,0 +1,30 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="ReinadelCisne.Views.ActivytiesView"
+             xmlns:vm="clr-namespace:ReinadelCisne.ViewModels"
+             Title="Actividades">
+    <ContentPage.BindingContext>
+        <vm:ActivitiesVM/>
+    </ContentPage.BindingContext>
+    <ContentPage.Content>
+        <Grid RowDefinitions="Auto, Auto, Auto, Auto, Auto, 2*, Auto" Margin="7">
+            <Label Text="Registre su actividad" Grid.Row="0" Grid.ColumnSpan="3" HorizontalOptions="Center" VerticalOptions="Center" FontAttributes="Bold" FontSize="20"/>
+            <Label Text="Fecha:" Grid.Row="1" Grid.Column="0" HorizontalOptions="Center" VerticalOptions="Center" FontAttributes="Bold" FontSize="17"/>
+            <DatePicker x:Name="startDatePicker" Date="{Binding Date}"
+                    Format="D" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2"/>
+            <Label Text="Hora inicio:" Grid.Row="2" Grid.Column="0" HorizontalOptions="Center" VerticalOptions="Center" FontAttributes="Bold" FontSize="17"/>
+            <TimePicker Time="{Binding TimeI}" Grid.Row="2" Grid.Column="1"/>
+
+            <Label Text="Hora fin:" Grid.Row="3" Grid.Column="0" HorizontalOptions="Center" VerticalOptions="Center" FontAttributes="Bold" FontSize="17"/>
+            <TimePicker Time="{Binding TimeF}" Grid.Row="3" Grid.Column="1"/>
+
+            <Label Text="Descripcion de actividad:" Grid.Row="4" Grid.ColumnSpan="2" FontAttributes="Bold" FontSize="17"/>
+            <Editor Text="{Binding Description}" Placeholder="hice esto" Grid.Row="5" Grid.ColumnSpan="3" BackgroundColor="LightSkyBlue"/>
+
+            <Button Text="Borrar" Command="{Binding CancelCommand}" Grid.Row="6" Grid.Column="0"/>
+            <Button Text="Guardar" Command="{Binding SaveCommand}" Grid.Row="6" Grid.Column="1"/>
+            <Button Text="Registro" Command="{Binding RegistrationCommand}" Grid.Row="6" Grid.Column="2"/>
+        </Grid>
+    </ContentPage.Content>
+</ContentPage>

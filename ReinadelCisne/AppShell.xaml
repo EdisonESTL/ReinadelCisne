@@ -6,14 +6,17 @@
     <FlyoutItem Title="Inicio">
         <ShellContent ContentTemplate="{DataTemplate views:GoView}" Route="RGo"/>
     </FlyoutItem>
-    <FlyoutItem Title="Stock">
-        <ShellContent ContentTemplate="{DataTemplate views:StockView}" Route="RStock"/>
+    <FlyoutItem Title="Actividades">
+        <ShellContent ContentTemplate="{DataTemplate views:ActivytiesView}" Route="RRaw"/>
+    </FlyoutItem>
+    <FlyoutItem Title="Compras">
+        <ShellContent ContentTemplate="{DataTemplate views:ShoppingView}" Route="RShopping"/>
     </FlyoutItem>
     <FlyoutItem Title="Ventas">
         <ShellContent ContentTemplate="{DataTemplate views:SalesView}" Route="RSales"/>
     </FlyoutItem>
-    <FlyoutItem Title="Compras">
-        <ShellContent ContentTemplate="{DataTemplate views:ShoppingView}" Route="RShopping"/>
+    <FlyoutItem Title="Stock">
+        <ShellContent ContentTemplate="{DataTemplate views:StockView}" Route="RStock"/>
     </FlyoutItem>
     <FlyoutItem Title="Materia Prima">
         <ShellContent ContentTemplate="{DataTemplate views:RawMaterial}" Route="RRaw"/>
