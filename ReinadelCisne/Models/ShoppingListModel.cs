@@ -16,8 +16,12 @@ namespace ReinadelCisne.Models
 
         [ForeignKey(typeof(ShoppingModel))]
         public int ShoppingModelId { get; set; }
+        [ManyToOne]
+        public ShoppingModel ShoppingModel { get; set; }
 
         [ForeignKey(typeof(RawMaterialModel))]
         public int RawMaterialModelId { get; set; }
+        [ManyToOne]
+        public RawMaterialModel RawMaterial { get; set; }
     }
 }

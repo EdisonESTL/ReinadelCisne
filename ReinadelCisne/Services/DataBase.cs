@@ -79,6 +79,10 @@ namespace ReinadelCisne.Services
                 return _database.InsertAsync(shoppingList);
             }
         }
+        public Task UpdateRelationsListShop(ShoppingListModel shoppingList)
+        {
+            return _database.UpdateWithChildrenAsync(shoppingList);
+        }
         public Task<ShoppingListModel> GetListShopping(int id)
         {
             return _database.GetWithChildrenAsync<ShoppingListModel>(id);

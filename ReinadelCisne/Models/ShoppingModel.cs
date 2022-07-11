@@ -16,6 +16,6 @@ namespace ReinadelCisne.Models
         public float TotalShop { get; set; }
         
         [OneToMany("ShoppingModelId")]
-        public List<ShoppingListModel> shoppingraw { get; set; }
+        public List<ShoppingListModel> ShoppingRaw { get; set; }
     }
 }

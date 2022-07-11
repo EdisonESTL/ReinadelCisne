@@ -49,10 +49,10 @@
                     </CollectionView.ItemsLayout>
                     <CollectionView.Header>
                         <Grid ColumnDefinitions="50, 120, 50, 2*">
-                            <Label Text="Cant." FontSize="17" FontAttributes="Bold" TextColor="Black" Grid.Column="0" HorizontalTextAlignment="Center"/>
-                            <Label Text="Descripción" FontSize="17" FontAttributes="Bold" TextColor="Black" Grid.Column="1" HorizontalTextAlignment="Center"/>
-                            <Label Text="C/U $" FontSize="17" FontAttributes="Bold" TextColor="Black" Grid.Column="2" HorizontalTextAlignment="Center"/>
-                            <Label Text="Total $" FontSize="17" FontAttributes="Bold" TextColor="Black" Grid.Column="3" HorizontalTextAlignment="Center"/>
+                            <Label Text="Cant." FontSize="15" FontAttributes="Bold" TextColor="Black" Grid.Column="0" HorizontalTextAlignment="Center"/>
+                            <Label Text="Descripción" FontSize="15" FontAttributes="Bold" TextColor="Black" Grid.Column="1" HorizontalTextAlignment="Center"/>
+                            <Label Text="C/U $" FontSize="15" FontAttributes="Bold" TextColor="Black" Grid.Column="2" HorizontalTextAlignment="Center"/>
+                            <Label Text="Total $" FontSize="15" FontAttributes="Bold" TextColor="Black" Grid.Column="3" HorizontalTextAlignment="Center"/>
                         </Grid>
                     </CollectionView.Header>
                     <CollectionView.ItemTemplate>
@@ -88,7 +88,7 @@
             <StackLayout Orientation="Horizontal" Grid.Row="10" Grid.ColumnSpan="3" HorizontalOptions="CenterAndExpand" VerticalOptions="End">
 
                 <Button Text="Cancelar"
-                    Command="{Binding CancelRM}"/>
+                    Command="{Binding CancelCommand}"/>
                 <Button Text="Guardar" 
                     Command="{Binding SaveCompra}"/>
                 <Button Text="Registro"
