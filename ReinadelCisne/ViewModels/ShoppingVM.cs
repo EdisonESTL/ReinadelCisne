@@ -5,6 +5,7 @@ using System.Text;
 using System.Windows.Input;
 using Xamarin.Forms;
 using ReinadelCisne.Models;
+using System.Linq;
 using System.Threading.Tasks;
 using dotMorten.Xamarin.Forms;
 
@@ -269,6 +270,8 @@ namespace ReinadelCisne.ViewModels
             LongList = 0;
             ListCompra.Clear();
         }
+
+        public List<RawMaterialModel> rgm { get; set; } = new List<RawMaterialModel>();
         private async void SaveShopping()
         {
             ShoppingModel shopping = new ShoppingModel
@@ -287,6 +290,8 @@ namespace ReinadelCisne.ViewModels
                 {
                     Id = obj.Id,
                     NameRM = obj.NameRM,
+                    AmountRM = obj.AmountRM,
+                    CostoRM = obj.CostoRM, 
                     UnitMeasurementRM = obj.UnitMeasurementRM
                 };
 
@@ -299,7 +304,7 @@ namespace ReinadelCisne.ViewModels
 
                 await App.Database.SaveRawMaterial(rawMaterial);
                 await App.Database.SaveListShop(shoppingItem);
-
+                
                 shoppingItem.RawMaterial = new RawMaterialModel();
                 shoppingItem.RawMaterial = rawMaterial;
                 shoppingItem.ShoppingModel = new ShoppingModel();
@@ -319,10 +324,24 @@ namespace ReinadelCisne.ViewModels
 
         private void UpdateWeightedAveragePrice()
         {
-            List<RawMaterialModel> rawsUp = new List<RawMaterialModel>();
-            foreach (var rr in ListCompra)
+            List<ShoppingListModel> shops = App.Database.ListShoppingList().Result;
+            float sumprice = 0;
+            int cc = 0;
+            var RMgroups = (from p in shops
+                      group p by p.RawMaterialModelId).ToList(); ;
+
+            foreach (var rm in RMgroups)
             {
-                rawsUp.Add(rr);
+                cc = rm.Count();
+
+                foreach (var mm in rm)
+                {
+                    sumprice += (float)mm.UnitCost;
+                }
+
+                var pond = sumprice / cc;
+                
+                
             }
         }
         private void UpdateStock()

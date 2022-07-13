@@ -170,11 +170,36 @@ namespace ReinadelCisne.Services
 
             if (rawMaterial.Id != 0)
             {
+                var nn = _database.GetWithChildrenAsync<RawMaterialModel>(rawMaterial.Id).Result;
+                if (rawMaterial.CostoRM != nn.CostoRM)
+                {
+                    calculatePriceponderd(rawMaterial);
+                }
                 return Task.FromResult(0);
             }
             else
             {
+                rawMaterial.AmountRM = 0;
                 return _database.InsertAsync(rawMaterial);
+            }
+        }
+
+        private async void calculatePriceponderd(RawMaterialModel rawMaterial)
+        {
+            var inPos = _database.GetWithChildrenAsync<RawMaterialModel>(rawMaterial.Id).Result;
+            var cpp = ((inPos.AmountRM * inPos.CostoRM) + (rawMaterial.AmountRM * rawMaterial.CostoRM)) / (inPos.AmountRM + rawMaterial.AmountRM);
+            inPos.CostoRM = (float)cpp;
+            await _database.UpdateAsync(inPos);
+        }
+
+        public Task<int> UpdateRawMaterial(RawMaterialModel rawMaterial)
+        {
+            if (rawMaterial.Id != 0)
+            {
+                return _database.UpdateAsync(rawMaterial);
+            } else
+            {
+                return Task.FromResult(0);
             }
         }
         public Task UpdateRealtionRawMat(RawMaterialModel rawMaterial)
@@ -231,9 +256,9 @@ namespace ReinadelCisne.Services
             foreach (var raw in rawMaterials)
             {
                 var query = (from a in _database.Table<RawMaterialModel>()
-                             where a.NameRM == raw.NameRM
+                             where a.NameRM == raw.NameRM & a.UnitMeasurementRM == raw.UnitMeasurementRM
                              select a).FirstOrDefaultAsync().Result;
-
+               
                 query.AmountRM += raw.AmountRM;
                 _database.UpdateAsync(query);
             }
