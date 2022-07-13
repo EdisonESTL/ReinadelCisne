@@ -24,6 +24,16 @@ namespace ReinadelCisne.Views
                 OnPropertyChanged();
             }
         }
+
+        public string AuxId
+        {
+            get => IdAux.Text;
+            set
+            {
+                IdAux.Text = value;
+                OnPropertyChanged();
+            }
+        }
         public ShoppingView()
         {
             InitializeComponent();
@@ -33,11 +43,11 @@ namespace ReinadelCisne.Views
         {
             if(autoComplete.SelectedValue != null && autoComplete.SelectedValue.ToString() != "")
             {
-                var gg = e.AddedItems as RawMaterialModel;
+                var gg = e.AddedItems as RawMaterialModel;                
                 bool answ = await DisplayAlert("Pregunta", "¿Usar " + gg.UnitMeasurementRM + " como unidad de medida?", "Si", "No");
-
                 if (answ)
                 {
+                    AuxId = gg.Id.ToString();
                     Entyd = gg.UnitMeasurementRM;
                     autoComplete.Text = gg.NameRM;
                 }

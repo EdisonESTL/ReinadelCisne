@@ -162,9 +162,15 @@ namespace ReinadelCisne.Services
         //Procesos de Materia prima
         public Task<int> SaveRawMaterial(RawMaterialModel rawMaterial)
         {
+            /*var fb = _database.Table<RawMaterialModel>().ToListAsync();
+
+            var query = (from a in fb.Result
+                        where a.NameRM == rawMaterial.NameRM & a.UnitMeasurementRM == rawMaterial.UnitMeasurementRM
+                        select a).FirstOrDefault();*/
+
             if (rawMaterial.Id != 0)
             {
-                return _database.UpdateAsync(rawMaterial);
+                return Task.FromResult(0);
             }
             else
             {
@@ -218,6 +224,19 @@ namespace ReinadelCisne.Services
         public Task<int> DeleteRawMaterial(RawMaterialModel rawMaterial)
         {
             return _database.DeleteAsync(rawMaterial);
+        }
+
+        public void UpdateInvRM(List<RawMaterialModel> rawMaterials)
+        {
+            foreach (var raw in rawMaterials)
+            {
+                var query = (from a in _database.Table<RawMaterialModel>()
+                             where a.NameRM == raw.NameRM
+                             select a).FirstOrDefaultAsync().Result;
+
+                query.AmountRM += raw.AmountRM;
+                _database.UpdateAsync(query);
+            }
         }
 
         //Metodos de Mano de Obra (Work Force)
@@ -321,19 +340,6 @@ namespace ReinadelCisne.Services
         public Task<int> DeleteOtherCost(OtherCostModel otherCost)
         {
             return _database.DeleteAsync(otherCost);
-        }
-
-        public void UpdateInvRM(List<RawMaterialModel> rawMaterials)
-        {
-            foreach(var raw in rawMaterials)
-            {
-                var query = (from a in _database.Table<RawMaterialModel>()
-                            where a.NameRM == raw.NameRM
-                            select a).FirstOrDefaultAsync().Result;
-
-                query.AmountRM += raw.AmountRM;
-                _database.UpdateAsync(query);
-            }
         }
     }
 }

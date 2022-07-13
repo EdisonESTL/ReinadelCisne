@@ -23,16 +23,6 @@ namespace ReinadelCisne.ViewModels
             }
         }
 
-        private RawMaterialModel _rawtt;
-        public RawMaterialModel Rawtt
-        {
-            get => _rawtt;
-            set
-            {
-                _rawtt = value;
-                OnPropertyChanged();
-            }
-        }
         private bool _isRefreshing = false;
         public bool IsRefreshing
         {
@@ -66,8 +56,8 @@ namespace ReinadelCisne.ViewModels
             }
         }
 
-        private int _id;
-        public int Id
+        private string _id = "0";
+        public string Id
         {
             get { return _id; }
             set
@@ -173,7 +163,7 @@ namespace ReinadelCisne.ViewModels
 
                 RawMaterialModel shModel = new RawMaterialModel
                 {
-                    Id = Id,
+                    Id = int.Parse(Id),
                     AmountRM = Convert.ToDouble(Amount),
                     UnitMeasurementRM = Measurement,
                     NameRM = Description,
@@ -209,49 +199,6 @@ namespace ReinadelCisne.ViewModels
                 Amount = 0;
             }
         });
-        
-        private void AddShopping()
-        {
-            var totalC = (float)(Amount * Convert.ToDouble(UnitCost));
-
-            RawMaterialModel shModel = new RawMaterialModel
-            {
-                Id = Id,
-                AmountRM = Convert.ToDouble(Amount),
-                UnitMeasurementRM = Measurement,
-                NameRM = Description,
-                CostoRM = float.Parse(UnitCost),
-                TotalCost = totalC
-            };
-
-            if (IdMOD != null)
-            {
-                ListCompra.RemoveAt(int.Parse(IdMOD));
-                ListCompra.Insert(int.Parse(IdMOD), shModel);
-                Count = 0;
-                foreach (var a in ListCompra)
-                {
-                    Count += (float)(a.CostoRM * a.AmountRM);
-                }
-
-                IdMOD = null;
-            }
-            else
-            {
-                ListCompra.Add(shModel);
-                Count += totalC;
-            }
-
-            LongList = ListCompra.Count;
-
-            TotalInv = Count.ToString("N2") + "$";
-
-            Measurement = string.Empty;
-            Description = string.Empty;
-            UnitCost = string.Empty;
-            Amount = 0;
-        }
-
         public ICommand SaveCompra => new Command(() =>
         {
             if (ListCompra.Count > 0)
@@ -278,6 +225,7 @@ namespace ReinadelCisne.ViewModels
 
         private void LoadNames()
         {
+            NamesRM.Clear();
             var a = App.Database.GetMR().Result;
 
             foreach(var b in a)
@@ -291,7 +239,7 @@ namespace ReinadelCisne.ViewModels
         {
             IdMOD = Convert.ToString(ListCompra.IndexOf(obj));
 
-            Id = obj.Id;
+            Id = obj.Id.ToString();
             Amount = (float)obj.AmountRM;
             Measurement = obj.UnitMeasurementRM;
             Description = obj.NameRM;
@@ -337,6 +285,7 @@ namespace ReinadelCisne.ViewModels
             {
                 RawMaterialModel rawMaterial = new RawMaterialModel
                 {
+                    Id = obj.Id,
                     NameRM = obj.NameRM,
                     UnitMeasurementRM = obj.UnitMeasurementRM
                 };
@@ -351,23 +300,30 @@ namespace ReinadelCisne.ViewModels
                 await App.Database.SaveRawMaterial(rawMaterial);
                 await App.Database.SaveListShop(shoppingItem);
 
-                rawMaterial.shoppingList = new List<ShoppingListModel> { shoppingItem };
+                shoppingItem.RawMaterial = new RawMaterialModel();
+                shoppingItem.RawMaterial = rawMaterial;
                 shoppingItem.ShoppingModel = new ShoppingModel();
                 shoppingItem.ShoppingModel = shopping;
 
                 await App.Database.UpdateRelationsListShop(shoppingItem);
-                await App.Database.UpdateRealtionRawMat(rawMaterial);
             }
 
             //await Shell.Current.DisplayAlert("Éxito", "se guardo la compra", "ok");
-            UpdateStock();            
-
+            LoadNames();
+            UpdateStock();
+            //UpdateWeightedAveragePrice();
+            var op = App.Database.GetMR().Result;
+            var ops = App.Database.ListShoppingList().Result;
             ClearShopping();
         }
 
-        private Task UpdateWeightedAveragePrice(ShoppingListModel shoppingList)
+        private void UpdateWeightedAveragePrice()
         {
-            throw new NotImplementedException();
+            List<RawMaterialModel> rawsUp = new List<RawMaterialModel>();
+            foreach (var rr in ListCompra)
+            {
+                rawsUp.Add(rr);
+            }
         }
         private void UpdateStock()
         {

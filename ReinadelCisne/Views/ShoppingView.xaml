@@ -11,7 +11,8 @@
     <ContentPage.Content>
         <Grid RowDefinitions="Auto, Auto, Auto, Auto, Auto, Auto, Auto, Auto, Auto, 2*, Auto" RowSpacing="3" Margin="7">
             <Label Text="Nueva Compra" Grid.Row="0" Grid.ColumnSpan="3" HorizontalOptions="Center"/>
-                        
+            <Label x:Name="IdAux" Text="{Binding Id, Mode=TwoWay}" IsVisible="false"/>
+            
             <Label Text="Fecha" Grid.Row="1"/>
             <Label Text="{Binding Date}" Grid.Row="1" Grid.Column="1"/>
             
