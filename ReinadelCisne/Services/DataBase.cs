@@ -198,7 +198,7 @@ namespace ReinadelCisne.Services
             
         }
 
-        public Task<List<ListRMModel>> GetV()
+        public Task<List<ListRMModel>> GetAllRMList()
         {
             return _database.GetAllWithChildrenAsync<ListRMModel>();
         }
@@ -271,6 +271,7 @@ namespace ReinadelCisne.Services
         {
             return _database.DeleteAsync(workForce);
         }
+        
         //Funciones Otros Costos
         public Task<int> SaveOtherCost(OtherCostModel otherCost)
         {
@@ -320,6 +321,19 @@ namespace ReinadelCisne.Services
         public Task<int> DeleteOtherCost(OtherCostModel otherCost)
         {
             return _database.DeleteAsync(otherCost);
+        }
+
+        public void UpdateInvRM(List<RawMaterialModel> rawMaterials)
+        {
+            foreach(var raw in rawMaterials)
+            {
+                var query = (from a in _database.Table<RawMaterialModel>()
+                            where a.NameRM == raw.NameRM
+                            select a).FirstOrDefaultAsync().Result;
+
+                query.AmountRM += raw.AmountRM;
+                _database.UpdateAsync(query);
+            }
         }
     }
 }

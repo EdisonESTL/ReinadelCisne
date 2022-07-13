@@ -168,7 +168,7 @@ namespace ReinadelCisne.ViewModels
                 AuzListShop auzList = new AuzListShop
                 {
                     IdShop = obj.Id,
-                    fecha = obj.ShoppingDate.Date.ToString("dd-MM-yyyy"),
+                    fecha = obj.ShoppingDate.Date.ToString("M"),
                     total = obj.TotalShop.ToString("N2") + "$"
                 };
 

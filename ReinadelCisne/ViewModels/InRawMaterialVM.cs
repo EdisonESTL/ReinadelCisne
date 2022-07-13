@@ -206,7 +206,7 @@ namespace ReinadelCisne.ViewModels
                 }
 
 
-                var gy = App.Database.GetV();
+                var gy = App.Database.GetAllRMList();
                 gy.Wait();
                 var fgh = gy.Result;
 

@@ -12,15 +12,8 @@ namespace ReinadelCisne.ViewModels
 {
     public class ShoppingDetailVM : BaseVM, IQueryAttributable
     {
-        /*bool includeEmptyGroups;
-
-        public ShoppingDetailVM(bool emptyGroups = false)
-        {
-            includeEmptyGroups = emptyGroups;
-        }*/
-
-        private DateTime _date;
-        public DateTime Date { get => _date; set { _date = value; OnPropertyChanged(); } }
+        private string _date;
+        public string Date { get => _date; set { _date = value; OnPropertyChanged(); } }
 
         private string _nameEstablishment;
         public string NameEstablishment
@@ -69,7 +62,7 @@ namespace ReinadelCisne.ViewModels
         {
             ShoppingModel shopping = App.Database.GetShopping(int.Parse(idShop)).Result;
 
-            Date = shopping.ShoppingDate;
+            Date = shopping.ShoppingDate.ToString("D");
             NameEstablishment = shopping.NameEstablishment;
             InvoiceNumber = shopping.InvoiceNumber;
             TotalInv = shopping.TotalShop.ToString("N2") + "$";

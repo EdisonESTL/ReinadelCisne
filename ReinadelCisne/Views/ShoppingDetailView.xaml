@@ -2,32 +2,36 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:vm="clr-namespace:ReinadelCisne.ViewModels"
-             x:Class="ReinadelCisne.Views.ShoppingDetailView">
+             x:Class="ReinadelCisne.Views.ShoppingDetailView"
+             Title="Detalle de compra">
     <ContentPage.BindingContext>
         <vm:ShoppingDetailVM/>
     </ContentPage.BindingContext>
     <ContentPage.Content>
-        <Grid RowDefinitions="Auto, Auto, Auto, 2*, Auto">
-            <Label Text="Fecha:" Grid.Row="0" Grid.Column="0"/>
-            <Label Text="{Binding Date, Mode=TwoWay}" Grid.Row="0" Grid.Column="1"/>
+        <Grid RowDefinitions="Auto, Auto, Auto, 0.8, 2*, Auto" ColumnDefinitions="Auto, 2*" Margin="3, 11, 3, 7">
+            <Label Text="Fecha:" Grid.Row="0" Grid.Column="0" FontAttributes="Bold" FontSize="17" TextColor="Black"/>
+            <Label Text="{Binding Date, Mode=TwoWay}" Grid.Row="0" Grid.Column="1" VerticalTextAlignment="Center" FontAttributes="Italic" FontSize="17" TextColor="Black"/>
 
-            <Label Text="Lugar:" Grid.Row="1" Grid.Column="0"/>
-            <Label Text="{Binding NameEstablishment, Mode=TwoWay}" Grid.Row="1" Grid.Column="1"/>
+            <Label Text="Lugar:" Grid.Row="1" Grid.Column="0" FontAttributes="Bold" FontSize="17" TextColor="Black"/>
+            <Label Text="{Binding NameEstablishment, Mode=TwoWay}" Grid.Row="1" Grid.Column="1" VerticalTextAlignment="Center" FontAttributes="Italic" FontSize="17" TextColor="Black"/>
 
-            <Label Text="N Recibo" Grid.Row="2" Grid.Column="0"/>
-            <Label Text="{Binding InvoiceNumber, Mode=TwoWay}" Grid.Row="2" Grid.Column="1"/>
-
-            <CollectionView ItemsSource="{Binding ShopsRMs}" Grid.Row="3" Grid.ColumnSpan="2">
+            <Label Text="N Recibo" Grid.Row="2" Grid.Column="0" FontAttributes="Bold" FontSize="17" TextColor="Black"/>
+            <Label Text="{Binding InvoiceNumber, Mode=TwoWay}" Grid.Row="2" Grid.Column="1" VerticalTextAlignment="Center" FontAttributes="Italic" FontSize="17" TextColor="Black"/>
+            
+            <BoxView Color="#096BAF" Grid.Row="3" Grid.ColumnSpan="2"
+             HorizontalOptions="Fill" />
+            
+            <CollectionView ItemsSource="{Binding ShopsRMs}" Grid.Row="4" Grid.ColumnSpan="2">
                 <CollectionView.ItemsLayout>
                     <LinearItemsLayout Orientation="Vertical" ItemSpacing="7"/>
                 </CollectionView.ItemsLayout>
                 <CollectionView.Header>
                     <Grid>
-                        <Label Text="Cant." FontSize="11" FontAttributes="Bold" TextColor="Black" Grid.Column="0" HorizontalTextAlignment="Center"/>
-                        <Label Text="medida" FontSize="11" FontAttributes="Bold" TextColor="Black" Grid.Column="1" HorizontalTextAlignment="Center"/>
-                        <Label Text="descripcion" FontSize="11" FontAttributes="Bold" TextColor="Black" Grid.Column="2" HorizontalTextAlignment="Center"/>
-                        <Label Text="C/U" FontSize="11" FontAttributes="Bold" TextColor="Black" Grid.Column="3" HorizontalTextAlignment="Center"/>
-                        <Label Text="C/T" FontSize="11" FontAttributes="Bold" TextColor="Black" Grid.Column="4" HorizontalTextAlignment="Center"/>
+                        <Label Text="Cant." FontSize="15" FontAttributes="Bold" TextColor="Black" Grid.Column="0" HorizontalTextAlignment="Center"/>
+                        <Label Text="Medida" FontSize="15" FontAttributes="Bold" TextColor="Black" Grid.Column="1" HorizontalTextAlignment="Center"/>
+                        <Label Text="Descrip." FontSize="15" FontAttributes="Bold" TextColor="Black" Grid.Column="2" HorizontalTextAlignment="Center"/>
+                        <Label Text="C/U" FontSize="15" FontAttributes="Bold" TextColor="Black" Grid.Column="3" HorizontalTextAlignment="Center"/>
+                        <Label Text="C/T" FontSize="15" FontAttributes="Bold" TextColor="Black" Grid.Column="4" HorizontalTextAlignment="Center"/>
                     </Grid>
                 </CollectionView.Header>
                 <CollectionView.ItemTemplate>
@@ -42,9 +46,9 @@
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
             </CollectionView>
-            
-            <Label Text="Total:" Grid.Row="4" Grid.Column="0"/>
-            <Label Text="{Binding TotalInv, Mode=TwoWay}" Grid.Row="4" Grid.Column="1"/>
+
+            <Label Text="Total:" Grid.Row="5" Grid.Column="0" HorizontalOptions="End" FontAttributes="Bold" FontSize="17" TextColor="Black"/>
+            <Label Text="{Binding TotalInv, Mode=TwoWay}" Grid.Row="5" Grid.Column="1" HorizontalOptions="Center" FontAttributes="Bold" FontSize="20" TextColor="Black"/>
         </Grid>
     </ContentPage.Content>
 </ContentPage>
