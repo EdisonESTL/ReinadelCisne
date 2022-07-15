@@ -282,15 +282,15 @@ namespace ReinadelCisne.ViewModels
         private async void LoadRawMaterials(string id)
         {
             RawMaterialT = string.Empty;
-            float d = 0;
+            //float d = 0;
             ListRMModel l = await App.Database.GetListRM(int.Parse(id));
-            List<RawMaterialModel> b = l.RawMaterials;
-
+            //List<RawMaterialModel> b = l.RawMaterials;
+            /*
             foreach(var a in b)
             {
                 d += (float)(a.CostoRM * a.AmountRM);
-            }
-            RawMaterialT = d.ToString("N2");
+            }*/
+            RawMaterialT = l.Total.ToString("N2");
             IdListRM = int.Parse(id);
         }
         private async void LoadProductS(string idProd)

@@ -14,10 +14,15 @@ namespace ReinadelCisne.Models
         //Relacion con SaleModel
         [ForeignKey(typeof(SaleModel))]
         public int SaleModeld { get; set; }
+        [ManyToOne]
+        public SaleModel SaleModel { get; set; }
 
         //Relacion con ProductModel
         [ForeignKey(typeof(ProductModel))]
         public int ProductModelId { get; set; }
+        [ManyToOne]
+        
+        public ProductModel ProductModel {get;set;}
    
         public int AmountProduct { get; set; }
     }

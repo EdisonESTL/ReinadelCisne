@@ -35,11 +35,24 @@ namespace ReinadelCisne.ViewModels
         {
             ActivityMonth();
         });
+        public Command<ActivityModel> DeleteCommand { get; set; }
+        public Command<ActivityModel> ModifyCommand { get; set; }
         public ActivityResgitrationVM()
         {
             ActivityDay();
+            DeleteCommand = new Command<ActivityModel>(DeleteWF);
+            ModifyCommand = new Command<ActivityModel>(ModifyWF);
         }
-
+        private async void DeleteWF(ActivityModel obj)
+        {
+            await App.Database.DeleteActivity(obj);
+        }
+        public string IdMOD;
+        private void ModifyWF(ActivityModel obj)
+        {
+            IdMOD = Convert.ToString(obj.Id);
+            Shell.Current.GoToAsync($"..?ActModId={IdMOD}");
+        }
         private void ActivityDay()
         {
             Activities.Clear();
@@ -76,6 +89,17 @@ namespace ReinadelCisne.ViewModels
             foreach(var obj in lista)
             {
                 Activities.Add(obj);
+            }
+        }
+
+        public ICommand goback 
+        {
+            get
+            {
+                return new Command(() =>
+                {
+                    Shell.Current.GoToAsync($"..?ActModId=0");
+                });
             }
         }
     }

@@ -3,46 +3,46 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:vm="clr-namespace:ReinadelCisne.ViewModels"
              x:Class="ReinadelCisne.Views.GoView"
-             Title="Inicio">
+             Title="Inicio"
+             Visual="Material">
     <ContentPage.BindingContext>
         <vm:GoVM/>
     </ContentPage.BindingContext>
     <ContentPage.Content>
-        <Grid RowDefinitions="Auto, 0.8, 2*, 0.8, Auto">
+        <Grid RowDefinitions="Auto, 0.8, 2*, 0.8, Auto" Padding="3,0,3,7">
             <Label x:Name="LabelPapas" Text="{Binding Cuenta}"
-                   Margin="10"
+                   Margin="10" Style="{StaticResource LabelCuentaVenta}"
                    FontSize="50"
                    HorizontalOptions="CenterAndExpand" 
-                   Grid.Row="0"/>
-            <BoxView Color="#096BAF" Grid.Row="1"
+                   Grid.Row="0" Grid.ColumnSpan="3"/>
+            <BoxView Color="#096BAF" Grid.Row="1" Grid.ColumnSpan="3"
              HorizontalOptions="Fill" />
-            <RefreshView IsRefreshing="{Binding IsRefreshing}" Command="{Binding RefreshCommand}" Grid.Row="2" Margin="7">
-                <CollectionView x:Name="MenuCV" SelectionMode="Single" SelectionChangedCommand="{Binding SelectedCommand}" SelectionChangedCommandParameter="{Binding SelectedItem , Source={x:Reference MenuCV}}" ItemsSource="{Binding ListPS}">
-                    <CollectionView.ItemsLayout>                        
+            <RefreshView IsRefreshing="{Binding IsRefreshing}" Command="{Binding RefreshCommand}" Grid.Row="2" Grid.ColumnSpan="3" BackgroundColor="#00FF9E">
+                <CollectionView x:Name="MenuCV" SelectionMode="Single" SelectionChangedCommand="{Binding SelectedCommand}" 
+                                SelectionChangedCommandParameter="{Binding SelectedItem , Source={x:Reference MenuCV}}" ItemsSource="{Binding ListPS}">
+                    <CollectionView.ItemsLayout>
                         <GridItemsLayout Orientation="Vertical" Span="3" VerticalItemSpacing="7" HorizontalItemSpacing="7"/>
                     </CollectionView.ItemsLayout>
                     <CollectionView.ItemTemplate>
                         <DataTemplate>
-                            <Frame BorderColor="Black" BackgroundColor="Transparent" HasShadow="True">
+                            <Frame Style="{StaticResource FrameGoViewProducts}">
                                 <Grid RowDefinitions="Auto, 20">
-                                    <Label Grid.Row="0" Text="{Binding NameProduct}" FontSize="13"/>
-                                    <Label Grid.Row="1" Text="{Binding PriceProduct}"/>
+                                    <Label Grid.Row="0" Text="{Binding NameProduct}" FontSize="Default" TextColor="#0EFFF9"/>
+                                    <Label Grid.Row="1" Text="{Binding PriceProduct}" FontSize="13" TextColor="#FFC745"/>
                                 </Grid>
                             </Frame>
                         </DataTemplate>
                     </CollectionView.ItemTemplate>
                 </CollectionView>
             </RefreshView>
-            <BoxView Color="#096BAF" Grid.Row="3"
+            <BoxView Color="#096BAF" Grid.Row="3" Grid.ColumnSpan="3"
              HorizontalOptions="Fill" />
-            <StackLayout Orientation="Horizontal" HorizontalOptions="Center" Grid.Row="4">
-                <Button Text="Borrar"
-                    Command="{Binding ClearCommand}"/>
-                <Button Text="Guardar"
-                    Command="{Binding NewCommand}"/>
-                <Button Text="Registro"
-                    Command="{Binding RegisterSale}"/>
-            </StackLayout>
+            <Button Text="Borrar" Style="{StaticResource ButtonCancel}"
+                    Command="{Binding ClearCommand}" Grid.Row="4" Grid.Column="0"/>
+            <Button Text="Guardar" Style="{StaticResource ButtonSave}"
+                    Command="{Binding NewCommand}" Grid.Row="4" Grid.Column="1"/>
+            <Button Text="Ventas" Style="{StaticResource ButtonRegistration}"
+                    Command="{Binding RegisterSale}" Grid.Row="4" Grid.Column="2"/>
         </Grid>
     </ContentPage.Content>
 </ContentPage>

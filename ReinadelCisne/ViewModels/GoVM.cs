@@ -55,7 +55,7 @@ namespace ReinadelCisne.ViewModels
             IsRefreshing = false;
         });
 
-        //
+        //Eleccion de opcion en menu
         public ICommand SelectedCommand => new Command((obj) =>
         {
             ProductModel prods = obj as ProductModel;

@@ -2,6 +2,7 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:vm="clr-namespace:ReinadelCisne.ViewModels"
+             xmlns:autocomplete="clr-namespace:Syncfusion.SfAutoComplete.XForms;assembly=Syncfusion.SfAutoComplete.XForms"
              x:Class="ReinadelCisne.Views.InRawMaterialView">
     <ContentPage.BindingContext>
         <vm:InRawMaterialVM/>
@@ -12,7 +13,8 @@
     <ContentPage.Content>
         <Grid RowDefinitions="Auto, Auto, Auto, Auto, Auto, Auto, Auto, Auto, 0.8, 2*, 0.8, Auto" ColumnDefinitions="60" Margin="7">
             <Label Grid.ColumnSpan="3" Text="Ingresando Materia Prima" TextColor="Black" FontAttributes="Bold" HorizontalOptions="Center" Padding="7" FontSize="20"/>
-
+            <Label x:Name="IdAux" Text="{Binding Id, Mode=TwoWay}" IsVisible="false"/>
+            
             <Label Grid.Row="1" Grid.Column="0" Text="Cant." FontSize="17" FontAttributes="Bold" TextColor="Black"/>
             <Entry Grid.Row="2" Grid.Column="0" Placeholder="Cantidad"
                    ClearButtonVisibility="WhileEditing"
@@ -20,22 +22,34 @@
                    Text="{Binding AmountRM, Mode=TwoWay}"/>
 
             <Label Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" Text="Nombre de Material" FontSize="17" FontAttributes="Bold" TextColor="Black"/>
-            <Entry Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="2" Placeholder="Aqui materia prima"
+            <!--<Entry Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="2" Placeholder="Aqui materia prima"
                         ClearButtonVisibility="WhileEditing"
                         FontSize="Small" 
-                        Text="{Binding NameRM, Mode=TwoWay}"/>
+                        Text="{Binding NameRM, Mode=TwoWay}"/>-->
+            <autocomplete:SfAutoComplete x:Name="autoComplete" Text="{Binding NameRM}" SuggestionMode="Contains" ShowClearButton="True" SelectionChanged="Handle_SelectionChanged"
+                                     HeightRequest="40" DataSource="{Binding RawsExist}" DisplayMemberPath="NameRM" Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="2">
+                <autocomplete:SfAutoComplete.ItemTemplate>
+                    <DataTemplate>
+                        <StackLayout Orientation="Horizontal">
+                            <Label Text="{Binding NameRM}"/>
+                            <Label Text="{Binding UnitMeasurementRM}"/>
+                        </StackLayout>
+                    </DataTemplate>
+                </autocomplete:SfAutoComplete.ItemTemplate>
+            </autocomplete:SfAutoComplete>
 
             <Label Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" Text="Unidad de medida" FontSize="17" FontAttributes="Bold" TextColor="Black"/>
-            <Entry Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" Placeholder="Unidad de medida"
+            <!--<Entry Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" Placeholder="Unidad de medida"
                         ClearButtonVisibility="WhileEditing"                        
-                        Text="{Binding UnitMeasurementRM, Mode=TwoWay}" PlaceholderColor="#98C54D"/>
-
+                        Text="{Binding UnitMeasurementRM, Mode=TwoWay}" PlaceholderColor="#98C54D"/>-->
+            <Label x:Name="MedidaLabel" Text="{Binding UnitMeasurementRM, Mode=TwoWay}" Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2"/>
+            
             <Label Grid.Row="3" Grid.Column="2" Text="Costo U." FontSize="17" FontAttributes="Bold" TextColor="Black"/>
-            <Entry Grid.Row="4" Grid.Column="2" Placeholder="Costo"
+            <!--<Entry Grid.Row="4" Grid.Column="2" Placeholder="Costo"
                         ClearButtonVisibility="WhileEditing"
                         Keyboard="Numeric"
-                        Text="{Binding CostRM, Mode=TwoWay}"/>
-            
+                        Text="{Binding CostRM, Mode=TwoWay}"/>-->
+            <Label x:Name="CostoUlabel" Text="{Binding CostRM, Mode=TwoWay}" Grid.Row="4" Grid.Column="2"/>
 
             <StackLayout Orientation="Horizontal" Grid.Row="5" Grid.ColumnSpan="2" RadioButtonGroup.SelectedValue="{Binding TypeRM}">
                 <RadioButton Content="Directa"

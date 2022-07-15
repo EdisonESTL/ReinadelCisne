@@ -8,9 +8,9 @@
     </ContentPage.BindingContext>
     <ContentPage.Content>
         <Grid Margin="20" RowSpacing="20" Padding="0" RowDefinitions="Auto, 0.8, 2*, Auto, Auto" HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand">            
-            <Button BackgroundColor="#0EFFF9" BorderColor="#096BAF" BorderWidth="1" Text="Día" Command="{Binding DayCommand}" Grid.Column="0" Grid.Row="0" HorizontalOptions="CenterAndExpand" VerticalOptions="Center"/>
-            <Button BackgroundColor="#0EFFF9" BorderColor="#096BAF" BorderWidth="1" Text="Mes" Command="{Binding MounthCommand}" Grid.Column="1" Grid.Row="0" HorizontalOptions="CenterAndExpand"/>
-            <Button BackgroundColor="#0EFFF9" BorderColor="#096BAF" BorderWidth="1" Text="Año" Command="{Binding YearCommand}" Grid.Column="2" Grid.Row="0" HorizontalOptions="CenterAndExpand"/>
+            <Button Text="Día" Command="{Binding DayCommand}" Grid.Column="0" Grid.Row="0" Style="{StaticResource ButtonDayWeekMonh}"/>
+            <Button Text="Mes" Command="{Binding MounthCommand}" Grid.Column="1" Grid.Row="0" Style="{StaticResource ButtonDayWeekMonh}"/>
+            <Button Text="Año" Command="{Binding YearCommand}" Grid.Column="2" Grid.Row="0" Style="{StaticResource ButtonDayWeekMonh}"/>
             <BoxView Color="#096BAF" Grid.Row="1" Grid.ColumnSpan="3"
              HorizontalOptions="Fill" />
             <CollectionView ItemsSource="{Binding Ventas, Mode=OneWay}" SelectionMode="None" x:Name="listaMateriaPrima" Grid.ColumnSpan="3" Grid.Row="2">

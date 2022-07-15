@@ -24,6 +24,7 @@ namespace ReinadelCisne
         {
             Routes.Add("StockRegistration", typeof(StockRegistrationView));
             Routes.Add("GoRegistration", typeof(GoRegistrationView));
+            Routes.Add("GoRegistrationDetail", typeof(GoRegistrationDetail));
             Routes.Add("InRawMaterial", typeof(InRawMaterialView));
             Routes.Add("InListRawMaterial", typeof(ListRawMaterialView));
             Routes.Add("InWorkForce", typeof(InWorkForce));

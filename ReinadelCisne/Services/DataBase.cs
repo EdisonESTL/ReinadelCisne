@@ -22,6 +22,7 @@ namespace ReinadelCisne.Services
             _database.CreateTableAsync<OrderModel>();
             _database.CreateTableAsync<RawMaterialModel>();
             _database.CreateTableAsync<ListRMModel>();
+            _database.CreateTableAsync<ItemsListRMModel>();
             _database.CreateTableAsync<WorkForceModel>();
             _database.CreateTableAsync<ListWFModel>();
             _database.CreateTableAsync<OtherCostModel>();
@@ -47,6 +48,16 @@ namespace ReinadelCisne.Services
         {
             return _database.Table<ActivityModel>().ToListAsync();
         }
+        public Task<int> DeleteActivity(ActivityModel activity)
+        {
+            return _database.DeleteAsync(activity);
+        }
+
+        public Task<ActivityModel> getActivity(int id)
+        {
+            return _database.GetWithChildrenAsync<ActivityModel>(id);
+        }
+
         //Procesos de Compras
         public Task<int> SaveShopping(ShoppingModel shopping)
         {
@@ -67,7 +78,6 @@ namespace ReinadelCisne.Services
         {
             return _database.GetWithChildrenAsync<ShoppingModel>(id);
         }
-        
         public Task<int> SaveListShop(ShoppingListModel shoppingList)
         {
             if (shoppingList.Id != 0)
@@ -87,7 +97,6 @@ namespace ReinadelCisne.Services
         {
             return _database.GetWithChildrenAsync<ShoppingListModel>(id);
         }
-        
         public Task<List<ShoppingModel>> ListShopping()
         {
             return _database.GetAllWithChildrenAsync<ShoppingModel>();
@@ -158,7 +167,10 @@ namespace ReinadelCisne.Services
         {
             return _database.UpdateWithChildrenAsync(sale);
         }
-
+        public Task<SaleModel> GetSale(int idsale)
+        {
+            return _database.GetWithChildrenAsync<SaleModel>(idsale);
+        }
         //Procesos de Materia prima
         public Task<int> SaveRawMaterial(RawMaterialModel rawMaterial)
         {
@@ -183,7 +195,20 @@ namespace ReinadelCisne.Services
                 return _database.InsertAsync(rawMaterial);
             }
         }
-
+        public Task<int> SaveItemListRM (ItemsListRMModel itemsListRM)
+        {
+            if(itemsListRM.Id != 0)
+            {
+                return _database.UpdateAsync(itemsListRM);
+            } else
+            {
+                return _database.InsertAsync(itemsListRM);
+            }
+        }
+        public Task UpdateRelationItemRM(ItemsListRMModel itemsListRM)
+        {
+            return _database.UpdateWithChildrenAsync(itemsListRM);
+        }
         private async void calculatePriceponderd(RawMaterialModel rawMaterial)
         {
             var inPos = _database.GetWithChildrenAsync<RawMaterialModel>(rawMaterial.Id).Result;
@@ -191,7 +216,6 @@ namespace ReinadelCisne.Services
             inPos.CostoRM = (float)cpp;
             await _database.UpdateAsync(inPos);
         }
-
         public Task<int> UpdateRawMaterial(RawMaterialModel rawMaterial)
         {
             if (rawMaterial.Id != 0)
@@ -206,7 +230,6 @@ namespace ReinadelCisne.Services
         {
             return _database.UpdateWithChildrenAsync(rawMaterial);
         }
-
         public Task<int> SaveListRM(ListRMModel listRawMaterial)
         {
             if (listRawMaterial.Id != 0)
@@ -222,35 +245,33 @@ namespace ReinadelCisne.Services
             }
             
         }
-       
+        public Task<List<ItemsListRMModel>> GetAllItems()
+        {
+            return _database.GetAllWithChildrenAsync<ItemsListRMModel>();
+        }
         public Task<ListRMModel> GetListRM(int i)
         {
             return _database.GetWithChildrenAsync<ListRMModel>(i);
             
         }
-
         public Task<List<ListRMModel>> GetAllRMList()
         {
             return _database.GetAllWithChildrenAsync<ListRMModel>();
         }
-
         public Task<List<RawMaterialModel>> GetMR()
         {
             return _database.GetAllWithChildrenAsync<RawMaterialModel>();
         }
-
         public Task UpdateListRM(ListRMModel listRMModel)
         {
             var t = _database.UpdateWithChildrenAsync(listRMModel);
 
             return t;
         }
-
         public Task<int> DeleteRawMaterial(RawMaterialModel rawMaterial)
         {
             return _database.DeleteAsync(rawMaterial);
         }
-
         public void UpdateInvRM(List<RawMaterialModel> rawMaterials)
         {
             foreach (var raw in rawMaterials)
@@ -279,7 +300,6 @@ namespace ReinadelCisne.Services
                 return m;
             }
         }
-
         public Task<int> SaveListWF(ListWFModel listWF)
         {
             if (listWF.Id != 0)
@@ -294,19 +314,16 @@ namespace ReinadelCisne.Services
                 return m;
             }
         }
-
         public Task UpdateListWF(ListWFModel listWF)
         {
             var t = _database.UpdateWithChildrenAsync(listWF);
 
             return t;
         }
-
         public Task<List<ListWFModel>> GetListsWF()
         {
             return _database.GetAllWithChildrenAsync<ListWFModel>();
         }
-
         public Task<ListWFModel> GetListWF(int i)
         {
             return _database.GetWithChildrenAsync<ListWFModel>(i);

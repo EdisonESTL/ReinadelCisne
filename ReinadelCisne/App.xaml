@@ -3,6 +3,102 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="ReinadelCisne.App">
     <Application.Resources>
+        <ResourceDictionary>
+        <!-- Xamarin Form Material Design Color System por Jucaripo -->
+        <!-- usamos MD para saber que es Material Design-->
+        <!--  Nombre del patron  + la palabra Color  para identificar en Xaml que solo es color -->
+        <!-- Definición de colores de Marca -->
+            <Color x:Key="MdPrimaryColor">#102949</Color>
+        <Color x:Key="MdPrimaryVariantColor">#3700B3</Color>
+        <Color x:Key="MdSeondaryColor">#03DAC6</Color>
+        <Color x:Key="MdSeondaryVariantColor">#018786</Color>
+        <!-- Definición de colores de sistema-->
+        <Color x:Key="MdBackgroundColor">#FFFFFF</Color>
+        <Color x:Key="MdSorfaceColor">#FFFFFF</Color>
+        <Color x:Key="MdErrorColor">#B00020</Color>
+        <!-- Definición de colores On "Deben tener contraste al color referido" -->
+        <Color x:Key="MdOnPrimaryColor">#FFFFFF</Color>
+        <Color x:Key="MdOnSeondaryColor">#000000</Color>
+        <Color x:Key="MdOnBackgroundColor">#000000</Color>
+        <Color x:Key="MdOnSorfaceColor">#000000</Color>
+        <Color x:Key="MdOnErrorColor">#FFFFFF</Color>
+        <!-- Definición para Unselected elements de primary color-->
+        <Color x:Key="MdUnselectedPrimaryColor">#999999</Color>
+        <!-- Fin de Xamarin Form Material Design Color System -->
+        </ResourceDictionary>
+        
+        <!--Buttons Style-->
+        <Style TargetType="Button"
+               x:Key="ButtonCancel">
+            <Setter Property="BackgroundColor" Value="#C90501"/>
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="FontAttributes" Value="Bold"/>
+            <Setter Property="Padding" Value="0, 6, 0, 6"/>
+        </Style>
+        <Style TargetType="Button"
+               x:Key="ButtonSave">
+            <Setter Property="BackgroundColor" Value="#00FF9E"/>
+            <Setter Property="TextColor" Value="#161616"/>
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="FontAttributes" Value="Bold"/>
+        </Style>
+        <Style TargetType="Button"
+               x:Key="ButtonRegistration">
+            <Setter Property="BackgroundColor" Value="#102949"/>
+            <Setter Property="TextColor" Value="#0EFFF9"/>
+            <Setter Property="FontSize" Value="13"/>
+        </Style>
+        <Style TargetType="Button"
+               x:Key="ButtonDayWeekMonh">
+            <Setter Property="BackgroundColor" Value="#0EFFF9"/>
+            <Setter Property="TextColor" Value="#161616"/>
+            <Setter Property="BorderWidth" Value="1"/>
+            <Setter Property="BorderColor" Value="#096BAF"/>
+            <Setter Property="Padding" Value="0, 6, 0, 6"/>
+        </Style>
+        <Style TargetType="Button"
+               x:Key="ButtonAdd">
+            <Setter Property="BackgroundColor" Value="#061529"/>
+            <Setter Property="TextColor" Value="#FFF500"/>
+        </Style>
+        
+        <!--Label Styles-->
+        <Style TargetType="Label"
+               x:Key="LabelCuentaVenta">
+            <Setter Property="TextColor" Value="Black"/>
+            <Setter Property="FontAttributes" Value="Bold"/>
+        </Style>
+        
+        <Style TargetType="Label"
+               x:Key="LabelRegistroVenta">
+            <Setter Property="TextColor" Value="Black"/>
+            <Setter Property="FontAttributes" Value="Bold,Italic"/>
+            <Setter Property="FontSize" Value="Medium"/>
+            <Setter Property="HorizontalTextAlignment" Value="Center"/>
+        </Style>
 
+        <Style TargetType="Label"
+               x:Key="LabelTittlesColLectionView">
+            <Setter Property="TextColor" Value="Black"/>
+            <Setter Property="FontAttributes" Value="Bold"/>
+            <Setter Property="FontSize" Value="15"/>
+            <Setter Property="HorizontalTextAlignment" Value="Center"/>
+        </Style>
+
+        <!--Frames Styles-->
+        <Style TargetType="Frame"
+               x:Key="FrameGoViewProducts">
+            <Setter Property="BackgroundColor" Value="#102949"/>
+            <Setter Property="BorderColor" Value="#0EFFF9"/>
+            <Setter Property="CornerRadius" Value="10"/>
+            <Setter Property="HasShadow" Value="True"/>
+        </Style>
+
+        <Style TargetType="Frame"
+               x:Key="FrameGoRegistroSales">
+            <Setter Property="BackgroundColor" Value="#68FF80"/>
+            <Setter Property="BorderColor" Value="DarkGray"/>
+            <Setter Property="HasShadow" Value="True"/>
+        </Style>
     </Application.Resources>
 </Application>

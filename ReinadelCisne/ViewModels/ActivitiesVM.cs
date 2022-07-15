@@ -2,13 +2,24 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Web;
 using System.Windows.Input;
 using Xamarin.Forms;
 
 namespace ReinadelCisne.ViewModels
 {
-    public class ActivitiesVM : BaseVM
+    public class ActivitiesVM : BaseVM, IQueryAttributable
     {
+        private int _id;
+        public int Id
+        {
+            get => _id;
+            set
+            {
+                _id = value;
+                OnPropertyChanged();
+            }
+        }
         private DateTime _date = DateTime.Now;
         public DateTime Date
         {
@@ -76,6 +87,7 @@ namespace ReinadelCisne.ViewModels
             {
                 ActivityModel activity = new ActivityModel
                 {
+                    Id = Id,
                     DateA = Date,
                     TimeI = TimeI,
                     TimeF = TimeF,
@@ -85,11 +97,13 @@ namespace ReinadelCisne.ViewModels
                 await App.Database.SaveActivity(activity);
                 await Shell.Current.DisplayAlert("SE GUARDO ACTIVIDAD", "Entre " + TimeI + " y "
                     + TimeF, "Ok");
+
                 ClearActivity();
             }
         }
         private void ClearActivity()
         {
+            Id = 0;
             Date = DateTime.Now;
             TimeI = DateTime.Now.TimeOfDay;
             TimeF = DateTime.Now.TimeOfDay;
@@ -98,6 +112,32 @@ namespace ReinadelCisne.ViewModels
         public ActivitiesVM()
         {
 
+        }
+
+        private string idAct;
+        public void ApplyQueryAttributes(IDictionary<string, string> query)
+        {
+            try
+            {
+                idAct = HttpUtility.UrlDecode(query["ActModId"]);
+
+                LoadAct(idAct);
+
+            }
+            catch (Exception)
+            {
+                Console.WriteLine("Failed to load idproduct.");
+            }
+        }
+
+        private async void LoadAct(string idAct)
+        {
+            var f = await App.Database.getActivity(int.Parse(idAct));
+            Id = f.Id;
+            Date = f.DateA;
+            TimeI = f.TimeI;
+            TimeF = f.TimeF;
+            Description = f.Description;
         }
     }
 }

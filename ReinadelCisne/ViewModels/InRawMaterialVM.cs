@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Windows.Input;
 using Xamarin.Forms;
@@ -11,8 +12,8 @@ namespace ReinadelCisne.ViewModels
 {
     public class InRawMaterialVM : BaseVM, IQueryAttributable
     {
-        private int _id;
-        public int Id
+        private string _id;
+        public string Id
         {
             get { return _id; }
             set
@@ -107,7 +108,7 @@ namespace ReinadelCisne.ViewModels
         public string IdMOD;
         public int IdList;
         public ObservableCollection<RawMaterialModel> ListRawMl { get; set; } = new ObservableCollection<RawMaterialModel>();
-
+        public ObservableCollection<RawMaterialModel> RawsExist { get; set; } = new ObservableCollection<RawMaterialModel>();
         public ICommand goback
         {
             get
@@ -132,7 +133,7 @@ namespace ReinadelCisne.ViewModels
             {
                 RawMaterialModel rawMaterial = new RawMaterialModel()
                 {
-                    Id = Id,
+                    Id = int.Parse(Id),
                     NameRM = NameRM,
                     UnitMeasurementRM = UnitMeasurementRM,
                     CostoRM = float.Parse(CostRM),
@@ -175,7 +176,7 @@ namespace ReinadelCisne.ViewModels
         });
         public ICommand CancelRM => new Command(() =>
         {
-            Id = 0;
+            Id = string.Empty;
             IdList = 0;
             NameRM = string.Empty;
             UnitMeasurementRM = string.Empty;
@@ -192,24 +193,35 @@ namespace ReinadelCisne.ViewModels
             {
                 ListRMModel b = new ListRMModel
                 {
-                    Id = IdList
+                    Id = IdList,
+                    Total = Count
                 };
                 App.Database.SaveListRM(b);
-                b.RawMaterials = new List<RawMaterialModel>();
 
                 foreach (var f in ListRawMl)
                 {
-                    App.Database.SaveRawMaterial(f);
-                    b.RawMaterials.Add(f);
+                    ItemsListRMModel itemsList = new ItemsListRMModel
+                    {
+                        Amount = f.AmountRM,
+                        UnitCost = f.CostoRM,
+                        TotalCost = f.CostoRM * f.AmountRM
+                    };
 
-                    App.Database.UpdateListRM(b);
-                }
+                    App.Database.SaveItemListRM(itemsList);
 
+                    itemsList.ListRMModel = new ListRMModel();
+                    itemsList.ListRMModel = b;
+
+                    itemsList.RawMaterial = new RawMaterialModel();
+                    itemsList.RawMaterial = f;
+
+                    App.Database.UpdateRelationItemRM(itemsList);
+                }               
 
                 var gy = App.Database.GetAllRMList();
                 gy.Wait();
                 var fgh = gy.Result;
-
+                List<ItemsListRMModel> itms = App.Database.GetAllItems().Result;
                 var fd = b.Id;
                 Shell.Current.GoToAsync($"..?IdListOC=0&IdlistRM={b.Id}&IdlistWF=0&idProduct=0");
             }
@@ -226,13 +238,23 @@ namespace ReinadelCisne.ViewModels
         {
             DeleteCommand = new Command<RawMaterialModel>(DeleteRM);
             ModifyCommand = new Command<RawMaterialModel>(ModifyRM);
+            LoadNames();
         }
+        private void LoadNames()
+        {
+            RawsExist.Clear();
+            var a = App.Database.GetMR().Result;
 
+            foreach (var b in a)
+            {
+                RawsExist.Add(b);
+            }
+        }
         private void ModifyRM(RawMaterialModel obj)
         {
             IdMOD = Convert.ToString(ListRawMl.IndexOf(obj));
 
-            Id = obj.Id;
+            Id = obj.Id.ToString();
             NameRM = obj.NameRM;
             UnitMeasurementRM = obj.UnitMeasurementRM;
             CostRM = obj.CostoRM.ToString("N2");
@@ -241,14 +263,12 @@ namespace ReinadelCisne.ViewModels
         private void DeleteRM(RawMaterialModel obj)
         {
             ListRawMl.Remove(obj);
-            
+            Count -= (float)(obj.CostoRM * obj.AmountRM);
+            LongList = ListRawMl.Count;
             if (Convert.ToString(IdList) != null)
             {
                 App.Database.DeleteRawMaterial(obj);
-            }
-
-            Count -= (float)(obj.CostoRM * obj.AmountRM);
-            LongList = ListRawMl.Count;
+            }            
         }
 
         public void ApplyQueryAttributes(IDictionary<string, string> query)
@@ -269,16 +289,31 @@ namespace ReinadelCisne.ViewModels
         private void LoadLS(string idListRM)
         {
             Count = 0;
+            List<RawMaterialModel> rm = App.Database.GetMR().Result;
+            List<ItemsListRMModel> itms = App.Database.GetAllItems().Result;
             var t = App.Database.GetListRM(int.Parse(idListRM)).Result;
 
-            foreach(var d in t.RawMaterials)
+            var its = (from i in itms
+                      where i.ListRMModelId == int.Parse(idListRM)
+                      select i).ToList();
+
+            var tsr = (from it in its
+                       join r in rm on it.RawMaterialModelId equals r.Id
+                       select new RawMaterialModel
+                       {
+                           AmountRM = it.Amount,
+                           NameRM = r.NameRM,
+                           UnitMeasurementRM = r.UnitMeasurementRM,
+                           CostoRM = (float)it.UnitCost
+                       }).ToList();
+            foreach(var d in tsr)
             {
                 ListRawMl.Add(d);
                 Count += (float)(d.CostoRM * d.AmountRM);
             }
 
             IdList = int.Parse(idListRM);
-            LongList = t.RawMaterials.Count;
+            LongList = t.itemsListRMModels.Count;
         }
     }
 }

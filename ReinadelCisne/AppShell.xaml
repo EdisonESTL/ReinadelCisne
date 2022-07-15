@@ -2,7 +2,27 @@
 <Shell xmlns="http://xamarin.com/schemas/2014/forms"
        xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
        xmlns:views="clr-namespace:ReinadelCisne.Views"
-       x:Class="ReinadelCisne.AppShell">
+       x:Class="ReinadelCisne.AppShell"
+       Visual="Material"
+       Shell.TitleColor="Black"
+       Shell.ForegroundColor="Black"
+       Shell.TabBarDisabledColor="Red"
+       >
+    <Shell.Resources>
+        <!-- version  con Los Colores de Metal Design System-->
+        <Style x:Key="BaseStyle" TargetType="Element">
+            <Setter Property="Shell.BackgroundColor" Value="{x:StaticResource MdPrimaryColor}" />
+            <Setter Property="Shell.ForegroundColor" Value="{x:StaticResource MdBackgroundColor}" />
+            <Setter Property="Shell.TitleColor" Value="{x:StaticResource MdOnPrimaryColor}" />
+            <Setter Property="Shell.DisabledColor" Value="{x:StaticResource MdOnBackgroundColor}" />
+            <Setter Property="Shell.UnselectedColor" Value="#95FFFFFF" />
+            <Setter Property="Shell.TabBarBackgroundColor" Value="{x:StaticResource MdPrimaryColor}" />
+            <Setter Property="Shell.TabBarForegroundColor" Value="{x:StaticResource MdOnPrimaryColor}" />
+            <Setter Property="Shell.TabBarUnselectedColor" Value="{x:StaticResource MdUnselectedPrimaryColor}" />
+            <Setter Property="Shell.TabBarTitleColor" Value="{x:StaticResource MdOnPrimaryColor}" />
+        </Style>
+        <Style TargetType="FlyoutItem" BasedOn="{StaticResource BaseStyle}" />
+    </Shell.Resources>
     <FlyoutItem Title="Inicio">
         <ShellContent ContentTemplate="{DataTemplate views:GoView}" Route="RGo"/>
     </FlyoutItem>

@@ -176,9 +176,7 @@ namespace ReinadelCisne.ViewModels
                 aux += obj.TotalShop;
             }
             ShoppingTotal = aux.ToString("N2") + "$";
-        }
-        
-                
+        }      
         public RegistrationShoppingVM()
         {
             Shop = new AuzListShop();

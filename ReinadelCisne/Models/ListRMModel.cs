@@ -12,8 +12,9 @@ namespace ReinadelCisne.Models
     {
         [PrimaryKey, AutoIncrement]
         public int Id { get; set; }
+        public float Total { get; set; }
         
         [OneToMany("ListRMModelId")]
-        public List<RawMaterialModel> RawMaterials { get; set; }
+        public List<ItemsListRMModel> itemsListRMModels { get; set; }
     }
 }

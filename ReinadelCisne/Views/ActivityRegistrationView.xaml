@@ -8,35 +8,43 @@
         <vm:ActivityResgitrationVM/>
     </ContentPage.BindingContext>
     <ContentPage.Content>
-        <Grid Margin="7" RowSpacing="7" RowDefinitions="Auto, 0.8, 2*, Auto, Auto" HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand">
-            <Button BackgroundColor="#0EFFF9" BorderColor="#096BAF" BorderWidth="1" Text="Día" Command="{Binding DayActivity}" Grid.Column="0" Grid.Row="0" HorizontalOptions="CenterAndExpand" VerticalOptions="Center"/>
-            <Button BackgroundColor="#0EFFF9" BorderColor="#096BAF" BorderWidth="1" Text="Semana" Command="{Binding WeekActivity}" Grid.Column="1" Grid.Row="0" HorizontalOptions="CenterAndExpand" VerticalOptions="Center"/>
-            <Button BackgroundColor="#0EFFF9" BorderColor="#096BAF" BorderWidth="1" Text="Mes" Command="{Binding MonthActivity}" Grid.Column="2" Grid.Row="0" HorizontalOptions="CenterAndExpand"/>
+        <Grid Margin="7, 14, 7, 10" RowSpacing="13" RowDefinitions="Auto, 0.8, 2*, Auto, Auto" HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand">
+            <Button Text="Día" Command="{Binding DayActivity}" Grid.Column="0" Grid.Row="0" Style="{StaticResource ButtonDayWeekMonh}"/>
+            <Button Text="Semana" Command="{Binding WeekActivity}" Grid.Column="1" Grid.Row="0" Style="{StaticResource ButtonDayWeekMonh}"/>
+            <Button Text="Mes" Command="{Binding MonthActivity}" Grid.Column="2" Grid.Row="0" Style="{StaticResource ButtonDayWeekMonh}"/>
 
             <BoxView Color="#096BAF" Grid.Row="1" Grid.ColumnSpan="3" HorizontalOptions="Fill" />
 
-            <CollectionView ItemsSource="{Binding Activities, Mode=OneWay}" SelectionMode="None" x:Name="listaMateriaPrima" 
+            <CollectionView ItemsSource="{Binding Activities, Mode=OneWay}" SelectionMode="None" x:Name="ListActivity" 
                             Grid.ColumnSpan="3" Grid.Row="2" HorizontalOptions="Center">
                 <CollectionView.ItemsLayout>
                     <LinearItemsLayout Orientation="Vertical" ItemSpacing="7"/>
                 </CollectionView.ItemsLayout>
                 <CollectionView.Header>
                     <Grid>
-                        <Label Text="Fecha" FontSize="17" FontAttributes="Bold" TextColor="Black" Grid.Column="0" HorizontalTextAlignment="Center"/>
-                        <Label Text="Desde:" FontSize="17" FontAttributes="Bold" TextColor="Black" Grid.Column="1" HorizontalTextAlignment="Center"/>
-                        <Label Text="Hasta:" FontSize="17" FontAttributes="Bold" TextColor="Black" Grid.Column="2" HorizontalTextAlignment="Center"/>
+                        <Label Text="Fecha" Grid.Column="0" Style="{StaticResource LabelTittlesColLectionView}"/>
+                        <Label Text="Desde:" Grid.Column="1" Style="{StaticResource LabelTittlesColLectionView}"/>
+                        <Label Text="Hasta:" Grid.Column="2" Style="{StaticResource LabelTittlesColLectionView}"/>
                     </Grid>
                 </CollectionView.Header>
                 <CollectionView.ItemTemplate>
                     <DataTemplate>
-                        <Frame BorderColor="DarkGray" HasShadow="True">
-                            <Grid Padding="0">
-                                <DatePicker Date="{Binding DateA}" Format="M" IsEnabled="True" Grid.Column="0"/>
-                                <TimePicker Time="{Binding TimeI}" Format="HH:mm" Grid.Column="1"/>
-                                <TimePicker Time="{Binding TimeF}" Format="HH:mm" Grid.Column="2"/>
-                                <Label Grid.Row="1" Grid.ColumnSpan="3" Text="{Binding Description}" TextColor="Black" FontSize="18" HorizontalTextAlignment="Center"/>
-                            </Grid>
-                        </Frame>                        
+                        <SwipeView>
+                            <SwipeView.LeftItems>
+                                <SwipeItem Text="Modificar"
+                                   BackgroundColor="LightGreen"
+                                   Command="{Binding Source={x:Reference ListActivity}, Path=BindingContext.ModifyCommand}"
+                                   CommandParameter="{Binding}" />                              
+                            </SwipeView.LeftItems>
+                            <Frame BorderColor="DarkGray" HasShadow="True">
+                                <Grid Padding="0" RowDefinitions="Auto, Auto">
+                                    <DatePicker Date="{Binding DateA}" Format="M" Grid.Column="0" IsEnabled="False" FontSize="16"/>
+                                    <TimePicker Time="{Binding TimeI}" Format="HH:mm" Grid.Column="1" IsEnabled="False" FontSize="16"/>
+                                    <TimePicker Time="{Binding TimeF}" Format="HH:mm" Grid.Column="2" IsEnabled="False" FontSize="16"/>
+                                    <Editor Grid.Row="1" Grid.ColumnSpan="3" Text="{Binding Description}" TextColor="Black" FontSize="18" IsReadOnly="True"/>
+                                </Grid>
+                            </Frame>
+                        </SwipeView>                                             
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
             </CollectionView>            
