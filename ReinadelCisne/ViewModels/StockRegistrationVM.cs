@@ -36,20 +36,13 @@ namespace ReinadelCisne.ViewModels
                 });
             }
         }
+        public ICommand NewStockCommand => new Command(() =>
+        {
+            Shell.Current.GoToAsync("NewStock");
+        });
 
         public Command<ProductModel> Delete { get; }
         public Command<ProductModel> Modify { get; }
-        public ICommand goback
-        {
-            get
-            {
-                return new Command(() =>
-                {
-                    Shell.Current.GoToAsync($"..?idProduct=0");
-                });
-            }            
-        }
-
         public StockRegistrationVM()
         {
             ListProductStock();
@@ -80,7 +73,7 @@ namespace ReinadelCisne.ViewModels
 
         private async void ModifyPS(ProductModel obj)
         {
-            await Shell.Current.GoToAsync($"//RStock?IdListOC=0&IdlistRM=0&IdlistWF=0&idProduct={obj.Id}");
+            await Shell.Current.GoToAsync($"NewStock?IdListOC=0&IdlistRM=0&IdlistWF=0&idProduct={obj.Id}");
         }
     }
 }

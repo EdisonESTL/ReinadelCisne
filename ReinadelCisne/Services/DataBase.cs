@@ -30,8 +30,38 @@ namespace ReinadelCisne.Services
             _database.CreateTableAsync<ShoppingModel>();
             _database.CreateTableAsync<ShoppingListModel>();
             _database.CreateTableAsync<ActivityModel>();
+            _database.CreateTableAsync<ClientModel>();
+            _database.CreateTableAsync<UserModel>();
         }
+        //Proceso Usuario
+        public bool ValidarUsuario(string ci, string contrasenia)
+        {
+            //var gf = _dataBase.QueryAsync<UserModel>("SELECT NameUser FROM UserModel WHERE CiUser = ? AND PasswordUser = ?", ci, contrasenia);
 
+            var data = _database.Table<UserModel>().FirstOrDefaultAsync(t => t.CiUser == ci && t.PasswordUser == contrasenia);
+            data.Wait();
+            var result = data.Result;
+            if (result != null)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        //Procesos Clientes
+        public Task<int> SaveClients(ClientModel client)
+        {
+            if (client.Id != 0)
+            {
+                return _database.UpdateAsync(client);
+            }
+            else
+            {
+                return _database.InsertAsync(client);
+            }
+        }
         //Procesos Actividades
         public Task<int> SaveActivity(ActivityModel activity)
         {

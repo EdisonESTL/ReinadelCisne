@@ -8,7 +8,7 @@
         <vm:RegistrationShoppingVM/>
     </ContentPage.BindingContext>
     <ContentPage.Content>
-        <Grid Margin="20" RowSpacing="20" Padding="0" RowDefinitions="Auto, 0.8, 2*, Auto, Auto" HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand">
+        <Grid Margin="20" RowSpacing="20" Padding="0" RowDefinitions="Auto, 0.8, 2*, Auto, Auto, Auto" HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand">
             <Button Text="Día" Command="{Binding DayShopping}" Grid.Column="0" Grid.Row="0" Style="{StaticResource ButtonDayWeekMonh}"/>
             <Button Text="Semana" Command="{Binding WeekShopping}" Grid.Column="1" Grid.Row="0" Style="{StaticResource ButtonDayWeekMonh}"/>
             <Button Text="Mes" Command="{Binding MonthShopping}" Grid.Column="2" Grid.Row="0" Style="{StaticResource ButtonDayWeekMonh}"/>
@@ -37,8 +37,9 @@
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
             </CollectionView>
-            <Label Text="Total comprado" Grid.Row="3" Grid.ColumnSpan="2" FontSize="17" FontAttributes="Bold" TextColor="Black"/>
-            <Label Text="{Binding ShoppingTotal}" Grid.Row="3" Grid.Column="2" HorizontalOptions="Center"/>
+            <Label Text="Total comprado" Grid.Row="3" Grid.ColumnSpan="2" FontSize="17" FontAttributes="Bold" TextColor="Black" Style="{StaticResource LabelCuentaVenta}"/>
+            <Label Text="{Binding ShoppingTotal}" Grid.Row="3" Grid.Column="2" HorizontalOptions="Center" Style="{StaticResource LabelRegistroVenta}"/>
+            <Button Text="Nueva compra" Grid.Row="4" Grid.ColumnSpan="3" Style="{StaticResource ButtonRegistration}" Command="{Binding NewSCommand}"/>
         </Grid>
     </ContentPage.Content>
 </ContentPage>

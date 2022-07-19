@@ -1,12 +1,42 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="ReinadelCisne.Views.RawMaterial">
+             xmlns:vm="clr-namespace:ReinadelCisne.ViewModels"
+             x:Class="ReinadelCisne.Views.RawMaterial"
+             Title="Materia Prima">
+    <ContentPage.BindingContext>
+        <vm:RawMaterialVm/>
+    </ContentPage.BindingContext>
     <ContentPage.Content>
         <StackLayout>
-            <Label Text="Welcome to Xamarin.Forms!"
-                VerticalOptions="CenterAndExpand" 
-                HorizontalOptions="CenterAndExpand" />
+            <RefreshView IsRefreshing="{Binding IsRefreshing}" Command="{Binding RefreshCommand}">
+                <CollectionView ItemsSource="{Binding RawMaterials, Mode=OneWay}" SelectionMode="Single" x:Name="listaMateriaPrima" SelectionChangedCommand="{Binding SelectedCommand}" 
+                            SelectedItem="{Binding Shop}" SelectionChangedCommandParameter="{Binding SelectedItem , Source={x:Reference listaMateriaPrima}}" Grid.ColumnSpan="3" Grid.Row="2" HorizontalOptions="Center">
+                    <CollectionView.ItemsLayout>
+                        <LinearItemsLayout Orientation="Vertical" ItemSpacing="3"/>
+                    </CollectionView.ItemsLayout>
+                    <CollectionView.Header>
+                        <Grid>
+                            <Label Text="Material" Grid.Column="0" Style="{StaticResource LabelTittlesColLectionView}"/>
+                            <Label Text="Medida" Grid.Column="1" Style="{StaticResource LabelTittlesColLectionView}"/>
+                            <Label Text="Cantidad" Grid.Column="2" Style="{StaticResource LabelTittlesColLectionView}"/>
+                            <Label Text="c/u P." Grid.Column="3" Style="{StaticResource LabelTittlesColLectionView}"/>
+                        </Grid>
+                    </CollectionView.Header>
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <Frame Style="{StaticResource FrameGoRegistroSales}">
+                                <Grid>
+                                    <Label Grid.Column="0" Text="{Binding Description}" Style="{StaticResource LabelRegistroVenta}" FontSize="15"/>
+                                    <Label Grid.Column="1" Text="{Binding Measurament}" Style="{StaticResource LabelRegistroVenta}" FontSize="15"/>
+                                    <Label Grid.Column="2" Text="{Binding Amount}" Style="{StaticResource LabelRegistroVenta}"/>
+                                    <Label Grid.Column="3" Text="{Binding UnitCost}" Style="{StaticResource LabelRegistroVenta}"/>
+                                </Grid>
+                            </Frame>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+            </RefreshView>
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>

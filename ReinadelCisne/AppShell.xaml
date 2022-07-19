@@ -23,6 +23,9 @@
         </Style>
         <Style TargetType="FlyoutItem" BasedOn="{StaticResource BaseStyle}" />
     </Shell.Resources>
+    <ShellItem Route="login" FlyoutItemIsVisible="False">
+        <ShellContent ContentTemplate="{DataTemplate views:LoginView }"/>
+    </ShellItem>
     <FlyoutItem Title="Inicio">
         <ShellContent ContentTemplate="{DataTemplate views:GoView}" Route="RGo"/>
     </FlyoutItem>
@@ -30,16 +33,24 @@
         <ShellContent ContentTemplate="{DataTemplate views:ActivytiesView}" Route="RRaw"/>
     </FlyoutItem>
     <FlyoutItem Title="Compras">
-        <ShellContent ContentTemplate="{DataTemplate views:ShoppingView}" Route="RShopping"/>
-    </FlyoutItem>
-    <FlyoutItem Title="Ventas">
-        <ShellContent ContentTemplate="{DataTemplate views:SalesView}" Route="RSales"/>
-    </FlyoutItem>
-    <FlyoutItem Title="Stock">
-        <ShellContent ContentTemplate="{DataTemplate views:StockView}" Route="RStock"/>
+        <ShellContent ContentTemplate="{DataTemplate views:RegistrationShoppingView}" Route="RShopping"/>
     </FlyoutItem>
     <FlyoutItem Title="Materia Prima">
         <ShellContent ContentTemplate="{DataTemplate views:RawMaterial}" Route="RRaw"/>
     </FlyoutItem>
-    
+    <FlyoutItem Title="Productos">
+        <ShellContent ContentTemplate="{DataTemplate views:StockRegistrationView}" Route="RStock"/>
+    </FlyoutItem>    
+    <FlyoutItem Title="Resultados">
+        <ShellContent ContentTemplate="{DataTemplate views:SalesView}" Route="RSales"/>
+        <!--<Tab Title="Ventas">
+            <ShellContent ContentTemplate="{DataTemplate views:SalesView}" Route="RSales"/>
+        </Tab>
+        <Tab Title="Compras">
+            <ShellContent ContentTemplate="{DataTemplate views:ShopsView}" Route="RShops"/>
+        </Tab>
+        <Tab Title="Total">
+            <ShellContent ContentTemplate="{DataTemplate views:ResultsTotalView}" Route="RTotals"/>
+        </Tab>-->
+    </FlyoutItem>
 </Shell>

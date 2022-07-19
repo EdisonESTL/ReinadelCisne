@@ -2,24 +2,27 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:VM="clr-namespace:ReinadelCisne.ViewModels" 
-             x:Class="ReinadelCisne.Views.StockRegistrationView">
+             x:Class="ReinadelCisne.Views.StockRegistrationView"
+             Title="Productos/Servicios">
     <ContentPage.BindingContext>
         <VM:StockRegistrationVM/>
-    </ContentPage.BindingContext>
-    <Shell.BackButtonBehavior>
-        <BackButtonBehavior Command="{Binding goback}"/>
-    </Shell.BackButtonBehavior>
+    </ContentPage.BindingContext>    
     <ContentPage.Content>
-        <StackLayout>
-            <Label Text="Lista de registros de Productos o Servicios" Margin="0,10,0,10"/>
+        <StackLayout Margin="7">
             <RefreshView IsRefreshing="{Binding IsRefreshing}" Command="{Binding RefreshCommand}">
                 <CollectionView ItemsSource="{Binding ListPS, Mode=TwoWay}" SelectionMode="None" x:Name="ListStock">
                     <CollectionView.ItemsLayout>
                         <LinearItemsLayout Orientation="Vertical" ItemSpacing="7"/>
                     </CollectionView.ItemsLayout>
+                    <CollectionView.Header>
+                        <Grid>
+                            <Label Text="Producto/Servicio" Grid.Column="0" Style="{StaticResource LabelTittlesColLectionView}"/>
+                            <Label Text="Valor $" Grid.Column="1" Style="{StaticResource LabelTittlesColLectionView}"/>
+                        </Grid>
+                    </CollectionView.Header>
                     <CollectionView.ItemTemplate>
                         <DataTemplate>
-                            <Frame BorderColor="Black" Padding="0" CornerRadius="40" BackgroundColor="Transparent">
+                            <Frame Style="{StaticResource FrameGoRegistroSales}">
                                 <SwipeView BackgroundColor="Transparent">
                                     <SwipeView.RightItems>
                                         <SwipeItems>
@@ -33,17 +36,9 @@
                                                    />
                                         </SwipeItems>
                                     </SwipeView.RightItems>
-                                    <Grid Padding="13" HorizontalOptions="CenterAndExpand">
-                                        <Grid.RowDefinitions>
-                                            <RowDefinition Height="Auto"/>
-                                        </Grid.RowDefinitions>
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="125"/>
-                                            <ColumnDefinition Width="Auto"/>
-                                        </Grid.ColumnDefinitions>
-                                        <Label Grid.Column="0" Text="{Binding NameProduct}"/>
-                                        <Label Grid.Column="1" Text="{Binding PriceProduct}"
-                                           HorizontalOptions="End"/>
+                                    <Grid>                                        
+                                        <Label Grid.Column="0" Text="{Binding NameProduct}" Style="{StaticResource LabelRegistroVenta}"/>
+                                        <Label Grid.Column="1" Text="{Binding PriceProduct}" Style="{StaticResource LabelRegistroVenta}"/>
                                     </Grid>
                                 </SwipeView>
                             </Frame>
@@ -51,6 +46,7 @@
                     </CollectionView.ItemTemplate>
                 </CollectionView>
             </RefreshView>
+            <Button Text="Nuevo" Command="{Binding NewStockCommand}" Style="{StaticResource ButtonRegistration}"/>
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>

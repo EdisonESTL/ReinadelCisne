@@ -9,12 +9,14 @@
         <vm:GoVM/>
     </ContentPage.BindingContext>
     <ContentPage.Content>
-        <Grid RowDefinitions="Auto, 0.8, 2*, 0.8, Auto" Padding="3,0,3,7">
+        <Grid RowDefinitions="60, 0.8, 2*, 0.8, Auto" Padding="3,0,3,7">
             <Label x:Name="LabelPapas" Text="{Binding Cuenta}"
                    Margin="10" Style="{StaticResource LabelCuentaVenta}"
-                   FontSize="50"
+                   FontSize="23"
                    HorizontalOptions="CenterAndExpand" 
-                   Grid.Row="0" Grid.ColumnSpan="3"/>
+                   Grid.Row="0" Grid.Column="1"/>
+            <ImageButton Source="descuentoicon.png" Aspect="AspectFit" BackgroundColor="Transparent" Command="{Binding DiscountCommand}" Grid.Row="0" Grid.Column="2" VerticalOptions="Center" HorizontalOptions="Center"/>
+            <Button Text="x Cobrar" Command="{Binding WaytoPayCommand}" Grid.Row="0" Grid.Column="0" VerticalOptions="Center" HorizontalOptions="Center" FontSize="11"/>
             <BoxView Color="#096BAF" Grid.Row="1" Grid.ColumnSpan="3"
              HorizontalOptions="Fill" />
             <RefreshView IsRefreshing="{Binding IsRefreshing}" Command="{Binding RefreshCommand}" Grid.Row="2" Grid.ColumnSpan="3" BackgroundColor="#00FF9E">

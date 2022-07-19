@@ -2,7 +2,8 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:vm="clr-namespace:ReinadelCisne.ViewModels"
-             x:Class="ReinadelCisne.Views.InOtherCost">
+             x:Class="ReinadelCisne.Views.InOtherCost"
+             Title="Ingresando Otros Costos">
     <ContentPage.BindingContext>
         <vm:InOtherCostVM/>
     </ContentPage.BindingContext>
@@ -11,24 +12,24 @@
     </Shell.BackButtonBehavior>
     <ContentPage.Content>
         <Grid Margin="7" RowDefinitions="Auto, Auto, Auto, Auto, Auto, Auto, Auto, 0.8, 2*, 0.8, Auto">
-            <Label Text="Ingresando Otros Costos" HorizontalOptions="Center" Padding="7" FontSize="20" FontAttributes="Bold" TextColor="Black" Grid.Row="0" Grid.ColumnSpan="2"/>
+            <Label Text="Ingresando Otros Costos" HorizontalOptions="Center" IsVisible="false" Padding="7" FontSize="20" FontAttributes="Bold" TextColor="Black" Grid.Row="0" Grid.ColumnSpan="2"/>
 
-            <Label Text="Descripción" FontSize="17" FontAttributes="Bold" TextColor="Black" Grid.Row="1"/>
+            <Label Text="Descripción" Grid.Row="1" Style="{StaticResource LabelTittlesColLectionView}"/>
             <Entry Placeholder="nombre"
                    ClearButtonVisibility="WhileEditing"
                    FontSize="Small" 
                    Text="{Binding Description, Mode=TwoWay}" Grid.Row="2" Grid.ColumnSpan="2"/>
 
-            <Label Text="Costo $" HorizontalOptions="End" VerticalOptions="Center" FontSize="17" FontAttributes="Bold" TextColor="Black" Grid.Row="3" Grid.Column="0"/>
+            <Label Text="Costo $" HorizontalOptions="End" VerticalOptions="Center" Style="{StaticResource LabelTittlesColLectionView}" Grid.Row="3" Grid.Column="0"/>
             <Entry Placeholder="Costo"
                    ClearButtonVisibility="WhileEditing"
                    Keyboard="Numeric"
                    Text="{Binding Cost, Mode=TwoWay}" Grid.Row="3" Grid.Column="1"/>
 
-            <Label Text="Elementos" Grid.Row="5" Grid.Column="0"/>
-            <Label Text="{Binding LongList}" Grid.Row="6" Grid.Column="0"/>
-            <Label Text="$ Total otros costos" Grid.Row="5" HorizontalOptions="End" Grid.Column="1" FontSize="15" FontAttributes="Bold" TextColor="Black"/>
-            <Label Text="{Binding Count}" Grid.Row="6" Grid.Column="1" HorizontalOptions="End" FontSize="17" FontAttributes="Bold" TextColor="Black"/>
+            <Label Text="Elementos" Grid.Row="5" Grid.Column="0" Style="{StaticResource LabelTittlesColLectionView}"/>
+            <Label Text="{Binding LongList}" Grid.Row="6" Grid.Column="0" Style="{StaticResource LabelTittlesColLectionView}"/>
+            <Label Text="$ Total otros costos" Grid.Row="5" HorizontalOptions="End" Grid.Column="1" Style="{StaticResource LabelTittlesColLectionView}"/>
+            <Label Text="{Binding Count}" Grid.Row="6" Grid.Column="1" HorizontalOptions="Center" Style="{StaticResource LabelTittlesColLectionView}"/>
 
             <BoxView Color="#096BAF" Grid.Row="7" Grid.ColumnSpan="2"
              HorizontalOptions="Fill" />
@@ -41,7 +42,7 @@
                     </CollectionView.ItemsLayout>
                     <CollectionView.ItemTemplate>
                         <DataTemplate>
-                            <Frame BorderColor="Black" Padding="3" CornerRadius="7" BackgroundColor="Transparent">
+                            <Frame Style="{StaticResource FrameGoRegistroSales}">
                                 <SwipeView BackgroundColor="Transparent">
                                     <SwipeView.RightItems>
                                         <SwipeItems>
@@ -72,14 +73,14 @@
             <BoxView Color="#096BAF" Grid.Row="9" Grid.ColumnSpan="2"
              HorizontalOptions="Fill" />
             
-            <StackLayout Orientation="Horizontal" HorizontalOptions="CenterAndExpand" Grid.Row="10" Grid.ColumnSpan="2">
-                <Button Text="Cancelar"
+            <Grid HorizontalOptions="CenterAndExpand" Grid.Row="10" Grid.ColumnSpan="2">
+                <Button Text="Borrar" Style="{StaticResource ButtonCancel}" Grid.Column="0" 
                     Command="{Binding CancelCommand}"/>
-                <Button Text="Añadir" 
+                <Button Text="Añadir" Style="{StaticResource ButtonAdd}" Grid.Column="1"
                     Command="{Binding AddCommand}"/>
-                <Button Text="Finalizar" 
+                <Button Text="Finalizar" Style="{StaticResource ButtonSave}" Grid.Column="2" FontSize="11"
                     Command="{Binding FinshCommand}"/>
-            </StackLayout>
+            </Grid>
         </Grid>        
     </ContentPage.Content>
 </ContentPage>

@@ -104,7 +104,7 @@ namespace ReinadelCisne.ViewModels
             Ventas.Clear();
             var sales = App.Database.ListSales().Result;
             var fgt = (from s in sales
-                       where s.DateSale.Date == StartDate.Date
+                       where s.DateSale.Date == StartDate.Date & s.WayToPay != "por cobrar"
                        select s).ToList();
             mostrarL(fgt);
         }
@@ -115,7 +115,7 @@ namespace ReinadelCisne.ViewModels
             Ventas.Clear();
             var sales = App.Database.ListSales().Result;
             var fgt = (from s in sales
-                       where s.DateSale.Date.Month == StartDate.Date.Month
+                       where s.DateSale.Date.Month == StartDate.Date.Month & s.WayToPay != "por cobrar"
                        select s).ToList();
             mostrarL(fgt);
         });
@@ -128,11 +128,15 @@ namespace ReinadelCisne.ViewModels
             WeekDay(StartDate, out DateTime di, out DateTime df);
 
             var fgt = (from s in sales
-                       where s.DateSale.Date >= di.Date & StartDate.Date <= df.Date
+                       where s.DateSale.Date >= di.Date & StartDate.Date <= df.Date & s.WayToPay != "por cobrar"
                        select s).ToList();
             mostrarL(fgt);
         });
 
+        public ICommand XcobrarCommand => new Command(() =>
+        {
+            Shell.Current.GoToAsync("GoRegistrationXcobrar");
+        });
         private void mostrarL(List<SaleModel> list)
         {
             n = 0;

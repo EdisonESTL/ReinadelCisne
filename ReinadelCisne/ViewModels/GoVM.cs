@@ -10,13 +10,46 @@ namespace ReinadelCisne.ViewModels
 {    
     public class GoVM : BaseVM
     {
-        public object _sto;
-        public object SelectedItem 
+        private double _entryDesc;
+        public double EntryDesc
         {
-            get { return _sto; }
+            get => _entryDesc;
             set
             {
-                _sto = value;
+                _entryDesc = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private string _wayPay = "efectivo";
+        public string WayPay
+        {
+            get => _wayPay;
+            set
+            {
+                _wayPay = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private string _clientexC;
+        public string ClientexC
+        {
+            get => _clientexC;
+            set
+            {
+                _clientexC = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private object _selectedItem;
+        public object SelectedItem 
+        {
+            get { return _selectedItem; }
+            set
+            {
+                _selectedItem = value;
                 OnPropertyChanged();
             }
         }
@@ -59,11 +92,34 @@ namespace ReinadelCisne.ViewModels
         public ICommand SelectedCommand => new Command((obj) =>
         {
             ProductModel prods = obj as ProductModel;
-            
-            
+                       
             //ListOrder.Add(prods);
             SumarOrden(prods);
         });
+        public ICommand DiscountCommand => new Command(() =>
+        {
+            if (Cuenta != 0)
+            {
+                AppplyDiscount();
+            }
+        });
+
+        //Por cobrar
+        public ICommand WaytoPayCommand => new Command(() =>
+        {
+            PaytoWay();
+        });
+
+        private async void PaytoWay()
+        {
+            if(Cuenta != 0)
+            {
+                string res = await Shell.Current.DisplayPromptAsync("Por Cobrar", "Nombre de Cliente");
+                ClientexC = res;
+                WayPay = "por cobrar";
+            }
+            
+        }
 
         //Limpiar
         public ICommand ClearCommand => new Command(() =>
@@ -75,21 +131,32 @@ namespace ReinadelCisne.ViewModels
         public ICommand NewCommand => new Command(() =>
         {
             if (Order != null)
-            {                
+            {
+                ClientModel client = new ClientModel
+                {
+                    Name = ClientexC
+                };
+
+                App.Database.SaveClients(client);
+
                 SaleModel d = new SaleModel();
                 d.DateSale = DateTime.Now;
                 d.TotalSale = Cuenta;
+                d.Discount = EntryDesc;
+                d.WayToPay = WayPay;
                 
                 App.Database.SaveSale(d);
                 d.Orders = new List<OrderModel>();
+                d.ClientModel = new ClientModel();
+                d.ClientModel = client;
 
                 foreach (var obj in Order)
                 {
                     App.Database.SaveOrder(obj);
                     d.Orders.Add(obj);
                     App.Database.UpdateRealtionSales(d);
-                }                
-                                
+                }
+                var gg = App.Database.ListSales().Result;     
                 ClearOrder();
                 d = null;
                 ListProductStock();
@@ -107,7 +174,17 @@ namespace ReinadelCisne.ViewModels
         {
             ListProductStock();
         }
-        
+
+        private async void AppplyDiscount()
+        {
+            string res = await Shell.Current.DisplayPromptAsync("Descuento", "Cuanto va a descontar en $?", maxLength: 2, keyboard: Keyboard.Numeric);
+            if (!string.IsNullOrEmpty(res))
+            {
+                Cuenta = Cuenta - double.Parse(res);
+                EntryDesc = double.Parse(res);
+            }            
+        }
+
         //Lista de productos para vender
         private async void ListProductStock()
         {
@@ -147,6 +224,7 @@ namespace ReinadelCisne.ViewModels
         private void ClearOrder()
         {
             Cuenta = 0.00;
+            EntryDesc = 0;
             Order.Clear();
         }
     }

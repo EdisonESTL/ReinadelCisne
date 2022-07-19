@@ -1,0 +1,65 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:ReinadelCisne.ViewModels"
+             x:Class="ReinadelCisne.Views.LoginView"
+             Shell.NavBarIsVisible="False"
+             Shell.FlyoutBehavior="Disabled"
+             BackgroundColor="{StaticResource MdPrimaryColor}">
+    <ContentPage.BindingContext>
+        <vm:LoginVM/>
+    </ContentPage.BindingContext>
+    <ContentPage.Content>
+        <Grid RowDefinitions="Auto, 2*, Auto, Auto">
+            <StackLayout Grid.Row="0" Margin="0, 60, 0, 30">
+                <Label Text="Taller de Zapatería" TextColor="White" FontAttributes="Bold,Italic" FontSize="Title" HorizontalOptions="Center" VerticalOptions="CenterAndExpand"/>
+                <Label Text="Reina del Cisne" TextColor="White" FontAttributes="Bold,Italic" FontSize="Title" HorizontalOptions="Center" VerticalOptions="CenterAndExpand"/>
+            </StackLayout>
+            
+            <!--Formulario Usuario Contraseña-->
+            <Frame Style="{StaticResource FrameLogin}" BackgroundColor="{StaticResource MdPrimaryColor}" Grid.Row="1" VerticalOptions="Center">
+                <Grid ColumnDefinitions="30, 2*, Auto">
+                    <Image Source="Usuario.png" Aspect="AspectFit"
+                           Grid.Column="0"
+                           Grid.Row="0" HorizontalOptions="Center"
+                           VerticalOptions="CenterAndExpand"/>
+                    <Image Source="Contrasenia.png" Aspect="AspectFit"
+                           Grid.Column="0"
+                           Grid.Row="1"
+                           VerticalOptions="CenterAndExpand"/>
+                    <Entry Placeholder="Usuario"
+                           Grid.Column="1"
+                           Grid.Row="0"
+                           ClearButtonVisibility="WhileEditing"
+                           Text="{Binding CiUser}"/>
+                    <Entry Placeholder="Contraseña"
+                           Grid.Column="1"
+                           Grid.Row="1"
+                           MaxLength="12"
+                           IsPassword="True"
+                           ClearButtonVisibility="WhileEditing"
+                           Text="{Binding PasswordUser}"/>
+                    <ImageButton Source="BotonEntrar.png" BackgroundColor="Transparent"
+                                 Grid.Column="2"
+                                 Grid.RowSpan="2" HorizontalOptions="Center"
+                                 VerticalOptions="CenterAndExpand"
+                                 Command="{Binding EntryCommand}"/>
+                </Grid>
+            </Frame>
+            <!--Opcion Registrarse-->
+            <Button Text="Registrarse" Grid.Row="2" Margin="0,0,0,30" BackgroundColor="Transparent" TextColor="#08B7FF" 
+                    HorizontalOptions="Center" BorderColor="Transparent"
+                    Command="{Binding RegisterCommand}" IsVisible="{Binding IsRegister}"/>
+
+            <!--Iconos-->
+            <Grid Grid.Row="3" Margin="0, 0, 0, 70">
+                <Image Source="IconoSubirTitulo.png" Grid.Row="0" Grid.Column="1" HorizontalOptions="End"/>
+                <Image Source="IconoDineroTitulo.png" Grid.Row="0" Grid.Column="1"/>
+                <Image Source="IconoTallerTitulo.png" Grid.Row="0" Grid.Column="1" HorizontalOptions="Start"/>
+                <Image Source="Yintu" Grid.Row="1" Grid.ColumnSpan="3"/>
+            </Grid>
+            <!--Imagen Yintu-->
+        </Grid>
+
+    </ContentPage.Content>
+</ContentPage>

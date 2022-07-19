@@ -10,6 +10,6 @@ namespace ReinadelCisne.Models
         public string Measurament { get; set; }
         public string Description { get; set; }
         public string UnitCost { get; set; }
-        public float TotalCost { get; set; }
+        public string TotalCost { get; set; }
     }
 }

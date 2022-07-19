@@ -8,7 +8,7 @@
         <!-- usamos MD para saber que es Material Design-->
         <!--  Nombre del patron  + la palabra Color  para identificar en Xaml que solo es color -->
         <!-- Definición de colores de Marca -->
-            <Color x:Key="MdPrimaryColor">#102949</Color>
+        <Color x:Key="MdPrimaryColor">#102949</Color>
         <Color x:Key="MdPrimaryVariantColor">#3700B3</Color>
         <Color x:Key="MdSeondaryColor">#03DAC6</Color>
         <Color x:Key="MdSeondaryVariantColor">#018786</Color>
@@ -58,8 +58,8 @@
         </Style>
         <Style TargetType="Button"
                x:Key="ButtonAdd">
-            <Setter Property="BackgroundColor" Value="#061529"/>
-            <Setter Property="TextColor" Value="#FFF500"/>
+            <Setter Property="BackgroundColor" Value="#0D2D57"/>
+            <Setter Property="TextColor" Value="#EAB91D"/>
         </Style>
         
         <!--Label Styles-->
@@ -84,7 +84,7 @@
             <Setter Property="FontSize" Value="15"/>
             <Setter Property="HorizontalTextAlignment" Value="Center"/>
         </Style>
-
+        
         <!--Frames Styles-->
         <Style TargetType="Frame"
                x:Key="FrameGoViewProducts">
@@ -98,6 +98,13 @@
                x:Key="FrameGoRegistroSales">
             <Setter Property="BackgroundColor" Value="#68FF80"/>
             <Setter Property="BorderColor" Value="DarkGray"/>
+            <Setter Property="HasShadow" Value="True"/>
+        </Style>
+
+        <Style TargetType="Frame"
+               x:Key="FrameLogin">
+            <Setter Property="BackgroundColor" Value="#096BAF"/>
+            <Setter Property="BorderColor" Value="#08B7FF"/>
             <Setter Property="HasShadow" Value="True"/>
         </Style>
     </Application.Resources>

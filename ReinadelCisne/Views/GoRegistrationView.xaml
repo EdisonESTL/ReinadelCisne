@@ -8,7 +8,7 @@
         <vm:GoRegistrationVM/>
     </ContentPage.BindingContext>
     <ContentPage.Content>
-        <Grid Margin="7" RowSpacing="7" Padding="0" RowDefinitions="Auto, 0.8, 2*, Auto, Auto" HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand">
+        <Grid Margin="7" RowSpacing="7" Padding="0" RowDefinitions="Auto, 0.8, 2*, Auto, Auto, Auto" HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand">
             <Button Text="Día" Command="{Binding DayCommand}" Grid.Column="0" Grid.Row="0" Style="{StaticResource ButtonDayWeekMonh}"/>
             <Button Text="Semana" Command="{Binding WeekCommand}" Grid.Column="1" Grid.Row="0" Style="{StaticResource ButtonDayWeekMonh}"/>
             <Button Text="Mes" Command="{Binding MounthCommand}" Grid.Column="2" Grid.Row="0" Style="{StaticResource ButtonDayWeekMonh}"/>
@@ -38,6 +38,7 @@
             </CollectionView>
             <Label Text="Total vendido" Grid.Row="3" Grid.ColumnSpan="2" Style="{StaticResource LabelCuentaVenta}" VerticalOptions="Center" HorizontalOptions="Center" FontSize="17"/>
             <Label Text="{Binding SalesTotal}" Grid.Row="3" Grid.Column="2" Style="{StaticResource LabelRegistroVenta}" VerticalOptions="Center" HorizontalOptions="Start"/>
+            <Button Text="Por Cobrar" Grid.Row="4" Grid.ColumnSpan="3" Command="{Binding XcobrarCommand}" Style="{StaticResource ButtonRegistration}"/>
         </Grid>
     </ContentPage.Content>
 </ContentPage>

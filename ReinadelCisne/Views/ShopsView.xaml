@@ -1,0 +1,54 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:ReinadelCisne.ViewModels"
+             x:Class="ReinadelCisne.Views.ShopsView">
+    <ContentPage.BindingContext>
+        <vm:ShopsVM/>
+    </ContentPage.BindingContext>
+    <ContentPage.Content>
+        <Grid>
+            <Button Text="Semana" Grid.Row="0" Grid.Column="0" Command="{Binding DayCommand}" Style="{StaticResource ButtonDayWeekMonh}"/>
+            <Button Text="Mes" Grid.Row="0" Grid.Column="1" Command="{Binding DayCommand}" Style="{StaticResource ButtonDayWeekMonh}"/>
+            <Button Text="Año" Grid.Row="0" Grid.Column="2" Command="{Binding DayCommand}" Style="{StaticResource ButtonDayWeekMonh}"/>
+            <RefreshView IsRefreshing="{Binding IsRefreshing}" Command="{Binding RefreshCommand}" Grid.Row="1" Grid.ColumnSpan="3" BackgroundColor="#00FF9E">
+                <CollectionView ItemsSource="{Binding RMs}"
+                IsGrouped="true">
+                    <CollectionView.GroupHeaderTemplate>
+                        <DataTemplate>
+                            <Label Text="{Binding NameRM}"
+                   BackgroundColor="LightGray"
+                   FontSize="Large"
+                   FontAttributes="Bold" />
+                        </DataTemplate>
+                    </CollectionView.GroupHeaderTemplate>
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <Grid>
+                                <Label Grid.Column="0" Text="{Binding DateShop}"
+                                FontAttributes="Bold" />
+                                <Label Grid.Column="2" Text="{Binding Measurement}"
+                                FontAttributes="Bold" />
+                                <Label Grid.Row="1"
+                                Grid.Column="1"
+                                Text="{Binding CantRM}"
+                                FontAttributes="Italic"
+                                VerticalOptions="End" />
+                                <Label Grid.Row="1"
+                                Grid.Column="3"
+                                Text="{Binding CostU}"
+                                FontAttributes="Italic"
+                                VerticalOptions="End" />
+                                <Label Grid.Row="1"
+                                Grid.Column="4"
+                                Text="{Binding CostT}"
+                                FontAttributes="Italic"
+                                VerticalOptions="End" />
+                            </Grid>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+            </RefreshView>
+        </Grid>
+    </ContentPage.Content>
+</ContentPage>

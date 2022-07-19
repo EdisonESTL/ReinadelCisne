@@ -25,7 +25,7 @@ namespace ReinadelCisne
         {
             //Register Syncfusion license
             Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense("Njc0NzkwQDMyMzAyZTMyMmUzMGlZV0FtZ1l2N0xaTUFsUktJUmJMUlZNcXFXeUEzTUdwVjNhY1AzZ1E2VGM9");
-
+            Properties["IsLoggedIn"] = false;
             InitializeComponent();
 
             MainPage = new AppShell();

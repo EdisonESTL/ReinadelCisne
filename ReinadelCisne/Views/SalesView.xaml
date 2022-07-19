@@ -2,15 +2,16 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:vm="clr-namespace:ReinadelCisne.ViewModels"
-             x:Class="ReinadelCisne.Views.SalesView">
+             x:Class="ReinadelCisne.Views.SalesView"
+             Title="Resultados de ventas">
     <ContentPage.BindingContext>
         <vm:SalesVM/>
     </ContentPage.BindingContext>
     <ContentPage.Content>
-        <Grid Margin="20" RowSpacing="20" Padding="0" RowDefinitions="Auto, 0.8, 2*, Auto, Auto" HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand">            
+        <Grid Margin="20" RowSpacing="20" Padding="0" RowDefinitions="Auto, 0.8, 2*, Auto, Auto, Auto, 0.8, Auto" HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand">            
             <Button Text="Día" Command="{Binding DayCommand}" Grid.Column="0" Grid.Row="0" Style="{StaticResource ButtonDayWeekMonh}"/>
-            <Button Text="Mes" Command="{Binding MounthCommand}" Grid.Column="1" Grid.Row="0" Style="{StaticResource ButtonDayWeekMonh}"/>
-            <Button Text="Año" Command="{Binding YearCommand}" Grid.Column="2" Grid.Row="0" Style="{StaticResource ButtonDayWeekMonh}"/>
+            <Button Text="Semana" Command="{Binding WeekCommand}" Grid.Column="1" Grid.Row="0" Style="{StaticResource ButtonDayWeekMonh}"/>
+            <Button Text="Mes" Command="{Binding MounthCommand}" Grid.Column="2" Grid.Row="0" Style="{StaticResource ButtonDayWeekMonh}"/>
             <BoxView Color="#096BAF" Grid.Row="1" Grid.ColumnSpan="3"
              HorizontalOptions="Fill" />
             <CollectionView ItemsSource="{Binding Ventas, Mode=OneWay}" SelectionMode="None" x:Name="listaMateriaPrima" Grid.ColumnSpan="3" Grid.Row="2">
@@ -18,26 +19,36 @@
                     <LinearItemsLayout Orientation="Vertical" ItemSpacing="7"/>
                 </CollectionView.ItemsLayout>
                 <CollectionView.Header>
-                    <Grid ColumnDefinitions="120, 2*, 2*">
-                        <Label Text="Producto/Servicio" FontSize="17" FontAttributes="Bold" TextColor="Black" Grid.Column="0" HorizontalTextAlignment="Center"/>
-                        <Label Text="Unidades Vendidas" FontSize="17" FontAttributes="Bold" TextColor="Black" Grid.Column="1" HorizontalTextAlignment="Center"/>
-                        <Label Text="Total" FontSize="17" FontAttributes="Bold" TextColor="Black" Grid.Column="2" HorizontalTextAlignment="Center"/>
+                    <Grid>
+                        <Label Text="Producto/Servicio" Grid.Column="0" HorizontalTextAlignment="Center" Style="{StaticResource LabelTittlesColLectionView}"/>
+                        <Label Text="C/U" Grid.Column="1" HorizontalTextAlignment="Center" Style="{StaticResource LabelTittlesColLectionView}"/>
+                        <Label Text="Unidades Vendidas"  Grid.Column="2" HorizontalTextAlignment="Center" Style="{StaticResource LabelTittlesColLectionView}"/>
+                        <Label Text="Total" Grid.Column="3" HorizontalTextAlignment="Center" Style="{StaticResource LabelTittlesColLectionView}"/>
                     </Grid>
                 </CollectionView.Header>
                 <CollectionView.ItemTemplate>
                     <DataTemplate>
-                        <Grid Padding="0" ColumnDefinitions="120, 2*, 2*">
-                            <Label Grid.Column="0" Text="{Binding Name}" HorizontalTextAlignment="Center"/>
-                            <Label Grid.Column="1" Text="{Binding canT}" HorizontalTextAlignment="Center"/>
-                            <Label Grid.Column="2" Text="{Binding TT}" HorizontalTextAlignment="Center"/>
+                        <Grid>
+                            <Label Grid.Column="0" Text="{Binding Name}" HorizontalTextAlignment="Center" Style="{StaticResource LabelCuentaVenta}"/>
+                            <Label Grid.Column="1" Text="{Binding cstu}" HorizontalTextAlignment="Center" Style="{StaticResource LabelCuentaVenta}"/>
+                            <Label Grid.Column="2" Text="{Binding canT}" HorizontalTextAlignment="Center" Style="{StaticResource LabelCuentaVenta}"/>
+                            <Label Grid.Column="3" Text="{Binding TT}" HorizontalTextAlignment="Center" Style="{StaticResource LabelCuentaVenta}"/>
                         </Grid>
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
             </CollectionView>
-            <Label Text="Total vendido" Grid.Row="3" Grid.ColumnSpan="2" FontSize="17" FontAttributes="Bold" TextColor="Black"/>
-            <Label Text="{Binding SalesTotal}" Grid.Row="3" Grid.Column="2"/>
-            <Label Text="Total comprado" Grid.Row="4" Grid.ColumnSpan="2"/>
-            <Label Text="0" Grid.Row="4" Grid.Column="2"/>
+            <Label Text="Total ventas" Grid.Row="3" Grid.ColumnSpan="2" FontSize="17" FontAttributes="Bold" TextColor="Black"/>
+            <Label Text="{Binding SalesTotal}" Grid.Row="3" Grid.Column="2" Style="{StaticResource LabelCuentaVenta}"/>
+            <Label Text="Total ventas descuento" Grid.Row="4" Grid.ColumnSpan="2" FontSize="17" FontAttributes="Bold" TextColor="Black"/>
+            <Label Text="{Binding SalesDiconutTotal}" Grid.Row="4" Grid.Column="2" Style="{StaticResource LabelCuentaVenta}"/>
+            <Label Text="Total compras" Grid.Row="5" Grid.ColumnSpan="2" FontSize="17" FontAttributes="Bold" TextColor="Black"/>
+            <Label Text="{Binding ShopsTotal}" Grid.Row="5" Grid.Column="2" Style="{StaticResource LabelCuentaVenta}"/>
+            
+            <BoxView Color="#096BAF" Grid.Row="6" Grid.ColumnSpan="3"
+             HorizontalOptions="Fill" />
+
+            <Label Text="Total" Grid.Row="7" Grid.ColumnSpan="2" FontSize="17" FontAttributes="Bold" TextColor="Black"/>
+            <Label Text="{Binding Total}" Grid.Row="7" Grid.Column="2" Style="{StaticResource LabelCuentaVenta}" FontSize="19"/>
         </Grid>
     </ContentPage.Content>
 </ContentPage>

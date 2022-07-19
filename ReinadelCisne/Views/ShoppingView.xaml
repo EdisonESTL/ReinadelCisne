@@ -14,36 +14,37 @@
             <Label x:Name="IdAux" Text="{Binding Id, Mode=TwoWay}" IsVisible="false"/>
 
             <Label Text="Fecha" Grid.Row="1" Style="{StaticResource LabelCuentaVenta}"/>
-            <Label Text="{Binding Date}" Grid.Row="1" Grid.Column="1" Style="{StaticResource LabelTittlesColLectionView}"/>
-
+            <DatePicker Date="{Binding Date}" Format="m" Grid.Row="1" Grid.Column="1" Visual="Default"/>
+          
             <Label Text="Numero comprobante" Grid.Row="2" Grid.Column="0" Style="{StaticResource LabelCuentaVenta}"/>
-            <Entry Placeholder="0*" Text="{Binding InvoiceNumber}" Grid.Row="2" Grid.Column="1"/>
+            <Entry Placeholder="0*" Text="{Binding InvoiceNumber}" Grid.Row="2" Grid.Column="1" Visual="Default"/>
 
             <Label Text="Total" Grid.Row="1" Grid.Column="2" HorizontalOptions="Center" Style="{StaticResource LabelCuentaVenta}"/>
             <Label Text="{Binding TotalInv}" Grid.Row="2" Grid.Column="2" HorizontalOptions="Center" VerticalOptions="Center" Style="{StaticResource LabelTittlesColLectionView}"/>
 
             <Label Text="Almacén" Grid.Row="3" Grid.Column="0" Style="{StaticResource LabelCuentaVenta}"/>
-            <Entry Placeholder="tienda abc*" Text="{Binding NameEstablishment}" Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="2"/>
+            <Entry Placeholder="tienda abc*" Text="{Binding NameEstablishment}" Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="2" Visual="Default"/>
 
             <Label Text="Cantidad" Grid.Row="4" Grid.Column="0" Style="{StaticResource LabelCuentaVenta}"/>
-            <Entry Placeholder="3*" Text="{Binding Amount}" Grid.Row="5" Grid.Column="0"/>
-
-            <Label Text="Unidad de medida" Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="2" Style="{StaticResource LabelCuentaVenta}"/>
-            <Entry x:Name="descf" Placeholder="metro*" Text="{Binding Measurement}" Grid.Row="5" Grid.Column="1" Grid.ColumnSpan="2"/>
-
-            <Label Text="Descripción" Grid.Row="6" Grid.ColumnSpan="2" Style="{StaticResource LabelCuentaVenta}"/>
+            <Entry Placeholder="3*" Text="{Binding Amount}" Grid.Row="5" Grid.Column="0" Visual="Default"/>
+            
+            <Label Text="Descripción" Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="2" Style="{StaticResource LabelCuentaVenta}"/>
             <autocomplete:SfAutoComplete x:Name="autoComplete" Text="{Binding Description}" SuggestionMode="StartsWith" ShowClearButton="True" SelectionChanged="Handle_SelectionChanged"
-                                     HeightRequest="40" DataSource="{Binding NamesRM}" DisplayMemberPath="NameRM" Grid.Row="7" Grid.ColumnSpan="2">                
+                                     HeightRequest="40" DataSource="{Binding NamesRM}" DisplayMemberPath="NameRM" Grid.Row="5" Grid.Column="1" Grid.ColumnSpan="2">
             </autocomplete:SfAutoComplete>
+            
+            <Label Text="Unidad de medida" Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="2" Style="{StaticResource LabelCuentaVenta}"/>
+            <Entry x:Name="descf" Placeholder="metro*" Text="{Binding Measurement}" Grid.Row="7" Grid.Column="0" Grid.ColumnSpan="2" Visual="Default"/>
+            
 
             <Label Text="Costo Unitario" Grid.Row="6" Grid.Column="2" Style="{StaticResource LabelCuentaVenta}"/>
-            <Entry Placeholder="0*" Text="{Binding UnitCost}" Grid.Row="7" Grid.Column="2"/>
+            <Entry Placeholder="0*" Text="{Binding UnitCost}" Grid.Row="7" Grid.Column="2" Visual="Default"/>
 
             <StackLayout Grid.Row="8" Grid.Column="0" Orientation="Horizontal" VerticalOptions="Center">
                 <Label Text="# Elem." Style="{StaticResource LabelCuentaVenta}"/>
                 <Label Text="{Binding LongList}" Style="{StaticResource LabelCuentaVenta}"/>
             </StackLayout>
-            
+
             <Button Text="Añadir" Command="{Binding AddCompra}" Grid.Row="8" Grid.Column="2" Style="{StaticResource ButtonAdd}"/>
 
             <RefreshView IsRefreshing="{Binding IsRefreshing}"
@@ -92,9 +93,7 @@
             <Button Text="Borrar" Style="{StaticResource ButtonCancel}"
                     Command="{Binding CancelCommand}" Grid.Row="10" Grid.Column="0"/>
             <Button Text="Guardar" Style="{StaticResource ButtonSave}"
-                    Command="{Binding SaveCompra}" Grid.Row="10" Grid.Column="1"/>
-            <Button Text="Compras" Style="{StaticResource ButtonRegistration}"
-                    Command="{Binding  RegistrationComand}" Grid.Row="10" Grid.Column="2"/>
+                    Command="{Binding SaveCompra}" Grid.Row="10" Grid.Column="1" Grid.ColumnSpan="2"/>
         </Grid>
     </ContentPage.Content>
 </ContentPage>

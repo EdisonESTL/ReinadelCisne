@@ -8,43 +8,43 @@
         <VM:StockpsVM/>
     </ContentPage.BindingContext>
     <ContentPage.Content>
-        <Grid RowDefinitions="Auto, Auto, Auto, 0.8, Auto, Auto, Auto, Auto, Auto, 0.8, Auto, Auto, 0.8, Auto" Margin="7" RowSpacing="4">
-            <Label Text="Ingreso de Producto/Servicio" HorizontalOptions="Center" Grid.Row="0" Grid.ColumnSpan="2" FontSize="Subtitle"/>
-            
-            <BoxView Color="#096BAF" Grid.Row="3" Grid.ColumnSpan="2" VerticalOptions="End"
-             HorizontalOptions="Fill" />
-            
-            <Label Text="Nombre:" Grid.Row="1"/>            
+        <Grid RowDefinitions="Auto, Auto, Auto, 0.8, 2*, Auto, Auto, Auto, Auto, 0.8, Auto" Margin="7" RowSpacing="6">
+            <Label Text="Ingreso de Producto/Servicio" HorizontalOptions="Center" Grid.Row="0" Grid.ColumnSpan="2" Style="{StaticResource LabelTittlesColLectionView}"/>
+
+            <Label Text="Nombre:" Grid.Row="1" Style="{StaticResource LabelCuentaVenta}"/>
             <Entry Text="{Binding NamePS, Mode=TwoWay}" Placeholder="Aquí escribe el nombre" Grid.Row="2" Grid.ColumnSpan="2"/>
-  
-            <Label Text="{Binding RawMaterialT}" VerticalOptions="Center" HorizontalOptions="Center" Grid.Column="0" Grid.Row="4" />
-            <Label Text="{Binding WorkForceT}" VerticalOptions="Center" HorizontalOptions="Center" Grid.Column="0" Grid.Row="5"/>
-            <Label Text="{Binding OtherCostT}" VerticalOptions="Center" HorizontalOptions="Center" Grid.Column="0" Grid.Row="6"/>
-            <Button Text="Materia Prima" Command="{Binding RawMaterialCommand}" Grid.Column="1" Grid.Row="4" HorizontalOptions="Center" FontSize="15"/>
-            <Button Text="Mano de Obra" Command="{Binding WorkForceCommand}" Grid.Column="1" Grid.Row="5" HorizontalOptions="Center" FontSize="15"/>
-            <Button Text="Otros Costos" Command="{Binding OtherCostCommand}" Grid.Column="1" Grid.Row="6" HorizontalOptions="Center" FontSize="15"/>
-
-            <Label Text="Unidades" VerticalOptions="Center" HorizontalOptions="Center" Grid.Column="0" Grid.Row="7"/>
-            <Label Text="% Utilidad" VerticalOptions="Center" HorizontalOptions="Center" Grid.Column="1" Grid.Row="7"/>
-            <Entry Grid.Column="0" Grid.Row="8" Text="{Binding UnitPS, Mode=TwoWay}" Keyboard="Numeric"/>
-            <Entry Grid.Column="1" Grid.Row="8" Text="{Binding UtilityPS, Mode=TwoWay}" Keyboard="Numeric"/>
-           
-            <Label Text="Precio" VerticalOptions="Center" HorizontalOptions="Center" Grid.Column="0" Grid.Row="10"/>
-            <Entry Text="{Binding PricePS, Mode=TwoWay}" Keyboard="Telephone" Grid.Column="0" Grid.Row="11"/>
-
-            <Button Text="Calcular"
-                    Command="{Binding CalculatePriceCommand}" Grid.Row="10" Grid.Column="1" Grid.RowSpan="2" VerticalOptions="Center" HorizontalOptions="Center"/>
-
-            <BoxView Color="#096BAF" Grid.Row="12" Grid.ColumnSpan="2" VerticalOptions="End"/>
             
-            <StackLayout Grid.Row="13" Grid.ColumnSpan="2" VerticalOptions="End" Orientation="Horizontal" HorizontalOptions="Center">
-                <Button Text="Cancelar"
-                    Command="{Binding Cancel}" Grid.Column="0"/>
+            <BoxView Color="#096BAF" Grid.Row="3" Grid.ColumnSpan="2"
+             HorizontalOptions="Fill" />
+            <Grid Grid.Row="4" Grid.ColumnSpan="2">
+                <Label Text="{Binding RawMaterialT}" VerticalOptions="Center" HorizontalOptions="Center" Grid.Column="0" Grid.Row="0" />
+                <Label Text="{Binding WorkForceT}" VerticalOptions="Center" HorizontalOptions="Center" Grid.Column="0" Grid.Row="1"/>
+                <Label Text="{Binding OtherCostT}" VerticalOptions="Center" HorizontalOptions="Center" Grid.Column="0" Grid.Row="2"/>
+                <Button Text="Materia Prima" Command="{Binding RawMaterialCommand}" Grid.Column="1" Grid.Row="0" HorizontalOptions="Center" Style="{StaticResource ButtonRegistration}"/>
+                <Button Text="Mano de Obra" Command="{Binding WorkForceCommand}" Grid.Column="1" Grid.Row="1" HorizontalOptions="Center" Style="{StaticResource ButtonRegistration}"/>
+                <Button Text="Otros Costos" Command="{Binding OtherCostCommand}" Grid.Column="1" Grid.Row="2" HorizontalOptions="Center" Style="{StaticResource ButtonRegistration}"/>
+
+            </Grid>
+            
+            <Label Text="Unidades" VerticalOptions="Center" HorizontalOptions="Center" Grid.Column="0" Grid.Row="5" Style="{StaticResource LabelCuentaVenta}"/>
+            <Label Text="% Utilidad" VerticalOptions="Center" HorizontalOptions="Center" Grid.Column="1" Grid.Row="5" Style="{StaticResource LabelCuentaVenta}"/>
+            <Entry Grid.Column="0" Grid.Row="6" Text="{Binding UnitPS, Mode=TwoWay}" Keyboard="Numeric"/>
+            <Entry Grid.Column="1" Grid.Row="6" Text="{Binding UtilityPS, Mode=TwoWay}" Keyboard="Numeric"/>
+
+            <Label Text="Precio" VerticalOptions="Center" HorizontalOptions="Center" Grid.Column="0" Grid.Row="7" Style="{StaticResource LabelCuentaVenta}"/>
+            <Entry Text="{Binding PricePS, Mode=TwoWay}" Keyboard="Telephone" Grid.Column="0" Grid.Row="8"/>
+
+            <Button Text="Calcular" Style="{StaticResource ButtonAdd}"
+                    Command="{Binding CalculatePriceCommand}" Grid.Row="7" Grid.Column="1" Grid.RowSpan="2" VerticalOptions="Center" HorizontalOptions="Center"/>
+
+            <BoxView Color="#096BAF" Grid.Row="9" Grid.ColumnSpan="2"/>
+            
+            <Grid Grid.Row="10" Grid.ColumnSpan="2">
+                <Button Text="Borrar"
+                    Command="{Binding Cancel}" Grid.Column="0" Style="{StaticResource ButtonCancel}"/>
                 <Button Text="Guardar"
-                    Command="{Binding Save}" Grid.Column="1"/>
-                <Button Text="Registro"
-                    Command="{Binding Registration}" Grid.Column="2"/>
-            </StackLayout>
+                    Command="{Binding Save}" Grid.Column="1" Style="{StaticResource ButtonSave}"/>
+            </Grid>
         </Grid>
     </ContentPage.Content>
 </ContentPage>

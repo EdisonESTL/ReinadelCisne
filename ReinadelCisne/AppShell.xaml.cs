@@ -22,14 +22,15 @@ namespace ReinadelCisne
 
         void RegisterRoutes()
         {
-            Routes.Add("StockRegistration", typeof(StockRegistrationView));
+            Routes.Add("NewStock", typeof(StockView));
             Routes.Add("GoRegistration", typeof(GoRegistrationView));
             Routes.Add("GoRegistrationDetail", typeof(GoRegistrationDetail));
+            Routes.Add("GoRegistrationXcobrar", typeof(GoRegistartionXCobrarView));
             Routes.Add("InRawMaterial", typeof(InRawMaterialView));
             Routes.Add("InListRawMaterial", typeof(ListRawMaterialView));
             Routes.Add("InWorkForce", typeof(InWorkForce));
             Routes.Add("InOtherCost", typeof(InOtherCost));
-            Routes.Add("ShoppingRegister", typeof(RegistrationShoppingView));
+            Routes.Add("NewShopping", typeof(ShoppingView));
             Routes.Add("ShoppingDetail", typeof(ShoppingDetailView));
             Routes.Add("ActivityRegistration", typeof(ActivityRegistrationView));
             foreach (var item in Routes)

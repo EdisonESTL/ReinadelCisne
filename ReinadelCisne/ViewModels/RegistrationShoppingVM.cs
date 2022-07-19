@@ -87,7 +87,10 @@ namespace ReinadelCisne.ViewModels
                 Shop = null;
             }
         });
-
+        public ICommand NewSCommand => new Command(() =>
+        {
+            Shell.Current.GoToAsync("NewShopping");
+        });
         private async void SelectShop()
         {
             await Shell.Current.GoToAsync($"ShoppingDetail?ShopId={Shop.IdShop}");
