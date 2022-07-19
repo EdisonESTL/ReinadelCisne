@@ -69,8 +69,11 @@ namespace ReinadelCisne.Services
         public bool CampsNullsEmpty(string ci, string name, string mail, string phone, string password, string passwordd, string type)
         {
             if (
+                string.IsNullOrWhiteSpace(ci) &&
+                string.IsNullOrWhiteSpace(name) &&
                 string.IsNullOrWhiteSpace(mail) &&
                 string.IsNullOrWhiteSpace(phone) &&
+                string.IsNullOrWhiteSpace(password) &&
                 string.IsNullOrWhiteSpace(passwordd) &&
                 string.IsNullOrWhiteSpace(type))
             {

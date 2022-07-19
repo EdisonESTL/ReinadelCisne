@@ -35,7 +35,7 @@
                     <Entry Placeholder="Contraseña"
                            Grid.Column="1"
                            Grid.Row="1"
-                           MaxLength="12"
+                           MaxLength="13"
                            IsPassword="True"
                            ClearButtonVisibility="WhileEditing"
                            Text="{Binding PasswordUser}"/>

@@ -33,6 +33,7 @@ namespace ReinadelCisne
             Routes.Add("NewShopping", typeof(ShoppingView));
             Routes.Add("ShoppingDetail", typeof(ShoppingDetailView));
             Routes.Add("ActivityRegistration", typeof(ActivityRegistrationView));
+            Routes.Add("RegisterUser", typeof(RegisterView));
             foreach (var item in Routes)
             {
                 Routing.RegisterRoute(item.Key, item.Value);

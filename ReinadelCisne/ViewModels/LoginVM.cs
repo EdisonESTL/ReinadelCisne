@@ -5,10 +5,11 @@ using System.Threading.Tasks;
 using System.Collections.Generic;
 using ReinadelCisne.Models;
 using ReinadelCisne.Services;
+using System.Web;
 
 namespace ReinadelCisne.ViewModels
 {
-    class LoginVM : BaseVM
+    public class LoginVM : BaseVM, IQueryAttributable
     {
         /*public string Usuario { get; set; }
         public string Contrasenia { get; set; }*/
@@ -105,7 +106,25 @@ namespace ReinadelCisne.ViewModels
 
         private async void Register()
         {
-            await Shell.Current.GoToAsync($"//login/registration");
+            await Shell.Current.GoToAsync("RegisterUser");
+        }
+
+        public void ApplyQueryAttributes(IDictionary<string, string> query)
+        {
+            try
+            {
+                string idListRM = HttpUtility.UrlDecode(query["IsRegister"]);
+
+                if (idListRM != "0")
+                {
+                    IsRegister = false;
+                }
+
+            }
+            catch (Exception)
+            {
+                Console.WriteLine("Failed to load idproduct.");
+            }
         }
     }
 }

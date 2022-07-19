@@ -34,6 +34,10 @@ namespace ReinadelCisne.Services
             _database.CreateTableAsync<UserModel>();
         }
         //Proceso Usuario
+        public Task<int> SaveUser(UserModel user)
+        {
+            return _database.InsertAsync(user);
+        }
         public bool ValidarUsuario(string ci, string contrasenia)
         {
             //var gf = _dataBase.QueryAsync<UserModel>("SELECT NameUser FROM UserModel WHERE CiUser = ? AND PasswordUser = ?", ci, contrasenia);
