@@ -4,61 +4,121 @@
              xmlns:vm="clr-namespace:ReinadelCisne.ViewModels"
              x:Class="ReinadelCisne.Views.LoginView"
              Shell.NavBarIsVisible="False"
-             Shell.FlyoutBehavior="Disabled"
-             BackgroundColor="{StaticResource MdPrimaryColor}">
+             BackgroundColor="{StaticResource MdSeondaryColor}"
+             Shell.FlyoutBehavior="Disabled">
     <ContentPage.BindingContext>
         <vm:LoginVM/>
     </ContentPage.BindingContext>
     <ContentPage.Content>
-        <Grid RowDefinitions="Auto, 2*, Auto, Auto">
-            <StackLayout Grid.Row="0" Margin="0, 60, 0, 30">
-                <Label Text="Taller de Zapatería" TextColor="White" FontAttributes="Bold,Italic" FontSize="Title" HorizontalOptions="Center" VerticalOptions="CenterAndExpand"/>
-                <Label Text="Reina del Cisne" TextColor="White" FontAttributes="Bold,Italic" FontSize="Title" HorizontalOptions="Center" VerticalOptions="CenterAndExpand"/>
-            </StackLayout>
-            
-            <!--Formulario Usuario Contraseña-->
-            <Frame Style="{StaticResource FrameLogin}" BackgroundColor="{StaticResource MdPrimaryColor}" Grid.Row="1" VerticalOptions="Center">
-                <Grid ColumnDefinitions="30, 2*, Auto">
-                    <Image Source="Usuario.png" Aspect="AspectFit"
+        <Grid RowDefinitions="2*, Auto" RowSpacing="0">
+            <Frame Grid.Row="0"
+                       HasShadow="False"
+                       Visual="Default"
+                       CornerRadius="0"
+                       WidthRequest="1000"
+                       HorizontalOptions="CenterAndExpand"
+                       Padding="0">
+                <Frame.Background>
+                    <!-- StartPoint defaults to (0,0) -->
+                    <LinearGradientBrush EndPoint="0,1">
+                        <GradientStop Color="{StaticResource MdPrimaryColor}"
+                          Offset="0.1" />
+                        <GradientStop Color="{StaticResource MdSeondaryColor}"
+                          Offset="1.0" />
+                        
+                    </LinearGradientBrush>
+                </Frame.Background>                
+                <Grid Margin="0" Padding="0">
+                    <Label Text="Bienvenido" Grid.Row="2" TextColor="White" VerticalOptions="Center"
+                       HorizontalOptions="Center" FontSize="Title"/>
+                    <!--<Image Source="Yintu" Grid.Row="0" Grid.ColumnSpan="1" Aspect="AspectFit"/>-->
+                    <!--Formulario Usuario Contraseña-->
+                    <Image Source="arbol.png" Aspect="AspectFit" Grid.Row="0"
+                           HeightRequest="100"
+                           HorizontalOptions="Center"/>
+                    <Frame Style="{StaticResource FrameLogin}" BackgroundColor="Transparent" Grid.Row="1" 
+                       VerticalOptions="Center" IsVisible="{Binding Frame1}">
+                        <Grid ColumnDefinitions="30, 2*, Auto, Auto">
+                            <Image Source="Usuario.png" Aspect="AspectFit"
                            Grid.Column="0"
                            Grid.Row="0" HorizontalOptions="Center"
                            VerticalOptions="CenterAndExpand"/>
-                    <Image Source="Contrasenia.png" Aspect="AspectFit"
+                            <Image Source="Contrasenia.png" Aspect="AspectFit"
                            Grid.Column="0"
                            Grid.Row="1"
                            VerticalOptions="CenterAndExpand"/>
-                    <Entry Placeholder="Usuario"
+                            <Entry Placeholder="Usuario"
                            Grid.Column="1"
                            Grid.Row="0"
                            ClearButtonVisibility="WhileEditing"
                            Text="{Binding CiUser}"/>
-                    <Entry Placeholder="Contraseña"
+                            <Entry Placeholder="Contraseña"
                            Grid.Column="1"
                            Grid.Row="1"
                            MaxLength="13"
                            IsPassword="True"
                            ClearButtonVisibility="WhileEditing"
                            Text="{Binding PasswordUser}"/>
-                    <ImageButton Source="BotonEntrar.png" BackgroundColor="Transparent"
-                                 Grid.Column="2"
-                                 Grid.RowSpan="2" HorizontalOptions="Center"
-                                 VerticalOptions="CenterAndExpand"
-                                 Command="{Binding EntryCommand}"/>
+                        </Grid>
+                    </Frame>
+                    <Frame Style="{StaticResource FrameLogin}" BackgroundColor="Red" Grid.Row="1" VerticalOptions="Center" IsVisible="{Binding Frame2}">
+                        <Grid ColumnDefinitions="30, 2*, Auto">
+                            
+                        </Grid>
+                    </Frame>
                 </Grid>
-            </Frame>
-            <!--Opcion Registrarse-->
-            <Button Text="Registrarse" Grid.Row="2" Margin="0,0,0,30" BackgroundColor="Transparent" TextColor="#08B7FF" 
-                    HorizontalOptions="Center" BorderColor="Transparent"
-                    Command="{Binding RegisterCommand}" IsVisible="{Binding IsRegister}"/>
+            </Frame>            
+            <Grid Grid.Row="1" BackgroundColor="White" Padding="0, 30, 0, 10" RowDefinitions="Auto, 2*, Auto">
+                <Frame BorderColor="Transparent"
+                       HasShadow="True"
+                       Visual="Default"
+                       CornerRadius="30"
+                       HeightRequest="60"
+                       WidthRequest="160"
+                       Grid.Row="0"
+                       Grid.ColumnSpan="2"
+                       HorizontalOptions="CenterAndExpand"
+                       Padding="0">      
+                    <Frame.Background>
+                        <!-- StartPoint defaults to (0,0) -->
+                        <LinearGradientBrush EndPoint="1,1">
+                            <GradientStop Color="{StaticResource MdSeondaryColor}"
+                          Offset="0.1" />
+                            <GradientStop Color="{StaticResource MdPrimaryColor}"
+                          Offset="1.0" />
+                        </LinearGradientBrush>
+                    </Frame.Background>
+                    <Button Text="Ingresar" Margin="0" Padding="10,0,10,0" Visual="Default" TextColor="White"
+                        FontSize="Subtitle" CornerRadius="30" BackgroundColor="Transparent" 
+                        Command="{Binding EntryCommand}">
+                    </Button>
+                </Frame>
+                
 
-            <!--Iconos-->
-            <Grid Grid.Row="3" Margin="0, 0, 0, 70">
+                <Label Text="Registrarse" Grid.Row="1" Grid.ColumnSpan="2" HorizontalOptions="Center"
+                       FontSize="16" TextColor="{StaticResource MdSeondaryColor}" Margin="0,0,0,40">
+                    <Label.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding RegisterCommand}"/>
+                    </Label.GestureRecognizers>
+                </Label>
+                
+                <Button Text="Usuario" Grid.Row="2" Grid.Column="0" CornerRadius="30" BorderWidth="0.2" BorderColor="DarkGray"
+                        BackgroundColor="White" TextColor="{StaticResource MdPrimaryColor}"
+                        Command="{Binding UsuarioButonnCommand}"/>
+                <Button Text="Teclado" Grid.Row="2" Grid.Column="1" CornerRadius="30" BorderWidth="0.2" BorderColor="DarkGray"
+                        BackgroundColor="White" TextColor="{StaticResource MdPrimaryColor}"
+                        Command="{Binding TecladoButonnCommand}"/>
+            </Grid>            
+
+            <!--
+            <Grid Grid.Row="3" Margin="0, 0, 0, 0" BackgroundColor="White">
                 <Image Source="IconoSubirTitulo.png" Grid.Row="0" Grid.Column="1" HorizontalOptions="End"/>
                 <Image Source="IconoDineroTitulo.png" Grid.Row="0" Grid.Column="1"/>
                 <Image Source="IconoTallerTitulo.png" Grid.Row="0" Grid.Column="1" HorizontalOptions="Start"/>
-                <Image Source="Yintu" Grid.Row="1" Grid.ColumnSpan="3"/>
+                
             </Grid>
-            <!--Imagen Yintu-->
+            -->
+            
         </Grid>
 
     </ContentPage.Content>

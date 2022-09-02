@@ -118,7 +118,7 @@ namespace ReinadelCisne.ViewModels
 
             var fgt = (from o in orders
                       join s in sales on o.SaleModeld equals s.Id
-                      where s.DateSale.Date >= StartDate.Date && s.DateSale.Date <= FinishDate.Date & s.WayToPay != "por cobrar" & s.Discount == 0
+                      where s.DateSale.Date >= StartDate.Date && s.DateSale.Date <= FinishDate.Date & s.WayToPay != "por cobrar"
                        select new
                       {
                           ProductId = o.ProductModelId,
@@ -158,7 +158,7 @@ namespace ReinadelCisne.ViewModels
                                select s).ToList();
             foreach (var s in SalesDiscou)
             {
-                SalesDiscountCount += s.TotalSale;
+                SalesDiscountCount += s.Discount;
             }
             SalesDiconutTotal = SalesDiscountCount.ToString() + "$";
 
@@ -195,7 +195,7 @@ namespace ReinadelCisne.ViewModels
 
             var fgt = (from o in orders
                        join s in sales on o.SaleModeld equals s.Id
-                       where s.DateSale.Date >= datei.Date && s.DateSale.Date <= datef.Date & s.WayToPay != "por cobrar" & s.Discount == 0
+                       where s.DateSale.Date >= datei.Date && s.DateSale.Date <= datef.Date & s.WayToPay != "por cobrar"
                        select new
                        {
                            ProductId = o.ProductModelId,
@@ -270,7 +270,7 @@ namespace ReinadelCisne.ViewModels
 
             var fgt = (from o in orders
                        join s in sales on o.SaleModeld equals s.Id
-                       where s.DateSale.Month >= StartDate.Month && s.DateSale.Month <= FinishDate.Month & s.WayToPay != "por cobrar" & s.Discount == 0
+                       where s.DateSale.Month >= StartDate.Month && s.DateSale.Month <= FinishDate.Month & s.WayToPay != "por cobrar"
                        select new
                        {
                            ProductId = o.ProductModelId,

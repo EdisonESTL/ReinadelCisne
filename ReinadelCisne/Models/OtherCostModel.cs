@@ -15,5 +15,7 @@ namespace ReinadelCisne.Models
 
         [ForeignKey(typeof(ListOCModel))]
         public int ListOCModelId { get; set; }
+        [ManyToOne]
+        public ListOCModel ListOCModel { get; set; }
     }
 }

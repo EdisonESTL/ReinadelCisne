@@ -39,7 +39,7 @@
             </CollectionView>
             <Label Text="Total ventas" Grid.Row="3" Grid.ColumnSpan="2" FontSize="17" FontAttributes="Bold" TextColor="Black"/>
             <Label Text="{Binding SalesTotal}" Grid.Row="3" Grid.Column="2" Style="{StaticResource LabelCuentaVenta}"/>
-            <Label Text="Total ventas descuento" Grid.Row="4" Grid.ColumnSpan="2" FontSize="17" FontAttributes="Bold" TextColor="Black"/>
+            <Label Text="Total descuentos" Grid.Row="4" Grid.ColumnSpan="2" FontSize="17" FontAttributes="Bold" TextColor="Black"/>
             <Label Text="{Binding SalesDiconutTotal}" Grid.Row="4" Grid.Column="2" Style="{StaticResource LabelCuentaVenta}"/>
             <Label Text="Total compras" Grid.Row="5" Grid.ColumnSpan="2" FontSize="17" FontAttributes="Bold" TextColor="Black"/>
             <Label Text="{Binding ShopsTotal}" Grid.Row="5" Grid.Column="2" Style="{StaticResource LabelCuentaVenta}"/>

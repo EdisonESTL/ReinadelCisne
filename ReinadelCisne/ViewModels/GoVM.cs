@@ -5,12 +5,13 @@ using System.Collections.ObjectModel;
 using System.Text;
 using System.Windows.Input;
 using Xamarin.Forms;
+using System.Linq;
 
 namespace ReinadelCisne.ViewModels
 {    
     public class GoVM : BaseVM
     {
-        private double _entryDesc;
+        private double _entryDesc = 0;
         public double EntryDesc
         {
             get => _entryDesc;
@@ -150,18 +151,50 @@ namespace ReinadelCisne.ViewModels
                 d.ClientModel = new ClientModel();
                 d.ClientModel = client;
 
-                foreach (var obj in Order)
+                foreach (OrderModel obj in Order)
                 {
                     App.Database.SaveOrder(obj);
                     d.Orders.Add(obj);
                     App.Database.UpdateRealtionSales(d);
+                    UpdateCantidadesInv(obj);
                 }
-                var gg = App.Database.ListSales().Result;     
+                
                 ClearOrder();
-                d = null;
                 ListProductStock();
             }            
         });
+
+        private void UpdateCantidadesInv(OrderModel obj)
+        {
+            //actualiza cantidad de productos en poseción
+            var id = obj.ProductModelId;
+
+            ProductModel updt = App.Database.Get1Product(id).Result;
+
+            updt.UnitProduct -= obj.AmountProduct;
+
+            App.Database.SaveProduct(updt);
+
+            //Actualiza cantidad de materia prima
+            var aux = obj.ProductModelId;
+            var product = App.Database.Get1Product(aux).Result;
+            if(product.ListRMModelId != 0)
+            {
+                var recetaProducto = App.Database.GetListRM(product.ListRMModelId).Result;
+                var materialesdeReceta = App.Database.GetAllItems().Result;
+
+                var seleccion = (from m in materialesdeReceta
+                                 where m.ListRMModelId == recetaProducto.Id
+                                 select m).ToList();
+
+                foreach (var s in seleccion)
+                {
+                    RawMaterialModel rm = App.Database.GetOneRM(s.RawMaterialModelId).Result;
+                    rm.AmountRM -= s.Amount;
+                    App.Database.UpdateRawMaterial(rm);
+                }
+            }            
+        }
 
         //Direcciona a la lista de ventas
         public ICommand RegisterSale => new Command(() => 
@@ -175,13 +208,23 @@ namespace ReinadelCisne.ViewModels
             ListProductStock();
         }
 
+        private double _totaldescueotaplicado=0;
+        public double Totaldescueotaplicado
+        {
+            get => _totaldescueotaplicado;
+            set
+            {
+                _totaldescueotaplicado = value;
+                OnPropertyChanged();
+            }
+        }
         private async void AppplyDiscount()
         {
             string res = await Shell.Current.DisplayPromptAsync("Descuento", "Cuanto va a descontar en $?", maxLength: 2, keyboard: Keyboard.Numeric);
             if (!string.IsNullOrEmpty(res))
             {
-                Cuenta = Cuenta - double.Parse(res);
-                EntryDesc = double.Parse(res);
+                EntryDesc += double.Parse(res);
+                Cuenta -= double.Parse(res);
             }            
         }
 
@@ -195,7 +238,10 @@ namespace ReinadelCisne.ViewModels
             {
                 foreach (ProductModel tp in lps)
                 {
-                    ListPS.Add(tp);
+                    if (tp.UnitProduct > 0)
+                    {
+                        ListPS.Add(tp);
+                    }
                 }
             }
 

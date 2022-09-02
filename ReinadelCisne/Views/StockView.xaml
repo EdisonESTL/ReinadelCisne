@@ -3,13 +3,13 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:VM="clr-namespace:ReinadelCisne.ViewModels" 
              x:Class="ReinadelCisne.Views.StockView"
-             Title="Stock">
+             Title="Nuevo producto/servicio">
     <ContentPage.BindingContext>
         <VM:StockpsVM/>
     </ContentPage.BindingContext>
     <ContentPage.Content>
         <Grid RowDefinitions="Auto, Auto, Auto, 0.8, 2*, Auto, Auto, Auto, Auto, 0.8, Auto" Margin="7" RowSpacing="6">
-            <Label Text="Ingreso de Producto/Servicio" HorizontalOptions="Center" Grid.Row="0" Grid.ColumnSpan="2" Style="{StaticResource LabelTittlesColLectionView}"/>
+            <Label Text="Ingreso de Producto/Servicio" IsVisible="false" HorizontalOptions="Center" Grid.Row="0" Grid.ColumnSpan="2" Style="{StaticResource LabelTittlesColLectionView}"/>
 
             <Label Text="Nombre:" Grid.Row="1" Style="{StaticResource LabelCuentaVenta}"/>
             <Entry Text="{Binding NamePS, Mode=TwoWay}" Placeholder="Aquí escribe el nombre" Grid.Row="2" Grid.ColumnSpan="2"/>

@@ -317,8 +317,8 @@ namespace ReinadelCisne.ViewModels
             LoadNames();
             UpdateStock();
             //UpdateWeightedAveragePrice();
-            var op = App.Database.GetMR().Result;
-            var ops = App.Database.ListShoppingList().Result;
+            //var op = App.Database.GetMR().Result;
+            //var ops = App.Database.ListShoppingList().Result;
             ClearShopping();
         }
 
@@ -338,10 +338,11 @@ namespace ReinadelCisne.ViewModels
                 {
                     sumprice += (float)mm.UnitCost;
                 }
-
                 var pond = sumprice / cc;
-                
-                
+
+                var rmup = App.Database.GetOneRM(rm.Key).Result;
+                rmup.CostoRM = pond;
+                App.Database.UpdateRawMaterial(rmup);
             }
         }
         private void UpdateStock()
@@ -352,7 +353,7 @@ namespace ReinadelCisne.ViewModels
                 rawsUp.Add(rr);
             }
             App.Database.UpdateInvRM(rawsUp);
-            var fgh = App.Database.GetMR().Result;
+            //var fgh = App.Database.GetMR().Result;
         }
     }
 }

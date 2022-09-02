@@ -16,8 +16,9 @@
                     </CollectionView.ItemsLayout>
                     <CollectionView.Header>
                         <Grid>
-                            <Label Text="Producto/Servicio" Grid.Column="0" Style="{StaticResource LabelTittlesColLectionView}"/>
-                            <Label Text="Valor $" Grid.Column="1" Style="{StaticResource LabelTittlesColLectionView}"/>
+                            <Label Text="Cantidad" Grid.Column="0" Style="{StaticResource LabelTittlesColLectionView}"/>
+                            <Label Text="Producto/Servicio" Grid.Column="1" Style="{StaticResource LabelTittlesColLectionView}"/>
+                            <Label Text="Costo $" Grid.Column="2" Style="{StaticResource LabelTittlesColLectionView}"/>
                         </Grid>
                     </CollectionView.Header>
                     <CollectionView.ItemTemplate>
@@ -37,8 +38,9 @@
                                         </SwipeItems>
                                     </SwipeView.RightItems>
                                     <Grid>                                        
-                                        <Label Grid.Column="0" Text="{Binding NameProduct}" Style="{StaticResource LabelRegistroVenta}"/>
-                                        <Label Grid.Column="1" Text="{Binding PriceProduct}" Style="{StaticResource LabelRegistroVenta}"/>
+                                        <Label Grid.Column="0" Text="{Binding UnitProduct}" Style="{StaticResource LabelRegistroVenta}"/>
+                                        <Label Grid.Column="1" Text="{Binding NameProduct}" Style="{StaticResource LabelRegistroVenta}"/>
+                                        <Label Grid.Column="2" Text="{Binding PriceProduct}" Style="{StaticResource LabelRegistroVenta}"/>
                                     </Grid>
                                 </SwipeView>
                             </Frame>

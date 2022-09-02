@@ -194,8 +194,16 @@ namespace ReinadelCisne.Services
             return _database.DeleteAsync(sale, recursive: true);
         }
         public Task SaveOrder(OrderModel order)
-        {
-            return _database.InsertAsync(order);
+        {//se aumento if.. f21/07 1:01
+            if (order.Id != 0)
+            {
+                return _database.UpdateAsync(order);
+            }
+            else
+            {
+                return _database.InsertAsync(order);
+            }
+            
         }
         public Task UpdateRealtionSales(SaleModel sale)
         {
@@ -204,6 +212,10 @@ namespace ReinadelCisne.Services
         public Task<SaleModel> GetSale(int idsale)
         {
             return _database.GetWithChildrenAsync<SaleModel>(idsale);
+        }
+        public Task<SaleModel> GetOrder(int idOrder)
+        {
+            return _database.GetWithChildrenAsync<SaleModel>(idOrder);
         }
         //Procesos de Materia prima
         public Task<int> SaveRawMaterial(RawMaterialModel rawMaterial)
@@ -273,9 +285,7 @@ namespace ReinadelCisne.Services
             }
             else
             {
-                var m = _database.InsertAsync(listRawMaterial);
-                
-                return m;
+                return _database.InsertAsync(listRawMaterial);
             }
             
         }
@@ -285,8 +295,11 @@ namespace ReinadelCisne.Services
         }
         public Task<ListRMModel> GetListRM(int i)
         {
-            return _database.GetWithChildrenAsync<ListRMModel>(i);
-            
+            return _database.GetWithChildrenAsync<ListRMModel>(i);  
+        }
+        public Task<RawMaterialModel> GetOneRM(int i)
+        {
+            return _database.GetWithChildrenAsync<RawMaterialModel>(i);
         }
         public Task<List<ListRMModel>> GetAllRMList()
         {
@@ -382,7 +395,6 @@ namespace ReinadelCisne.Services
                 return m;
             }
         }
-
         public Task<int> SaveListOC(ListOCModel listOC)
         {
             if (listOC.Id != 0)
@@ -397,22 +409,18 @@ namespace ReinadelCisne.Services
                 return m;
             }
         }
-
         public Task UpdateListOC(ListOCModel listOC)
         {
             return _database.UpdateWithChildrenAsync(listOC);            
         }
-
         public Task<List<ListOCModel>> GetListsOC()
         {
             return _database.GetAllWithChildrenAsync<ListOCModel>();
         }
-
         public Task<ListOCModel> GetListOC(int i)
         {
             return _database.GetWithChildrenAsync<ListOCModel>(i);
         }
-
         public Task<int> DeleteOtherCost(OtherCostModel otherCost)
         {
             return _database.DeleteAsync(otherCost);

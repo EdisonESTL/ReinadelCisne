@@ -4,27 +4,27 @@
              xmlns:vm="clr-namespace:ReinadelCisne.ViewModels" 
              xmlns:autocomplete="clr-namespace:Syncfusion.SfAutoComplete.XForms;assembly=Syncfusion.SfAutoComplete.XForms"
              x:Class="ReinadelCisne.Views.ShoppingView"
-             Title="Compras">
+             Title="Nueva compra">
     <ContentPage.BindingContext>
         <vm:ShoppingVM/>
     </ContentPage.BindingContext>
     <ContentPage.Content>
         <Grid RowDefinitions="Auto, Auto, Auto, Auto, Auto, Auto, Auto, Auto, Auto, 2*, Auto" ColumnDefinitions="90, 2*, Auto" RowSpacing="3" Margin="7">
-            <Label Text="Nueva Compra" Grid.Row="0" Grid.ColumnSpan="3" HorizontalOptions="Center" Style="{StaticResource LabelTittlesColLectionView}"/>
+            <Label Text="Nueva Compra" Grid.Row="0" IsVisible="false" Grid.ColumnSpan="3" HorizontalOptions="Center" Style="{StaticResource LabelTittlesColLectionView}"/>
             <Label x:Name="IdAux" Text="{Binding Id, Mode=TwoWay}" IsVisible="false"/>
 
             <Label Text="Fecha" Grid.Row="1" Style="{StaticResource LabelCuentaVenta}"/>
             <DatePicker Date="{Binding Date}" Format="m" Grid.Row="1" Grid.Column="1" Visual="Default"/>
-          
+          <!--
             <Label Text="Numero comprobante" Grid.Row="2" Grid.Column="0" Style="{StaticResource LabelCuentaVenta}"/>
             <Entry Placeholder="0*" Text="{Binding InvoiceNumber}" Grid.Row="2" Grid.Column="1" Visual="Default"/>
-
+-->
             <Label Text="Total" Grid.Row="1" Grid.Column="2" HorizontalOptions="Center" Style="{StaticResource LabelCuentaVenta}"/>
             <Label Text="{Binding TotalInv}" Grid.Row="2" Grid.Column="2" HorizontalOptions="Center" VerticalOptions="Center" Style="{StaticResource LabelTittlesColLectionView}"/>
-
+            <!--
             <Label Text="Almacén" Grid.Row="3" Grid.Column="0" Style="{StaticResource LabelCuentaVenta}"/>
             <Entry Placeholder="tienda abc*" Text="{Binding NameEstablishment}" Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="2" Visual="Default"/>
-
+-->
             <Label Text="Cantidad" Grid.Row="4" Grid.Column="0" Style="{StaticResource LabelCuentaVenta}"/>
             <Entry Placeholder="3*" Text="{Binding Amount}" Grid.Row="5" Grid.Column="0" Visual="Default"/>
             

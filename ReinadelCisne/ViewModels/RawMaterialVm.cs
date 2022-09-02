@@ -27,7 +27,7 @@ namespace ReinadelCisne.ViewModels
         {
             IsRefreshing = true;
 
-            //ListRawMl.get
+            ListRMs();
 
             IsRefreshing = false;
         });
@@ -39,6 +39,7 @@ namespace ReinadelCisne.ViewModels
 
         private async void ListRMs()
         {
+            RawMaterials.Clear();
             List<RawMaterialModel> lrm = await App.Database.GetMR();
 
             foreach(var obj in lrm)

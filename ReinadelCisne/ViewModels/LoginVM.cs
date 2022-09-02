@@ -56,12 +56,48 @@ namespace ReinadelCisne.ViewModels
         }
         public ICommand EntryCommand { get; set; }
         public ICommand RegisterCommand { get; set; }
+        public ICommand UsuarioButonnCommand { get; set; }
+        public ICommand TecladoButonnCommand { get; set; }
 
+        private bool _frame1 = false;
+        public bool Frame1 
+        {
+            get => _frame1;
+            set
+            {
+                _frame1 = value;
+                OnPropertyChanged();
+            }
+        }
+        private bool _frame2 = false;
+        public bool Frame2
+        {
+            get => _frame2;
+            set
+            {
+                _frame2 = value;
+                OnPropertyChanged();
+            }
+        }
         public LoginVM()
         {
             IsRegister = true;
             EntryCommand = new Command(() => Entry());
             RegisterCommand = new Command(() => Register());
+            UsuarioButonnCommand = new Command(() => UserButton());
+            TecladoButonnCommand = new Command(() => TecladoButton());
+        }
+
+        private void TecladoButton()
+        {
+            Frame1 = false;
+            Frame2 = true;
+        }
+
+        private void UserButton()
+        {
+            Frame1 = true;
+            Frame2 = false;
         }
 
         private async void Entry()
