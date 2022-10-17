@@ -1,0 +1,264 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:ReinadelCisne.ViewModels"
+             x:Class="ReinadelCisne.Views.YintuView">
+    <ContentPage.BindingContext>
+        <vm:YintuVM/>
+    </ContentPage.BindingContext>
+    <Shell.TitleView>
+        <StackLayout Margin="0" Padding="0">
+            <Label Text="Yintu" Margin="-70,0,0,0"
+               HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand"
+               FontSize="Title"/>
+        </StackLayout>        
+    </Shell.TitleView>
+    <ContentPage.Content>        
+        <ScrollView>
+            <Grid RowDefinitions="60,60,130,130,130,*" ColumnDefinitions="*,*,*"
+                  Margin="10,15,10,0" ColumnSpacing="6" HorizontalOptions="Fill">
+                <Frame Grid.Row="0" Grid.RowSpan="2" Grid.ColumnSpan="3" 
+                       Margin="0,0,0,11" BorderColor="White"
+                       HasShadow="False">
+                    <Frame.Background>
+                        <!-- StartPoint defaults to (0,0) -->
+                        <LinearGradientBrush EndPoint="0,1"
+                                             StartPoint="0,0">
+                            <GradientStop Color="Transparent"
+                          Offset="0.0" />
+                            <GradientStop Color="#A8FDF7"
+                          Offset="0.4" />
+                            <GradientStop Color="Transparent"
+                          Offset="1.1" />
+                        </LinearGradientBrush>
+                    </Frame.Background>
+                    <Grid RowSpacing="0" RowDefinitions="*, *"
+                      ColumnDefinitions="100,124" 
+                      HorizontalOptions="CenterAndExpand"
+                      Margin="10,0,10,0"
+                      Padding="0">
+                        <Image Source="arbol.png" Aspect="AspectFit" 
+                           VerticalOptions="Center"
+                           HorizontalOptions="Center" Grid.Row="0" Grid.Column="0"
+                           Grid.RowSpan="2"/>
+                        <Label Text="{Binding NameNegocio}" Grid.Row="0"
+                           Grid.Column="1" FontAttributes="Bold"
+                           TextColor="Black" FontSize="16"
+                           VerticalOptions="EndAndExpand"
+                           HorizontalOptions="CenterAndExpand"/>
+                        <Label Text="{Binding NameOwner}" Grid.Row="1" Grid.Column="1"
+                           TextColor="Black" FontSize="13"
+                           VerticalOptions="Center"
+                           HorizontalOptions="CenterAndExpand"/>
+                    </Grid>
+                </Frame>                                
+
+                <Frame BorderColor="Transparent"
+                       HasShadow="False"
+                       Visual="Default"
+                       CornerRadius="10"
+                       Grid.Row="2"
+                       Grid.Column="0"
+                       Padding="0">
+                    <Frame.Background>
+                        <!-- StartPoint defaults to (0,0) -->
+                        <RadialGradientBrush Center="0.5,0.5">
+                            <GradientStop Color="#FFFFFF"
+                          Offset="0.1" />
+                            <GradientStop Color="#A8FDF7"
+                          Offset="1.0" />
+                        </RadialGradientBrush>
+                    </Frame.Background>
+                    <Button Text="Productos" TextColor="Black"
+                            FontSize="13" 
+                            ImageSource="inventory.png"
+                            ContentLayout="Top, 0"
+                            BackgroundColor="Transparent"
+                            Command="{Binding PushCommand}"
+                            CommandParameter="productos"/>
+                </Frame>
+
+                <Frame BorderColor="Transparent"
+                       HasShadow="True"
+                       Visual="Default"
+                       CornerRadius="10"
+                       Grid.Row="2"
+                        Grid.Column="1"
+                       Padding="0">
+                    <Frame.Background>
+                        <!-- StartPoint defaults to (0,0) -->
+                        <RadialGradientBrush Center="0.5,0.5">
+                            <GradientStop Color="#FFFFFF"
+                          Offset="0.1" />
+                            <GradientStop Color="#FBF4A9"
+                          Offset="1.0" />
+                        </RadialGradientBrush>
+                    </Frame.Background>
+                    <Button Text="Servicios" TextColor="Black"
+                            FontSize="13"
+                            ImageSource="services.png"
+                            ContentLayout="Top, 0"
+                            BackgroundColor="Transparent"
+                            Command="{Binding PushCommand}"
+                            CommandParameter="servicios"/>
+                </Frame>
+
+                <Frame BorderColor="Transparent"
+                       HasShadow="True"
+                       Visual="Default"
+                       CornerRadius="10"
+                       Grid.Row="2"
+                       Grid.Column="2"
+                       Padding="0">
+                    <Frame.Background>
+                        <!-- StartPoint defaults to (0,0) -->
+                        <RadialGradientBrush Center="0.5,0.5">
+                            <GradientStop Color="#FFFFFF"
+                          Offset="0.1" />
+                            <GradientStop Color="#9DF0BD"
+                          Offset="1.0" />
+                        </RadialGradientBrush>
+                    </Frame.Background>
+                    <Button Text="Ventas" TextColor="Black"
+                            FontSize="13"
+                            ImageSource="sales.png"
+                            ContentLayout="Top, 0"
+                            BackgroundColor="Transparent"
+                            Command="{Binding PushCommand}"
+                            CommandParameter="ventas"/>
+                </Frame>
+
+                <Frame BorderColor="Transparent"
+                       HasShadow="True"
+                       Visual="Default"
+                       CornerRadius="10"
+                       Grid.Row="3"
+                       Grid.Column="0"
+                       Padding="0">
+                    <Frame.Background>
+                        <!-- StartPoint defaults to (0,0) -->
+                        <RadialGradientBrush Center="0.5,0.5">
+                            <GradientStop Color="#FFFFFF"
+                          Offset="0.1" />
+                            <GradientStop Color="#9DF0BD"
+                          Offset="1.0" />
+                        </RadialGradientBrush>
+                    </Frame.Background>
+                    <Button Text="Compras" TextColor="Black"
+                            FontSize="13"
+                            ImageSource="shops.png"
+                            ContentLayout="Top, 0"
+                            BackgroundColor="Transparent"
+                            Command="{Binding PushCommand}"
+                            CommandParameter="compras"/>
+                </Frame>
+
+                <Frame BorderColor="Transparent"
+                       HasShadow="True"
+                       Visual="Default"
+                       CornerRadius="10"
+                       Grid.Row="3"
+                       Grid.Column="1"
+                       Padding="0">
+                    <Frame.Background>
+                        <!-- StartPoint defaults to (0,0) -->
+                        <RadialGradientBrush Center="0.5,0.5">
+                            <GradientStop Color="#FFFFFF"
+                          Offset="0.1" />
+                            <GradientStop Color="#A8FDF7"
+                          Offset="1.0" />
+                        </RadialGradientBrush>
+                    </Frame.Background>
+                    <Button Text="Ingresos - Egresos extras" TextColor="Black"
+                            ImageSource="inoutex.png"
+                            ContentLayout="Top, 0"
+                            BackgroundColor="Transparent"
+                            Command="{Binding PushCommand}"
+                            CommandParameter="ingresos"/>
+                </Frame>
+
+                <Frame BorderColor="Transparent"
+                       HasShadow="True"
+                       Visual="Default"
+                       CornerRadius="10"
+                       Grid.Row="3"
+                       Grid.Column="2"
+                       Padding="0">
+                    <Frame.Background>
+                        <!-- StartPoint defaults to (0,0) -->
+                        <RadialGradientBrush Center="0.5,0.5">
+                            <GradientStop Color="#FFFFFF"
+                          Offset="0.1" />
+                            <GradientStop Color="#FBF4A9"
+                          Offset="1.0" />
+                        </RadialGradientBrush>
+                    </Frame.Background>
+                    <Button Text="Materia prima" TextColor="Black"
+                            FontSize="13"
+                            ImageSource="rawmaterial.png"
+                            ContentLayout="Top, 0"
+                            BackgroundColor="Transparent"
+                            Command="{Binding PushCommand}"
+                            CommandParameter="materiaprima"/>
+                </Frame>
+
+                <Frame BorderColor="Transparent"
+                       HasShadow="True"
+                       Visual="Default"
+                       CornerRadius="10"
+                       Grid.Row="4"
+                       Grid.Column="0"
+                       Padding="0">
+                    <Frame.Background>
+                        <!-- StartPoint defaults to (0,0) -->
+                        <RadialGradientBrush Center="0.5,0.5">
+                            <GradientStop Color="#FFFFFF"
+                          Offset="0.1" />
+                            <GradientStop Color="#FBF4A9"
+                          Offset="1.0" />
+                        </RadialGradientBrush>
+                    </Frame.Background>
+                    <Button Text="Reportes" TextColor="Black"
+                            FontSize="13"
+                            ImageSource="reports.png"
+                            ContentLayout="Top, 0"
+                            BackgroundColor="Transparent"
+                            Command="{Binding PushCommand}"
+                            CommandParameter="reportes"/>
+                </Frame>
+
+                <Frame BorderColor="Transparent"
+                       HasShadow="True"
+                       Visual="Default"
+                       CornerRadius="10"
+                       Grid.Row="4"
+                       Grid.Column="1"
+                       Padding="0">
+                    <Frame.Background>
+                        <!-- StartPoint defaults to (0,0) -->
+                        <RadialGradientBrush Center="0.5,0.5">
+                            <GradientStop Color="#FFFFFF"
+                          Offset="0.1" />
+                            <GradientStop Color="#9DF0BD"
+                          Offset="1.0" />
+                        </RadialGradientBrush>
+                    </Frame.Background>
+                    <Button Text="Ventanilla" TextColor="Black"
+                            FontSize="13"
+                            ImageSource="window.png"
+                            ContentLayout="Top, 0"
+                            BackgroundColor="Transparent"
+                            Command="{Binding PushCommand}"
+                            CommandParameter="ventanilla"/>
+                </Frame>
+                <StackLayout Grid.Row="5" Grid.ColumnSpan="3" Orientation="Horizontal" HorizontalOptions="CenterAndExpand"
+                             Margin="0,15,0,15">
+                    <Button Text="Configuracion" BackgroundColor="Transparent" BorderColor="Transparent"
+                            TextColor="Black" ImageSource="configg.png" ContentLayout="left, 6"/>
+                    <Button Text="Nuevo" BackgroundColor="Transparent" BorderColor="Transparent"
+                            TextColor="Black" ImageSource="newa.png" ContentLayout="left, 6"/>
+                </StackLayout>
+            </Grid>
+        </ScrollView>
+    </ContentPage.Content>
+</ContentPage>

@@ -8,7 +8,7 @@
         <!-- usamos MD para saber que es Material Design-->
         <!--  Nombre del patron  + la palabra Color  para identificar en Xaml que solo es color -->
         <!-- Definición de colores de Marca -->
-        <Color x:Key="MdPrimaryColor">#102949</Color>
+        <Color x:Key="MdPrimaryColor">#6CBD8D</Color>
         <Color x:Key="MdPrimaryVariantColor">#3700B3</Color>
         <Color x:Key="MdSeondaryColor">#03DAC6</Color>
         <Color x:Key="MdSeondaryVariantColor">#018786</Color>
@@ -61,6 +61,11 @@
             <Setter Property="BackgroundColor" Value="#0D2D57"/>
             <Setter Property="TextColor" Value="#EAB91D"/>
         </Style>
+        <Style TargetType="Button"
+               x:Key="Button1">
+            <Setter Property="BackgroundColor" Value="{StaticResource MdPrimaryColor}"/>
+            <Setter Property="TextColor" Value="#102949"/>
+        </Style>
         
         <!--Label Styles-->
         <Style TargetType="Label"
@@ -84,7 +89,23 @@
             <Setter Property="FontSize" Value="15"/>
             <Setter Property="HorizontalTextAlignment" Value="Center"/>
         </Style>
-        
+
+        <Style TargetType="Label"
+               x:Key="LabelTittles1">
+            <Setter Property="TextColor" Value="Black"/>
+            <Setter Property="FontAttributes" Value="Italic"/>
+            <Setter Property="FontSize" Value="15"/>
+            <Setter Property="HorizontalTextAlignment" Value="Center"/>
+        </Style>
+
+        <Style TargetType="Label"
+               x:Key="LabelValorsTittles">
+            <Setter Property="TextColor" Value="Black"/>
+            <Setter Property="FontAttributes" Value="Bold"/>
+            <Setter Property="FontSize" Value="19"/>
+            <Setter Property="HorizontalTextAlignment" Value="Center"/>
+        </Style>
+
         <!--Frames Styles-->
         <Style TargetType="Frame"
                x:Key="FrameGoViewProducts">
@@ -106,6 +127,27 @@
             <Setter Property="BackgroundColor" Value="#096BAF"/>
             <Setter Property="BorderColor" Value="#08B7FF"/>
             <Setter Property="HasShadow" Value="True"/>
+        </Style>
+        
+        <Style TargetType="Frame"
+               x:Key="FrameProductss">
+            <Setter Property="BackgroundColor" Value="#FBF4A9"/>
+            <Setter Property="BorderColor" Value="Transparent"/>
+            <Setter Property="HasShadow" Value="True"/>
+            <Setter Property="CornerRadius" Value="16"/>
+        </Style>
+        <!--Entry Styles-->
+        <Style TargetType="Entry"
+               x:Key="Entry1">
+            <Setter Property="BackgroundColor" Value="White"/>
+            <Setter Property="TextColor" Value="Black"/>
+        </Style>
+        
+        <!--Editor styles-->
+        <Style TargetType="Editor"
+               x:Key="Editor1">
+            <Setter Property="BackgroundColor" Value="White"/>
+            <Setter Property="TextColor" Value="Black"/>
         </Style>
     </Application.Resources>
 </Application>

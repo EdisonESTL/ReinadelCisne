@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using Xamarin.Forms;
 using ReinadelCisne.Models;
+using System.Windows.Input;
 
 namespace ReinadelCisne.ViewModels
 {
@@ -41,28 +42,54 @@ namespace ReinadelCisne.ViewModels
         }
 
         public List<RawMaterialModel> Raws { get; set; }
-
+        public ICommand IniCommand => new Command(() =>
+        {
+            Shell.Current.GoToAsync("//Rini");
+        });
         public void cargarL(List<RawMaterialModel> rawMaterials)
         {
             Raws = rawMaterials;
         }
-       /* private bool _isRefreshing = false;
-        public bool IsRefreshing
+
+        public BaseVM()
         {
-            get { return _isRefreshing; }
+            ObtenerUser();
+        }
+
+        /*private string _nameNegocio;
+        public string NameNegocio
+        {
+            get => _nameNegocio;
             set
             {
-                _isRefreshing = value;
+                _nameNegocio = value;
                 OnPropertyChanged();
             }
-        }
-        public ICommand RefreshCommand => new Command(() =>
+        }*/
+        public UserModel UserModel { get; set; }
+        private void ObtenerUser()
         {
-            IsRefreshing = true;
+            var f = App.Database.GetUser();
+            UserModel = f.Result;
+            //NameNegocio = UserModel.NegocioUser;
+        }
+        /* private bool _isRefreshing = false;
+public bool IsRefreshing
+{
+    get { return _isRefreshing; }
+    set
+    {
+        _isRefreshing = value;
+        OnPropertyChanged();
+    }
+}
+public ICommand RefreshCommand => new Command(() =>
+{
+    IsRefreshing = true;
 
-            ListProductStock();
+    ListProductStock();
 
-            IsRefreshing = false;
-        });*/
+    IsRefreshing = false;
+});*/
     }
 }

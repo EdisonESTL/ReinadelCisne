@@ -21,7 +21,8 @@ namespace ReinadelCisne
         }
 
         void RegisterRoutes()
-        {
+        {         
+
             Routes.Add("NewStock", typeof(StockView));
             Routes.Add("GoRegistration", typeof(GoRegistrationView));
             Routes.Add("GoRegistrationDetail", typeof(GoRegistrationDetail));
@@ -34,7 +35,9 @@ namespace ReinadelCisne
             Routes.Add("ShoppingDetail", typeof(ShoppingDetailView));
             Routes.Add("ActivityRegistration", typeof(ActivityRegistrationView));
             Routes.Add("RegisterUser", typeof(RegisterView));
-            foreach (var item in Routes)
+
+            Routes.Add("//Rini/Productos", typeof(StockRegistrationView));
+            foreach (KeyValuePair<string, Type> item in Routes)
             {
                 Routing.RegisterRoute(item.Key, item.Value);
             }

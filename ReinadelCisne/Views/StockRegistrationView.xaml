@@ -2,28 +2,91 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:VM="clr-namespace:ReinadelCisne.ViewModels" 
+             xmlns:controls="clr-namespace:ReinadelCisne.Services"
              x:Class="ReinadelCisne.Views.StockRegistrationView"
              Title="Productos/Servicios">
     <ContentPage.BindingContext>
         <VM:StockRegistrationVM/>
-    </ContentPage.BindingContext>    
+    </ContentPage.BindingContext>
+    <Shell.SearchHandler>
+        <controls:SearchProductos Placeholder="Buscar un producto" BackgroundColor="White"
+                                  TextColor="Black"
+                                  ShowsResults="True"
+                                  DisplayMemberName="NameProduct">
+            <controls:SearchProductos.ItemTemplate>
+                <DataTemplate>
+                    <Grid Padding="10"
+                          ColumnDefinitions="0.15*,0.85*"
+                          BackgroundColor="White">
+                        <Image Source="product.png"
+                               HeightRequest="40"
+                               WidthRequest="40" />
+                        <Label Grid.Column="1"
+                               Text="{Binding NameProduct}"
+                               Style="{StaticResource LabelTittles1}"
+                               FontAttributes="Bold"
+                               VerticalOptions="Center" />
+                    </Grid>
+                </DataTemplate>
+            </controls:SearchProductos.ItemTemplate>
+        </controls:SearchProductos>
+    </Shell.SearchHandler>
     <ContentPage.Content>
         <StackLayout Margin="7">
-            <RefreshView IsRefreshing="{Binding IsRefreshing}" Command="{Binding RefreshCommand}">
+            <Frame CornerRadius="10" Margin="0,10,0,18"
+                   Padding="0,9,0,9"
+                   BorderColor="#AAFDF7">
+                <Frame.Background>
+                    <LinearGradientBrush StartPoint="0,0"
+                                         EndPoint="1,1">
+                        <GradientStop Color="#AAFDF7"
+                                          Offset="0.1" />
+                        <GradientStop Color="#FFFFFF"
+                                          Offset="1.0" />
+                    </LinearGradientBrush>
+                </Frame.Background>
+                
+                <Grid RowDefinitions="18,30,18,30" Padding="0,0,0,0" Margin="0" RowSpacing="0"
+                      ColumnSpacing="36"
+                      HorizontalOptions="Center"
+                      VerticalOptions="Center">
+                    
+                    <Label Text="Productos" Grid.Row="0"
+                           Grid.Column="0" Style="{StaticResource LabelTittles1}"/>
+                    <Label Text="Costo" Grid.Row="2"
+                           Grid.Column="0" Style="{StaticResource LabelTittles1}"/>
+
+                    <Label Text="{Binding Productos}" Grid.Row="1"
+                           Grid.Column="0" Style="{StaticResource LabelValorsTittles}"/>
+                    <Label Text="{Binding Costo}" 
+                           Style="{StaticResource LabelValorsTittles}"
+                           Grid.Row="3"
+                           Grid.Column="0"/>
+
+
+                    <Image Source="arbol.png" 
+                           Grid.Row="0"
+                           Grid.RowSpan="3"
+                           Grid.Column="1"/>
+                    <Label Text="{Binding UserModel.NegocioUser}" 
+                           Grid.Row="3"
+                           Grid.Column="1"
+                           HorizontalOptions="CenterAndExpand"
+                           TextColor="Black"
+                           Style="{StaticResource LabelTittlesColLectionView}"/>
+                </Grid>
+            </Frame>
+            <RefreshView IsRefreshing="{Binding IsRefreshing}" Command="{Binding RefreshCommand}"
+                         Margin="10,0,10,0"
+                         VerticalOptions="CenterAndExpand"
+                         HorizontalOptions="CenterAndExpand">
                 <CollectionView ItemsSource="{Binding ListPS, Mode=TwoWay}" SelectionMode="None" x:Name="ListStock">
                     <CollectionView.ItemsLayout>
                         <LinearItemsLayout Orientation="Vertical" ItemSpacing="7"/>
                     </CollectionView.ItemsLayout>
-                    <CollectionView.Header>
-                        <Grid>
-                            <Label Text="Cantidad" Grid.Column="0" Style="{StaticResource LabelTittlesColLectionView}"/>
-                            <Label Text="Producto/Servicio" Grid.Column="1" Style="{StaticResource LabelTittlesColLectionView}"/>
-                            <Label Text="Costo $" Grid.Column="2" Style="{StaticResource LabelTittlesColLectionView}"/>
-                        </Grid>
-                    </CollectionView.Header>
                     <CollectionView.ItemTemplate>
                         <DataTemplate>
-                            <Frame Style="{StaticResource FrameGoRegistroSales}">
+                            <Frame Style="{StaticResource FrameProductss}" HorizontalOptions="CenterAndExpand">
                                 <SwipeView BackgroundColor="Transparent">
                                     <SwipeView.RightItems>
                                         <SwipeItems>
@@ -37,10 +100,20 @@
                                                    />
                                         </SwipeItems>
                                     </SwipeView.RightItems>
-                                    <Grid>                                        
-                                        <Label Grid.Column="0" Text="{Binding UnitProduct}" Style="{StaticResource LabelRegistroVenta}"/>
-                                        <Label Grid.Column="1" Text="{Binding NameProduct}" Style="{StaticResource LabelRegistroVenta}"/>
-                                        <Label Grid.Column="2" Text="{Binding PriceProduct}" Style="{StaticResource LabelRegistroVenta}"/>
+                                    <Grid RowDefinitions="30,18"
+                                          RowSpacing="0">
+                                        <Image Source="product.png"
+                                               Grid.Row="0"
+                                               Grid.RowSpan="2"
+                                               Grid.Column="0"
+                                               />
+                                        <Label Grid.Column="1" Text="{Binding Data0}" Style="{StaticResource LabelValorsTittles}"
+                                               Grid.Row="0"/>
+
+                                        <Label Grid.Column="1" Text="{Binding Data1}" Style="{StaticResource LabelTittles1}"
+                                               Grid.Row="1"/>
+                                        <Label Grid.Column="2" Text="{Binding Data2}" Style="{StaticResource LabelTittles1}"
+                                               Grid.Row="0"/>
                                     </Grid>
                                 </SwipeView>
                             </Frame>
@@ -48,7 +121,15 @@
                     </CollectionView.ItemTemplate>
                 </CollectionView>
             </RefreshView>
-            <Button Text="Nuevo" Command="{Binding NewStockCommand}" Style="{StaticResource ButtonRegistration}"/>
+            <Grid RowDefinitions="50">
+                <Button Text="Inicio" Command="{Binding IniCommand}" Style="{StaticResource ButtonRegistration}"
+                        Grid.Column="0"
+                        ImageSource="arbol1.png"/>
+                <Button Text="Nuevo" Command="{Binding NewStockCommand}" Style="{StaticResource Button1}"
+                        Grid.Column="1"
+                        ImageSource="newa.png"/>
+            </Grid>
+            
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>

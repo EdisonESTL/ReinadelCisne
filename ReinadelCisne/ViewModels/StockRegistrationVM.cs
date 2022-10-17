@@ -1,8 +1,11 @@
-﻿using ReinadelCisne.Models;
+﻿using ReinadelCisne.Auxiliars;
+using ReinadelCisne.Models;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using System.Windows.Input;
 using Xamarin.Forms;
 
@@ -10,17 +13,37 @@ namespace ReinadelCisne.ViewModels
 {
     public class StockRegistrationVM : BaseVM
     {
+        private string _productos;
+        public string Productos
+        {
+            get => _productos;
+            set
+            {
+                _productos = value;
+                OnPropertyChanged();
+            }
+        }
+        private string _costo;
+        public string Costo
+        {
+            get => _costo;
+            set
+            {
+                _costo = value;
+                OnPropertyChanged();
+            }
+        }
         private bool _isRefreshing = false;
         public bool IsRefreshing
         {
-            get { return _isRefreshing; }
+            get => _isRefreshing;
             set
             {
                 _isRefreshing = value;
                 OnPropertyChanged();
             }
         }
-        public ObservableCollection<ProductModel> ListPS { get; private set; } = new ObservableCollection<ProductModel>();
+        public ObservableCollection<PassString> ListPS { get; private set; } = new ObservableCollection<PassString>();
 
         public ICommand RefreshCommand
         {
@@ -31,6 +54,8 @@ namespace ReinadelCisne.ViewModels
                     IsRefreshing = true;
 
                     ListProductStock();
+                    NumProducts();
+                    CostProduct();
 
                     IsRefreshing = false;
                 });
@@ -40,26 +65,59 @@ namespace ReinadelCisne.ViewModels
         {
             Shell.Current.GoToAsync("NewStock");
         });
+        
+
 
         public Command<ProductModel> Delete { get; }
         public Command<ProductModel> Modify { get; }
+        
+        //Constructor
         public StockRegistrationVM()
         {
             ListProductStock();
+            NumProducts();
+            CostProduct();
             Delete = new Command<ProductModel>(DeletePS);
             Modify = new Command<ProductModel>(ModifyPS);
+        }
+
+        private async void CostProduct()
+        {
+            List<ProductModel> lps = await App.Database.ListProduct();
+            
+            if (lps.Count >= 0)
+            {
+                var result = lps.Sum(x => x.PriceProduct);
+                var costsuma = "$" + result.ToString();
+
+                Costo = costsuma;
+            }
+            else
+            {
+                Costo = "No hay productos registrados";
+            }
+        }
+        private async void NumProducts()
+        {
+            var resp = await App.Database.GetTotalProducts();
+            Productos = resp.ToString();
         }
 
         private async void ListProductStock()
         {
             ListPS.Clear();
-
+            List<string> products = new List<string>();
             List<ProductModel> lps = await App.Database.ListProduct();
             if (lps != null)
             {
                 foreach (var tp in lps)
                 {
-                    ListPS.Add(tp);
+                    PassString pass = new PassString{
+                        Data0 = tp.NameProduct,
+                        Data1 = "$" + tp.PriceProduct.ToString(),
+                        Data2 = tp.UnitProduct.ToString()
+                    };
+                    ListPS.Add(pass);
                 }
             }
 

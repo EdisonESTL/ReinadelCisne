@@ -27,16 +27,25 @@ namespace ReinadelCisne.ViewModels
         private string _passwordUser;
         public string PasswordUser
         {
-            get
-            {
-                return _passwordUser;
-            }
+            get => _passwordUser;
             set
             {
                 _passwordUser = value;
                 OnPropertyChanged();
             }
         }
+
+        public string _pinUser;
+        public string PinUser
+        {
+            get => _pinUser;
+            set
+            {
+                _pinUser = value;
+                OnPropertyChanged();
+            }
+        }
+
         public List<UserModel> _lista;
         public List<UserModel> Lista
         {
@@ -59,7 +68,9 @@ namespace ReinadelCisne.ViewModels
         public ICommand UsuarioButonnCommand { get; set; }
         public ICommand TecladoButonnCommand { get; set; }
 
-        private bool _frame1 = false;
+        public ICommand PinCommand { get; set; }
+
+        private bool _frame1 = true;
         public bool Frame1 
         {
             get => _frame1;
@@ -81,16 +92,29 @@ namespace ReinadelCisne.ViewModels
         }
         public LoginVM()
         {
-            IsRegister = true;
+            IsRegister = false;
             EntryCommand = new Command(() => Entry());
             RegisterCommand = new Command(() => Register());
             UsuarioButonnCommand = new Command(() => UserButton());
             TecladoButonnCommand = new Command(() => TecladoButton());
+            PinCommand = new Command<string>((num) => PinButton(num));
+        }
+        string n;
+        private void PinButton(string num)
+        {
+            if (PinUser.Length <= 4)
+            {
+                PinUser = PinUser + "*";
+                n = n + num;
+            }
+            
         }
 
         private void TecladoButton()
         {
             Frame1 = false;
+
+            PinUser = string.Empty;
             Frame2 = true;
         }
 
@@ -102,42 +126,50 @@ namespace ReinadelCisne.ViewModels
 
         private async void Entry()
         {
-            RulesValidation validar = new RulesValidation();
-            int val = validar.ValidarCiPassword(CiUser, PasswordUser);
+            if(Frame1)
+            {
+                RulesValidation validar = new RulesValidation();
+                int val = validar.ValidarCiPassword(CiUser, PasswordUser);
 
-            if (val == 1)
-            {
-                var j = App.Database.ValidarUsuario(CiUser, PasswordUser);
+                if (val == 1)
+                {
+                    var j = App.Database.ValidarUsuario(CiUser, PasswordUser);
 
-                if (j == true)
-                {
-                    App.Current.Properties["IsLoggedIn"] = true;
-                    App.Current.Properties["UserLogged"] = CiUser;
-                    App.Current.Properties["PassLoged"] = PasswordUser;
-                    await Application.Current.MainPage.DisplayAlert("Bienvenido",
-                                                                    "Yintu le da la Bienvenida",
-                                                                    "Aceptar");
-                    await Shell.Current.GoToAsync($"//RGo");
+                    if (j == true)
+                    {
+                        App.Current.Properties["IsLoggedIn"] = true;
+                        App.Current.Properties["UserLogged"] = CiUser;
+                        App.Current.Properties["PassLoged"] = PasswordUser;
+                        await Application.Current.MainPage.DisplayAlert("Bienvenido",
+                                                                        "Yintu le da la Bienvenida",
+                                                                        "Aceptar");
+                        await Shell.Current.GoToAsync($"//RYintuRoom");
+                    }
+                    else
+                    {
+                        await Application.Current.MainPage.DisplayAlert("Losiento",
+                                                                        "Sus datos no se encuentran registrados en nuestro sistema",
+                                                                        "Aceptar");
+                    }
                 }
-                else
+                if (val == 2)
                 {
-                    await Application.Current.MainPage.DisplayAlert("Losiento",
-                                                                    "Sus datos no se encuentran registrados en nuestro sistema",
-                                                                    "Aceptar");
+                    await Shell.Current.DisplayAlert("Error",
+                        "Usuario o Contraseña incorrecto",
+                        "Ok");
+                }
+                if (val == 3)
+                {
+                    await Shell.Current.DisplayAlert("Error",
+                        "El numero de usuario es incorrecto",
+                        "Aceptar");
                 }
             }
-            if (val == 2)
+            if (Frame2)
             {
-                await Shell.Current.DisplayAlert("Error",
-                    "Usuario o Contraseña incompletos",
-                    "Ok");
+
             }
-            if (val == 3)
-            {
-                await Shell.Current.DisplayAlert("Error",
-                    "El numero de usuario es incorrecto",
-                    "Aceptar");
-            }
+            
         }
 
         private async void Register()
@@ -151,9 +183,9 @@ namespace ReinadelCisne.ViewModels
             {
                 string idListRM = HttpUtility.UrlDecode(query["IsRegister"]);
 
-                if (idListRM != "0")
+                if (idListRM == "0")
                 {
-                    IsRegister = false;
+                    IsRegister = true;
                 }
 
             }

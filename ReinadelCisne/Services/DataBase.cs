@@ -34,6 +34,10 @@ namespace ReinadelCisne.Services
             _database.CreateTableAsync<UserModel>();
         }
         //Proceso Usuario
+        public Task<UserModel> GetUser()
+        {
+            return _database.Table<UserModel>().FirstOrDefaultAsync();
+        }
         public Task<int> SaveUser(UserModel user)
         {
             return _database.InsertAsync(user);
@@ -42,7 +46,7 @@ namespace ReinadelCisne.Services
         {
             //var gf = _dataBase.QueryAsync<UserModel>("SELECT NameUser FROM UserModel WHERE CiUser = ? AND PasswordUser = ?", ci, contrasenia);
 
-            var data = _database.Table<UserModel>().FirstOrDefaultAsync(t => t.CiUser == ci && t.PasswordUser == contrasenia);
+            var data = _database.Table<UserModel>().FirstOrDefaultAsync(t => t.MailUser == ci && t.PasswordUser == contrasenia);
             data.Wait();
             var result = data.Result;
             if (result != null)
@@ -139,6 +143,7 @@ namespace ReinadelCisne.Services
         {
             return _database.GetAllWithChildrenAsync<ShoppingListModel>();
         }
+        
         //Procesos de Productos
         public Task<int> SaveProduct(ProductModel product)
         {
@@ -168,7 +173,10 @@ namespace ReinadelCisne.Services
         {
             return _database.GetWithChildrenAsync<ProductModel>(idproduct);
         }
-    
+        public Task<int> GetTotalProducts()
+        {
+            return _database.Table<ProductModel>().CountAsync();
+        }
         //Procesos de Ventas
         public Task<int> SaveSale(SaleModel sale)
         {

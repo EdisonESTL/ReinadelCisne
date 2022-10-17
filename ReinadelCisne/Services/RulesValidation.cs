@@ -18,7 +18,8 @@ namespace ReinadelCisne.Services
             else
             {
                 //Ci es válido
-                resp = ValidarCi(Ci) ? 1 : 3;
+                //resp = ValidarCi(Ci) ? 1 : 3;
+                resp = 1;
             }
             
             return resp;
@@ -41,11 +42,12 @@ namespace ReinadelCisne.Services
             return res;
         }
 
-        public int ValidarRegisterCamps(string ci, string name, string mail, string phone, string password, string passwordd, string type)
+        public int ValidarRegisterCamps(string ci, string name, string mail, string phone, string password, string passwordd, string type, string negocio, string pin)
         {
             int resp = 0;
-            if (CampsNullsEmpty(ci, name, mail, phone, password, passwordd, type))
+            if (CampsNullsEmpty(ci, name, mail, phone, password, passwordd, type, negocio, pin))
             {
+                /*
                 if (ValidarCi(ci))
                 {
                     if (string.Equals(password, passwordd))
@@ -56,6 +58,11 @@ namespace ReinadelCisne.Services
                     {
                         resp = 3;
                     }
+                }*/
+
+                if (string.Equals(password, passwordd))
+                {
+                    resp = 1;
                 }
                 else
                 {
@@ -66,7 +73,7 @@ namespace ReinadelCisne.Services
             return resp;
         }
 
-        public bool CampsNullsEmpty(string ci, string name, string mail, string phone, string password, string passwordd, string type)
+        public bool CampsNullsEmpty(string ci, string name, string mail, string phone, string password, string passwordd, string type, string negocio, string pin)
         {
             if (
                 string.IsNullOrWhiteSpace(ci) &&
@@ -75,7 +82,10 @@ namespace ReinadelCisne.Services
                 string.IsNullOrWhiteSpace(phone) &&
                 string.IsNullOrWhiteSpace(password) &&
                 string.IsNullOrWhiteSpace(passwordd) &&
-                string.IsNullOrWhiteSpace(type))
+                string.IsNullOrWhiteSpace(type) &&
+                string.IsNullOrWhiteSpace(negocio) &&
+                string.IsNullOrWhiteSpace(pin)
+                )
             {
                 return false;
             }

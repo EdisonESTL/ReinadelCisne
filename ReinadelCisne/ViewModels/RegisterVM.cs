@@ -11,7 +11,7 @@ namespace ReinadelCisne.ViewModels
     public class RegisterVM : BaseVM
     {
         //Propiedades de Enlace con la vista
-        private string _ciUser;
+        private string _ciUser = "123456799";
         public string CiUser
         {
             get { return _ciUser; }
@@ -21,6 +21,18 @@ namespace ReinadelCisne.ViewModels
                 OnPropertyChanged();
             }
         }
+
+        private string _nameNegocio;
+        public string NameNegocio
+        {
+            get { return _nameNegocio; }
+            set
+            {
+                _nameNegocio = value;
+                OnPropertyChanged();
+            }
+        }
+
         private string _nameUser;
         public string NameUser
         {
@@ -41,7 +53,7 @@ namespace ReinadelCisne.ViewModels
                 OnPropertyChanged();
             }
         }
-        private string _phoneUser;
+        private string _phoneUser = "097654321";
         public string PhoneUser
         {
             get { return _phoneUser; }
@@ -74,6 +86,17 @@ namespace ReinadelCisne.ViewModels
             }
         }
 
+        private string _pinUser;
+        public string PinUser
+        {
+            get { return _pinUser; }
+            set
+            {
+                _pinUser = value;
+                OnPropertyChanged();
+            }
+        }
+
         private string _typeUser;
         public string TypeUser
         {
@@ -98,23 +121,23 @@ namespace ReinadelCisne.ViewModels
         private async void Register()
         {
             RulesValidation rule = new RulesValidation();
-            var confirmVal = rule.ValidarRegisterCamps(CiUser, NameUser, MailUser, PhoneUser, PasswordUser, PasswordUser, TypeUser);
+            var confirmVal = rule.ValidarRegisterCamps(CiUser, NameUser, MailUser, PhoneUser, PasswordUser, PasswordUser, TypeUser, NameNegocio, PinUser);
             if (confirmVal == 1)
             {
                 if(TypeUser == "Yintu2022Adm")
                 {
                     UserModel newUser = new UserModel()
                     {
-                        CiUser = CiUser,
+                        NegocioUser = NameNegocio,
                         NameUser = NameUser,
                         MailUser = MailUser,
-                        PhoneUser = PhoneUser,
                         PasswordUser = PasswordUser,
+                        PinUser = PinUser,
                         TypeUser = TypeUser
                     };
                     await App.Database.SaveUser(newUser);
                     await Shell.Current.DisplayAlert("Felicidades", "Usuario agregado correctamente", "Aceptar");
-                    await Shell.Current.GoToAsync($"..?IsRegister={newUser.CiUser}");
+                    await Shell.Current.GoToAsync($"..?IsRegister={newUser.NameUser}");
                 }
                 else
                 {
