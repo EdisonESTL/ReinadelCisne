@@ -141,8 +141,8 @@ namespace ReinadelCisne.ViewModels
                      {
                          Name = p.NameProduct,
                          canT = obj.Amount,
-                         cstu = p.PriceProduct,
-                         TT = obj.Amount * p.PriceProduct
+                         cstu = p.PrecioVentaProduct,
+                         TT = obj.Amount * p.PrecioVentaProduct
                      }).ToList();
 
             foreach(var ji in jj)
@@ -218,8 +218,8 @@ namespace ReinadelCisne.ViewModels
                       {
                           Name = p.NameProduct,
                           canT = obj.Amount,
-                          cstu = p.PriceProduct,
-                          TT = obj.Amount * p.PriceProduct
+                          cstu = p.PrecioVentaProduct,
+                          TT = obj.Amount * p.PrecioVentaProduct
                       }).ToList();
 
             foreach (var ji in jj)
@@ -293,8 +293,8 @@ namespace ReinadelCisne.ViewModels
                       {
                           Name = p.NameProduct,
                           canT = obj.Amount,
-                          cstu = p.PriceProduct,
-                          TT = obj.Amount * p.PriceProduct
+                          cstu = p.PrecioVentaProduct,
+                          TT = obj.Amount * p.PrecioVentaProduct
                       }).ToList();
 
             foreach (var ji in jj)
@@ -366,8 +366,8 @@ namespace ReinadelCisne.ViewModels
                       {
                           Name = p.NameProduct,
                           canT = obj.Amount,
-                          cstu = p.PriceProduct,
-                          TT = obj.Amount * p.PriceProduct
+                          cstu = p.PrecioVentaProduct,
+                          TT = obj.Amount * p.PrecioVentaProduct
                       }).ToList();
 
             foreach (var ji in jj)

@@ -79,8 +79,8 @@ namespace ReinadelCisne.ViewModels
                            {
                                Producto = mat.NameProduct,
                                Cantidad = shp.AmountProduct,
-                               CostoU = mat.PriceProduct.ToString("N2") + "$",
-                               CostoT = (shp.AmountProduct * mat.PriceProduct).ToString("N2") + "$"
+                               CostoU = mat.PrecioVentaProduct.ToString("N2") + "$",
+                               CostoT = (shp.AmountProduct * mat.PrecioVentaProduct).ToString("N2") + "$"
                            }).ToList();
             foreach (var obj in listshp)
             {

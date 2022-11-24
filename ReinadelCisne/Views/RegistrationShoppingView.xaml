@@ -3,25 +3,74 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:vm="clr-namespace:ReinadelCisne.ViewModels"
              x:Class="ReinadelCisne.Views.RegistrationShoppingView"
-             Title="Registro de Compras">
+             Title="Compras">
+    <Shell.BackButtonBehavior>
+        <BackButtonBehavior Command="{Binding BackCommand}"/>
+    </Shell.BackButtonBehavior>
     <ContentPage.BindingContext>
         <vm:RegistrationShoppingVM/>
     </ContentPage.BindingContext>
     <ContentPage.Content>
-        <Grid Margin="20" RowSpacing="20" Padding="0" RowDefinitions="Auto, 0.8, 2*, Auto, Auto, Auto" HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand">
-            <Button Text="Día" Command="{Binding DayShopping}" Grid.Column="0" Grid.Row="0" Style="{StaticResource ButtonDayWeekMonh}"/>
-            <Button Text="Semana" Command="{Binding WeekShopping}" Grid.Column="1" Grid.Row="0" Style="{StaticResource ButtonDayWeekMonh}"/>
-            <Button Text="Mes" Command="{Binding MonthShopping}" Grid.Column="2" Grid.Row="0" Style="{StaticResource ButtonDayWeekMonh}"/>
+        <Grid RowSpacing="0" RowDefinitions="Auto, Auto, 2*, Auto, Auto, Auto" 
+              Padding="10,15,10,10"
+              VerticalOptions="CenterAndExpand"
+              >
+            <Button Text="Filtrar por fecha"
+                    Style="{StaticResource Button2}"
+                    BorderWidth="6"
+                    FontAttributes="Bold"
+                    Grid.Row="0" Grid.ColumnSpan="2"
+                    Command="{Binding OnFechaCommand}"/>
             
-            <BoxView Color="#096BAF" Grid.Row="1" Grid.ColumnSpan="3" HorizontalOptions="Fill" />
+            <Frame Grid.Row="1" Grid.ColumnSpan="2"
+                   IsVisible="{Binding OnDate}"
+                   Style="{StaticResource Frame4}"
+                   Padding="9,16,9,16">
+                <Grid BackgroundColor="Transparent"
+                      ColumnSpacing="11"
+                      RowDefinitions="Auto, Auto, Auto">
+                    <Label Text="Desde"
+                   Style="{StaticResource LabelTittlesColLectionView}"
+                   VerticalOptions="Center"
+                   Grid.Row="0"
+                   Grid.Column="0"/>
+                    <Label Text="Hasta"
+                   Grid.Row="0"
+                   Grid.Column="1"
+                   Style="{StaticResource LabelTittlesColLectionView}"
+                   VerticalOptions="Center"/>
+                    <DatePicker Grid.Row="1"
+                        Grid.Column="0"
+                        BackgroundColor="White"
+                        Date="{Binding InitDate}"/>
+                    <DatePicker Grid.Row="1"
+                        Grid.Column="1"
+                        BackgroundColor="White"
+                        Date="{Binding FinishDate}"/>
 
-            <CollectionView ItemsSource="{Binding shoppings, Mode=OneWay}" SelectionMode="Single" x:Name="listaMateriaPrima" SelectionChangedCommand="{Binding SelectedCommand}" 
-                            SelectedItem="{Binding Shop}" SelectionChangedCommandParameter="{Binding SelectedItem , Source={x:Reference listaMateriaPrima}}" Grid.ColumnSpan="3" Grid.Row="2" HorizontalOptions="Center">
+                    <ImageButton Source="buscar.png"
+                                 Grid.Row="2"
+                                 Grid.ColumnSpan="2"
+                                 Command="{Binding FechaCommand}"
+                                 Style="{StaticResource ImgButon1}"/>
+                </Grid>
+            </Frame>
+            
+            <!--<BoxView Color="#096BAF" Grid.Row="1" Grid.ColumnSpan="3" HorizontalOptions="Fill" />-->
+
+            <CollectionView ItemsSource="{Binding shoppings, Mode=OneWay}" 
+                            SelectionMode="Single" x:Name="listaMateriaPrima" 
+                            SelectionChangedCommand="{Binding SelectedCommand}" 
+                            SelectedItem="{Binding Shop}" 
+                            SelectionChangedCommandParameter="{Binding SelectedItem , Source={x:Reference listaMateriaPrima}}" 
+                            Grid.ColumnSpan="2" Grid.Row="2" 
+                            HorizontalOptions="Center"
+                            Margin="0,20,0,0">
                 <CollectionView.ItemsLayout>
-                    <LinearItemsLayout Orientation="Vertical" ItemSpacing="3"/>
+                    <LinearItemsLayout Orientation="Vertical" ItemSpacing="2"/>
                 </CollectionView.ItemsLayout>
                 <CollectionView.Header>
-                    <Grid>
+                    <Grid >
                         <Label Text="Fecha compra" Grid.Column="0" Style="{StaticResource LabelTittlesColLectionView}"/>
                         <Label Text="Total compra $$" Grid.Column="1" Style="{StaticResource LabelTittlesColLectionView}"/>
                     </Grid>
@@ -37,9 +86,18 @@
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
             </CollectionView>
-            <Label Text="Total comprado" Grid.Row="3" Grid.ColumnSpan="2" FontSize="17" FontAttributes="Bold" TextColor="Black" Style="{StaticResource LabelCuentaVenta}"/>
-            <Label Text="{Binding ShoppingTotal}" Grid.Row="3" Grid.Column="2" HorizontalOptions="Center" Style="{StaticResource LabelRegistroVenta}"/>
-            <Button Text="Nueva compra" Grid.Row="4" Grid.ColumnSpan="3" Style="{StaticResource ButtonRegistration}" Command="{Binding NewSCommand}"/>
+            <Label Text="Total comprado" Grid.Row="3" Grid.Column="0" 
+                   FontSize="17" FontAttributes="Bold" 
+                   TextColor="Black" Style="{StaticResource LabelCuentaVenta}"
+                   HorizontalOptions="Center"/>
+            <Label Text="{Binding ShoppingTotal}" Grid.Row="3" Grid.Column="1" HorizontalOptions="Center" Style="{StaticResource LabelRegistroVenta}"/>
+            <Button Text="Nueva compra" 
+                    Grid.Row="4" Grid.ColumnSpan="2" 
+                    Margin="0,16,0,0"
+                    Style="{StaticResource Button1}"
+                    CornerRadius="30"
+                    TextColor="{StaticResource TextColorWhite}"
+                    Command="{Binding NewSCommand}"/>
         </Grid>
     </ContentPage.Content>
 </ContentPage>

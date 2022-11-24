@@ -46,22 +46,37 @@ namespace ReinadelCisne.ViewModels
                 case "productos":
                     Shell.Current.GoToAsync("//Rini/Productos"); break;
                 case "servicios":
-                    Shell.Current.GoToAsync("//Rserv"); break;
+                    Shell.Current.GoToAsync("//Rini/RServicios"); break;
                 case "ventas":
-                    Shell.Current.GoToAsync("//Rven"); break;
+                    Shell.Current.GoToAsync("//Rini/RVentas"); break;
                 case "compras":
-                    Shell.Current.GoToAsync("//Rcomp"); break;
+                    Shell.Current.GoToAsync("//Rini/RCompras"); break;
                 case "ingresos":
-                    Shell.Current.GoToAsync("//Ring"); break;
+                    Shell.Current.GoToAsync("//Rini/RIngresoEgreso"); break;
                 case "materiaprima":
-                    Shell.Current.GoToAsync("//Rmat"); break;
+                    Shell.Current.GoToAsync("//Rini/RMateriaPrima"); break;
                 case "reportes":
-                    Shell.Current.GoToAsync("//Rrep"); break;
+                    Shell.Current.GoToAsync("//Rini/RReportes"); break;
                 case "ventanilla":
-                    Shell.Current.GoToAsync("//Rvent"); break;
+                    Shell.Current.GoToAsync("//Rini/RVentanilla"); break;
+                case "ajustes":
+                    Shell.Current.GoToAsync("//Rini/RAjustes"); break;
+                case "manoobra":
+                    Shell.Current.GoToAsync("//Rini/ManoObra"); break;
+                case "costosindirectos":
+                    Shell.Current.GoToAsync("//Rini/OtherCost"); break;
+                case "mas":
+                    break;
+                case "nuevo":
+                    YintuNuevo(); break;
                 default:
                     break;
             }
+        }
+
+        private void YintuNuevo()
+        {
+            Shell.Current.DisplayActionSheet("Nuevo", "Cancelar", null, "Producto", "Servicio", "Compra", "Venta", "Materia prima", "Ingreso-Egreso extra");
         }
     }
 }

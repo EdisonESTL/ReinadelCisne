@@ -1,0 +1,32 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:ReinadelCisne.ViewModels"
+             x:Class="ReinadelCisne.Views.ServicesView"
+             Title="Servicios">
+    <ContentPage.BindingContext>
+        <vm:ServicesVM/>
+    </ContentPage.BindingContext>
+    <ContentPage.Content>
+        <StackLayout Padding="10,10,10,15">
+            <Label Text="No hay servicios registrados"
+                VerticalOptions="CenterAndExpand" 
+                HorizontalOptions="CenterAndExpand" TextColor="Black"/>
+            
+            <Grid RowDefinitions="50">
+                <Button Text="Inicio" Command="{Binding Push}"
+                        CommandParameter="inicio"
+                        Style="{StaticResource Button2}"
+                        FontAttributes="Bold"
+                        Grid.Column="0"
+                        ImageSource="arbol1.png"/>
+                <Button Text="Nuevo" Command="{Binding Push}"
+                        CommandParameter="nuevo"
+                        CornerRadius="30"
+                        Style="{StaticResource Button1}"
+                        Grid.Column="1"
+                        ImageSource="newa.png"/>
+            </Grid>
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

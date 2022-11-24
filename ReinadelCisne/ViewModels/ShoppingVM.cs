@@ -8,11 +8,45 @@ using ReinadelCisne.Models;
 using System.Linq;
 using System.Threading.Tasks;
 using dotMorten.Xamarin.Forms;
+using System.Web;
+using ReinadelCisne.Auxiliars;
 
 namespace ReinadelCisne.ViewModels
 {
-    public class ShoppingVM : BaseVM
+    public class ShoppingVM : BaseVM, IQueryAttributable
     {
+        private bool _isRefreshing = false;
+        public bool IsRefreshing
+        {
+            get { return _isRefreshing; }
+            set
+            {
+                _isRefreshing = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private double _preciocompra;
+        public double PrecioCompra
+        {
+            get => _preciocompra;
+            set
+            {
+                _preciocompra = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private int _cantcompra;
+        public int CantCompra
+        {
+            get => _cantcompra;
+            set
+            {
+                _cantcompra = value;
+                OnPropertyChanged();
+            }
+        }
         private DateTime _date = DateTime.Now.Date;
         public DateTime Date
         {
@@ -24,16 +58,7 @@ namespace ReinadelCisne.ViewModels
             }
         }
 
-        private bool _isRefreshing = false;
-        public bool IsRefreshing
-        {
-            get { return _isRefreshing; }
-            set
-            {
-                _isRefreshing = value;
-                OnPropertyChanged();
-            }
-        }
+        
 
         private string _nameEstablishment;
         public string NameEstablishment
@@ -56,7 +81,7 @@ namespace ReinadelCisne.ViewModels
                 OnPropertyChanged();
             }
         }
-
+        /*
         private string _id = "0";
         public string Id
         {
@@ -143,11 +168,21 @@ namespace ReinadelCisne.ViewModels
                 _longList = value;
                 OnPropertyChanged();
             }
-        }
-
+        } */
         public ObservableCollection<RawMaterialModel> ListCompra { get; set; } = new ObservableCollection<RawMaterialModel>();
         public ObservableCollection<RawMaterialModel> NamesRM { get; set; } = new ObservableCollection<RawMaterialModel>();
+        public ObservableCollection<PassString> ListPS { get; private set; } = new ObservableCollection<PassString>();
 
+        private ProductModel _product;
+        public ProductModel Product 
+        {
+            get => _product;
+            set
+            {
+                _product = value;
+                OnPropertyChanged();
+            } 
+        }
         public ICommand RefreshCommand => new Command(() =>
         {
             IsRefreshing = true;
@@ -156,7 +191,11 @@ namespace ReinadelCisne.ViewModels
 
             IsRefreshing = false;
         });
-        public ICommand AddCompra => new Command(() =>
+        public ICommand BackCommand => new Command(() =>
+        {
+            Shell.Current.GoToAsync("//Rini/RCompras/SelectionPS");
+        });
+        /*public ICommand AddCompra => new Command(() =>
         {
             if(Amount != 0 & !string.IsNullOrEmpty(Description) & !string.IsNullOrEmpty(UnitCost))
             {
@@ -199,17 +238,30 @@ namespace ReinadelCisne.ViewModels
                 UnitCost = string.Empty;
                 Amount = 0;
             }
-        });
+        });*/
+
         public ICommand SaveCompra => new Command(() =>
         {
-            if (ListCompra.Count > 0)
+            if(PrecioCompra != 0 && CantCompra > 0)
             {
-                SaveShopping();
+                if(Product != null)
+                {
+                    GuardarProd(Product);
+                }
+                
             }
         });
+
+        
+
         public ICommand CancelCommand => new Command(() =>
         {
-            ClearShopping();
+            //ClearShopping();
+            Shell.Current.GoToAsync("..");
+        });
+        public ICommand NewShopCommand => new Command(() =>
+        {
+            Shell.Current.GoToAsync("//Rini/RCompras/NewShopping/SelectionPS");
         });
         public ICommand RegistrationComand => new Command(() =>
         {
@@ -219,12 +271,12 @@ namespace ReinadelCisne.ViewModels
         public Command<RawMaterialModel> ModifyCommand { get; set; }
         public ShoppingVM()
         {
-            DeleteCommand = new Command<RawMaterialModel>(DeleteItemShop);
-            ModifyCommand = new Command<RawMaterialModel>(ModifyItemShop);
-            LoadNames();
+            //DeleteCommand = new Command<RawMaterialModel>(DeleteItemShop);
+            //ModifyCommand = new Command<RawMaterialModel>(ModifyItemShop);
+            //LoadNames();
         }
 
-        private void LoadNames()
+        /*private void LoadNames()
         {
             NamesRM.Clear();
             var a = App.Database.GetMR().Result;
@@ -233,10 +285,10 @@ namespace ReinadelCisne.ViewModels
             {
                 NamesRM.Add(b);
             }
-        }
+        }*/
 
         public string IdMOD;
-        private void ModifyItemShop(RawMaterialModel obj)
+        /*private void ModifyItemShop(RawMaterialModel obj)
         {
             IdMOD = Convert.ToString(ListCompra.IndexOf(obj));
 
@@ -298,7 +350,7 @@ namespace ReinadelCisne.ViewModels
                 ShoppingListModel shoppingItem = new ShoppingListModel
                 {
                     Amount = obj.AmountRM,
-                    UnitCost = Convert.ToDouble(obj.CostoRM),
+                    ValorUnitario = Convert.ToDouble(obj.CostoRM),
                     TotalCost = Convert.ToDouble(obj.AmountRM * Convert.ToDouble(obj.CostoRM))
                 };
 
@@ -336,7 +388,7 @@ namespace ReinadelCisne.ViewModels
 
                 foreach (var mm in rm)
                 {
-                    sumprice += (float)mm.UnitCost;
+                    sumprice += (float)mm.ValorUnitario;
                 }
                 var pond = sumprice / cc;
 
@@ -354,6 +406,130 @@ namespace ReinadelCisne.ViewModels
             }
             App.Database.UpdateInvRM(rawsUp);
             //var fgh = App.Database.GetMR().Result;
+        }*/
+
+        public void ApplyQueryAttributes(IDictionary<string, string> query)
+        {
+            try
+            {
+                string regreso = HttpUtility.UrlDecode(query["objId"]);
+                string TipoElemento = HttpUtility.UrlDecode(query["TipoElemento"]);
+                cargarLItem(regreso, TipoElemento);
+            }
+            catch (Exception)
+            {
+                Console.WriteLine("Failed to load idproduct.");
+            }
+        }
+
+        private void cargarLItem(string regreso, string tipoElemento)
+        {
+            switch (tipoElemento)
+            {
+                case "producto":
+                    RecuperarProducto(regreso);
+                    break;
+                case "materiaprima":
+                    RecuperarMateriaPrima(regreso);
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        /*private void CargarListaCompra(Task<ProductModel> prod)
+        {
+            throw new NotImplementedException();
+        }*/
+        
+        private void RecuperarMateriaPrima(string regreso)
+        {
+            RawMaterialModel recup = App.Database.GetOneRM(int.Parse(regreso)).Result;
+
+
+            /*PassString pass = new PassString
+            {
+                Data0 = recup.Id.ToString(),
+                Data1 = recup.NameRM,
+                Data2 = recup.AmountRM.ToString(),
+                Data3 = "$" + recup.CostoRM.ToString(),
+                Data4 = "$",
+                Data5 = "materiaprima"
+            };
+            ListPS.Add(pass);*/
+        }
+
+        
+        private void RecuperarProducto(string regreso)
+        {            
+            Product = App.Database.Get1Product(int.Parse(regreso)).Result;
+            /*Product = recup;
+            PassString pass = new PassString
+            {
+                Data0 = recup.Id.ToString(),
+                Data1 = recup.NameProduct,
+                Data2 = recup.CantProduct.ToString(),
+                Data3 = "$"+recup.PrecioVentaProduct.ToString(),
+                Data4 = "$"+recup.CostElaboracionProduct.ToString(),
+                Data5 = "producto"
+            };
+            ListPS.Add(pass);*/
+        }
+
+        private void GuardarProd(ProductModel product)
+        {
+            ProductShoppingModel shopping = new ProductShoppingModel
+            {
+                ShoppingDate = Date,
+                NameEstablishment = NameEstablishment,
+                InvoiceNumber = InvoiceNumber,
+                TotalShop = (float)(CantCompra * PrecioCompra)
+            };
+
+            App.Database.SaveShoppingProduct(shopping);
+
+            ProductShoppingList shoppingList = new ProductShoppingList
+            {
+                Amount = CantCompra,
+                ValorUnitario = PrecioCompra
+            };
+
+            foreach (var obj in ListCompra)
+            {
+                RawMaterialModel rawMaterial = new RawMaterialModel
+                {
+                    Id = obj.Id,
+                    NameRM = obj.NameRM,
+                    CantidadRM = obj.CantidadRM,
+                    CostoRM = obj.CostoRM,
+                    UnitMeasurementRM = obj.UnitMeasurementRM
+                };
+
+                ShoppingListModel shoppingItem = new ShoppingListModel
+                {
+                    Amount = obj.CantidadRM,
+                    ValorUnitario = Convert.ToDouble(obj.CostoRM),
+                    TotalCost = Convert.ToDouble(obj.CantidadRM * Convert.ToDouble(obj.CostoRM))
+                };
+
+                App.Database.SaveRawMaterial(rawMaterial);
+                App.Database.SaveListShop(shoppingItem);
+
+                /*shoppingItem.RawMaterial = new RawMaterialModel();
+                shoppingItem.RawMaterial = rawMaterial;*/
+                shoppingItem.ShoppingModel = new ShoppingModel();
+                //shoppingItem.ShoppingModel = sh
+
+                App.Database.UpdateRelationsListShop(shoppingItem);
+            }
+
+            //await Shell.Current.DisplayAlert("Éxito", "se guardo la compra", "ok");
+            //LoadNames();
+            //UpdateStock();
+            //UpdateWeightedAveragePrice();
+            //var op = App.Database.GetMR().Result;
+            //var ops = App.Database.ListShoppingList().Result;
+            //ClearShopping();
         }
     }
 }

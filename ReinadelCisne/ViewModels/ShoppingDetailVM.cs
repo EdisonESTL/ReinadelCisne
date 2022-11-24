@@ -74,7 +74,7 @@ namespace ReinadelCisne.ViewModels
                      select lis).ToList();
 
             var rawmaterialsList = App.Database.GetMR().Result;
-
+            /*
             var listshp = (from shp in ft
                            join mat in rawmaterialsList on shp.RawMaterialModelId equals mat.Id
                            select new
@@ -82,13 +82,13 @@ namespace ReinadelCisne.ViewModels
                                Material = mat.NameRM,
                                UnidMedida = mat.UnitMeasurementRM,
                                Cantidad = shp.Amount,
-                               CostoU = shp.UnitCost.ToString("N2") + "$",
+                               CostoU = shp.ValorUnitario.ToString("N2") + "$",
                                CostoT = shp.TotalCost.ToString("N2") + "$"
-                           }).ToList();
-            foreach(var obj in listshp)
+                           }).ToList();*/
+            /*foreach(var obj in listshp)
             {
                 ShopsRMs.Add(obj);
-            }
+            }*/
         }
     }
 }

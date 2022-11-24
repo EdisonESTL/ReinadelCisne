@@ -8,35 +8,95 @@
         <vm:RawMaterialVm/>
     </ContentPage.BindingContext>
     <ContentPage.Content>
-        <StackLayout>
+        <StackLayout Padding="10">
+            <Label Text="Filtrar por grupo"
+                   TextColor="Black"/>
+            <Grid ColumnDefinitions="*, Auto, Auto"
+                  RowDefinitions="Auto"
+                  Margin="60,0,40,20">
+                <Picker x:Name="picker"
+                        Grid.Column="0"
+                    Title="Grupo"
+                    TitleColor="Black"
+                    BackgroundColor="White"
+                    ItemsSource="{Binding GroupsRMs}"
+                    ItemDisplayBinding="{Binding Description}"
+                    SelectedItem="{Binding GroupSelected}"/>
+                <ImageButton Source="searchhd.png"
+                             BackgroundColor="{StaticResource PrimerColor}"
+                             CornerRadius="35"
+                             Grid.Column="1"
+                             HorizontalOptions="CenterAndExpand"
+                             Command="{Binding PerformSearch}"
+                             Aspect="AspectFit"
+                             Padding="10,0,10,0"/>
+                <ImageButton Source="arbol1.png"                             
+                             BackgroundColor="{StaticResource SegundoColor}"
+                             CornerRadius="35"
+                             Grid.Column="2"
+                             HorizontalOptions="CenterAndExpand"
+                             Command="{Binding PushCommand}"
+                             CommandParameter="todo"
+                             Aspect="AspectFit"
+                             Padding="15,0,15,0"/>
+            </Grid>
             <RefreshView IsRefreshing="{Binding IsRefreshing}" Command="{Binding RefreshCommand}">
                 <CollectionView ItemsSource="{Binding RawMaterials, Mode=OneWay}" SelectionMode="Single" x:Name="listaMateriaPrima" SelectionChangedCommand="{Binding SelectedCommand}" 
                             SelectedItem="{Binding Shop}" SelectionChangedCommandParameter="{Binding SelectedItem , Source={x:Reference listaMateriaPrima}}" Grid.ColumnSpan="3" Grid.Row="2" HorizontalOptions="Center">
                     <CollectionView.ItemsLayout>
                         <LinearItemsLayout Orientation="Vertical" ItemSpacing="3"/>
                     </CollectionView.ItemsLayout>
-                    <CollectionView.Header>
-                        <Grid>
-                            <Label Text="Material" Grid.Column="0" Style="{StaticResource LabelTittlesColLectionView}"/>
-                            <Label Text="Medida" Grid.Column="1" Style="{StaticResource LabelTittlesColLectionView}"/>
-                            <Label Text="Cantidad" Grid.Column="2" Style="{StaticResource LabelTittlesColLectionView}"/>
-                            <Label Text="c/u P." Grid.Column="3" Style="{StaticResource LabelTittlesColLectionView}"/>
-                        </Grid>
-                    </CollectionView.Header>
                     <CollectionView.ItemTemplate>
                         <DataTemplate>
-                            <Frame Style="{StaticResource FrameGoRegistroSales}">
+                            <Frame Style="{StaticResource Frame2}">
                                 <Grid>
-                                    <Label Grid.Column="0" Text="{Binding Description}" Style="{StaticResource LabelRegistroVenta}" FontSize="15"/>
-                                    <Label Grid.Column="1" Text="{Binding Measurament}" Style="{StaticResource LabelRegistroVenta}" FontSize="15"/>
-                                    <Label Grid.Column="2" Text="{Binding Amount}" Style="{StaticResource LabelRegistroVenta}"/>
-                                    <Label Grid.Column="3" Text="{Binding UnitCost}" Style="{StaticResource LabelRegistroVenta}"/>
+                                    <Image Source="rawmaterial.png"
+                                           Grid.Column="0"
+                                           Grid.RowSpan="2"/>
+                                    <Label Grid.Column="1"
+                                           Grid.Row="0"
+                                           Text="{Binding NameRM}" Style="{StaticResource LabelRegistroVenta}" FontSize="15"/>
+                                    <Label Grid.Column="2" 
+                                           Grid.Row="1"
+                                           Text="{Binding UMedidaRM.Description}" Style="{StaticResource LabelRegistroVenta}" FontSize="15"/>
+                                    <Label Grid.Column="2"
+                                           Grid.ColumnSpan="2"
+                                           Grid.Row="0"
+                                           Text="{Binding DescriptionRM}" Style="{StaticResource LabelRegistroVenta}" FontSize="15"/>
+                                    <Label Grid.Column="3" 
+                                           Grid.Row="1"
+                                           Text="{Binding CantidadRM}" Style="{StaticResource LabelRegistroVenta}"/>
+                                    <Label Grid.Column="1"
+                                           Grid.Row="1"
+                                           Text="{Binding CostoRM}" Style="{StaticResource LabelRegistroVenta}"/>
                                 </Grid>
                             </Frame>
                         </DataTemplate>
                     </CollectionView.ItemTemplate>
                 </CollectionView>
             </RefreshView>
+            <Grid RowDefinitions="Auto" Margin="10">
+                <!--<Button Text="Inicio" Command="{Binding PushCommand}" 
+                        Style="{StaticResource Button2}"
+                        CommandParameter="inicio"
+                        Grid.Column="0"
+                        FontAttributes="Bold"
+                        ImageSource="arbol1.png"/>-->
+                <Button Text="Compras" Command="{Binding PushCommand}" 
+                        Style="{StaticResource Button2}"
+                        CommandParameter="compras"
+                        Grid.Column="0"
+                        FontAttributes="Bold"
+                        ImageSource="shopsld.png"
+                        ContentLayout="top, 3"/>
+                <Button Text="Nuevo" Command="{Binding PushCommand}" 
+                        Style="{StaticResource Button1}"
+                        CommandParameter="nuevo"
+                        CornerRadius="30"
+                        Grid.Column="1"
+                        ImageSource="newa.png"
+                        ContentLayout="top, 3"/>
+            </Grid>
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>

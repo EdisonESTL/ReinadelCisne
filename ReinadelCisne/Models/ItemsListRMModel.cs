@@ -19,9 +19,15 @@ namespace ReinadelCisne.Models
         [ManyToOne]
         public ListRMModel ListRMModel { get; set; }
 
-        [ForeignKey(typeof(RawMaterialModel))]
+        [ForeignKey(typeof(KardexRMModel))]
         public int RawMaterialModelId { get; set; }
         [ManyToOne]
-        public RawMaterialModel RawMaterial { get; set; }
+        public KardexRMModel KardexRMModel { get; set; }
+        /*[ForeignKey(typeof(RawMaterialModel))]
+        public int RawMaterialModelId { get; set; }
+        [ManyToOne]
+        public RawMaterialModel RawMaterial { get; set; }*/
+
+
     }
 }

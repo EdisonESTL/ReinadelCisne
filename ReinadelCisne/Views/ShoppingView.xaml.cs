@@ -15,7 +15,7 @@ namespace ReinadelCisne.Views
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class ShoppingView : ContentPage
     {
-        public string Entyd
+        /*public string Entyd
         {
             get => descf.Text;
             set
@@ -33,13 +33,13 @@ namespace ReinadelCisne.Views
                 IdAux.Text = value;
                 OnPropertyChanged();
             }
-        }
+        }*/
         public ShoppingView()
         {
             InitializeComponent();
         }
          
-        async void Handle_SelectionChanged(object sender, Syncfusion.SfAutoComplete.XForms.SelectionChangedEventArgs e)
+        /*async void Handle_SelectionChanged(object sender, Syncfusion.SfAutoComplete.XForms.SelectionChangedEventArgs e)
         {
             if(autoComplete.SelectedValue != null && autoComplete.SelectedValue.ToString() != "")
             {
@@ -53,7 +53,7 @@ namespace ReinadelCisne.Views
                 }
             }
             
-        }
+        }*/
         /*
         private void AutoSuggestBox_TextChanged(AutoSuggestBox sender, AutoSuggestBoxTextChangedEventArgs args)
         {

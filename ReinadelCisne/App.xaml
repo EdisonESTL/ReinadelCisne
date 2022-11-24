@@ -4,27 +4,34 @@
              x:Class="ReinadelCisne.App">
     <Application.Resources>
         <ResourceDictionary>
-        <!-- Xamarin Form Material Design Color System por Jucaripo -->
-        <!-- usamos MD para saber que es Material Design-->
-        <!--  Nombre del patron  + la palabra Color  para identificar en Xaml que solo es color -->
-        <!-- Definición de colores de Marca -->
-        <Color x:Key="MdPrimaryColor">#6CBD8D</Color>
-        <Color x:Key="MdPrimaryVariantColor">#3700B3</Color>
-        <Color x:Key="MdSeondaryColor">#03DAC6</Color>
-        <Color x:Key="MdSeondaryVariantColor">#018786</Color>
-        <!-- Definición de colores de sistema-->
-        <Color x:Key="MdBackgroundColor">#FFFFFF</Color>
-        <Color x:Key="MdSorfaceColor">#FFFFFF</Color>
-        <Color x:Key="MdErrorColor">#B00020</Color>
-        <!-- Definición de colores On "Deben tener contraste al color referido" -->
-        <Color x:Key="MdOnPrimaryColor">#FFFFFF</Color>
-        <Color x:Key="MdOnSeondaryColor">#000000</Color>
-        <Color x:Key="MdOnBackgroundColor">#000000</Color>
-        <Color x:Key="MdOnSorfaceColor">#000000</Color>
-        <Color x:Key="MdOnErrorColor">#FFFFFF</Color>
-        <!-- Definición para Unselected elements de primary color-->
-        <Color x:Key="MdUnselectedPrimaryColor">#999999</Color>
-        <!-- Fin de Xamarin Form Material Design Color System -->
+            <!-- Xamarin Form Material Design Color System por Jucaripo -->
+            <!-- usamos MD para saber que es Material Design-->
+            <!--  Nombre del patron  + la palabra Color  para identificar en Xaml que solo es color -->
+            <!-- Definición de colores de Marca -->
+            <Color x:Key="MdPrimaryColor">#6CBD8D</Color>
+            <Color x:Key="MdPrimaryVariantColor">#3700B3</Color>
+                <Color x:Key="MdSeondaryColor">#A5FAF4</Color>
+            <Color x:Key="MdSeondaryVariantColor">#AAFDF7</Color>
+            <!-- Definición de colores de sistema-->
+            <Color x:Key="MdBackgroundColor">#FFFFFF</Color>
+                <Color x:Key="MdSorfaceColor">#6CBD8D</Color>
+            <Color x:Key="MdErrorColor">#B00020</Color>
+            <!-- Definición de colores On "Deben tener contraste al color referido" -->
+            <Color x:Key="MdOnPrimaryColor">#FFFFFF</Color>
+            <Color x:Key="MdOnSeondaryColor">#000000</Color>
+            <Color x:Key="MdOnBackgroundColor">#000000</Color>
+            <Color x:Key="MdOnSorfaceColor">#000000</Color>
+            <Color x:Key="MdOnErrorColor">#FFFFFF</Color>
+            <!-- Definición para Unselected elements de primary color-->
+            <Color x:Key="MdUnselectedPrimaryColor">#999999</Color>
+            <!-- Fin de Xamarin Form Material Design Color System -->
+            
+            <!-- Colores ESTL -->
+            <Color x:Key="TextColorWhite">#FFFFFF</Color>
+            <Color x:Key="PrimerColor">#6CBD8D</Color>
+            <Color x:Key="SegundoColor">#A5FAF4</Color>
+            <Color x:Key="TercerColor">#FBF4A9</Color>
+            <Color x:Key="CuartoColor">#E4E4E4</Color>
         </ResourceDictionary>
         
         <!--Buttons Style-->
@@ -66,7 +73,47 @@
             <Setter Property="BackgroundColor" Value="{StaticResource MdPrimaryColor}"/>
             <Setter Property="TextColor" Value="#102949"/>
         </Style>
-        
+        <Style TargetType="Button"
+               x:Key="Button1Login">
+            <Setter Property="TextColor" Value="{StaticResource TextColorWhite}"/>
+            <Setter Property="Margin" Value="0"/>
+            <Setter Property="Padding" Value="10,0,10,0"/>
+            <Setter Property="Visual" Value="Default"/>
+            <Setter Property="FontSize" Value="20"/>
+        </Style>
+        <Style TargetType="Button"
+               x:Key="Button2">
+            <Setter Property="CornerRadius" Value="30"/>
+            <Setter Property="BorderWidth" Value="0.3"/>
+            <Setter Property="BorderColor" Value="DarkGray"/>
+            <Setter Property="BackgroundColor" Value="White"/>
+            <Setter Property="TextColor" Value="{StaticResource MdPrimaryColor}"/>
+            <Setter Property="Margin" Value="0"/>
+            <Setter Property="Padding" Value="10,0,10,0"/>
+            <Setter Property="Visual" Value="Material"/>
+        </Style>
+        <Style TargetType="ImageButton"
+               x:Key="ImgButon1">
+            <Setter Property="BackgroundColor" Value="{StaticResource TercerColor}"/>
+            <Setter Property="Aspect" Value="AspectFit"/>
+            <Setter Property="BorderWidth" Value="3"/>
+            <Setter Property="BorderColor" Value="{StaticResource MdPrimaryColor}"/>
+            <Setter Property="CornerRadius" Value="100"/>
+            <Setter Property="HeightRequest" Value="60"/>
+            <Setter Property="WidthRequest" Value="60"/>
+            <Setter Property="Padding" Value="9"/>
+        </Style>
+        <Style TargetType="ImageButton"
+               x:Key="ImgButon2">
+            <Setter Property="BackgroundColor" Value="White"/>
+            <Setter Property="Aspect" Value="AspectFit"/>
+            <Setter Property="BorderWidth" Value="3"/>
+            <Setter Property="BorderColor" Value="{StaticResource MdPrimaryColor}"/>
+            <Setter Property="CornerRadius" Value="30"/>
+            <Setter Property="HeightRequest" Value="60"/>
+            <Setter Property="WidthRequest" Value="90"/>
+            <Setter Property="Padding" Value="9"/>
+        </Style>
         <!--Label Styles-->
         <Style TargetType="Label"
                x:Key="LabelCuentaVenta">
@@ -135,6 +182,86 @@
             <Setter Property="BorderColor" Value="Transparent"/>
             <Setter Property="HasShadow" Value="True"/>
             <Setter Property="CornerRadius" Value="16"/>
+        </Style>
+        
+        <Style TargetType="Frame"
+               x:Key="FrameButton1">
+            <Setter Property="Background">
+                <LinearGradientBrush EndPoint="0,1"
+                                             StartPoint="0,0">
+                    <GradientStop Color="#9df0bd"
+                          Offset="0.0" />
+                    <GradientStop Color="#6CBD8D"
+                          Offset="0.5" />
+                    <GradientStop Color="#9df0bd"
+                          Offset="1.0" />
+                </LinearGradientBrush>
+            </Setter>
+            <Setter Property="BorderColor" Value="Transparent"/>
+            <Setter Property="HasShadow" Value="True"/>
+            <Setter Property="CornerRadius" Value="18"/> 
+        </Style>
+        
+        <Style TargetType="Frame"
+               x:Key="Frame1">
+            <Setter Property="Background">
+                <RadialGradientBrush Center="0.5,0.5">
+                    <GradientStop Color="#FFFFFF"
+                          Offset="0.1" />
+                    <GradientStop Color="#9DF0BD"
+                          Offset="1.0" />
+                </RadialGradientBrush>
+            </Setter>
+            <Setter Property="BorderColor" Value="Transparent"/>
+            <Setter Property="HasShadow" Value="False"/>
+            <Setter Property="Visual" Value="Default"/>
+            <Setter Property="CornerRadius" Value="10"/>
+        </Style>
+
+        <Style TargetType="Frame"
+               x:Key="Frame2">
+            <Setter Property="Background">
+                <RadialGradientBrush Center="0.5,0.5">
+                    <GradientStop Color="#FFFFFF"
+                          Offset="0.1" />
+                    <GradientStop Color="#A8FDF7"
+                          Offset="1.0" />
+                </RadialGradientBrush>
+            </Setter>
+            <Setter Property="BorderColor" Value="Transparent"/>
+            <Setter Property="HasShadow" Value="False"/>
+            <Setter Property="Visual" Value="Default"/>
+            <Setter Property="CornerRadius" Value="10"/>
+        </Style>
+        <Style TargetType="Frame"
+               x:Key="Frame3">
+            <Setter Property="Background">
+                <RadialGradientBrush Center="0.5,0.5">
+                    <GradientStop Color="#FFFFFF"
+                          Offset="0.1" />
+                    <GradientStop Color="#FBF4A9"
+                          Offset="1.0" />
+                </RadialGradientBrush>
+            </Setter>
+            <Setter Property="BorderColor" Value="Transparent"/>
+            <Setter Property="HasShadow" Value="False"/>
+            <Setter Property="Visual" Value="Default"/>
+            <Setter Property="CornerRadius" Value="10"/>
+        </Style>
+        <Style TargetType="Frame"
+               x:Key="Frame4">
+            <Setter Property="Background">
+                <LinearGradientBrush StartPoint="0,0"
+                                         EndPoint="1,1">
+                    <GradientStop Color="#AAFDF7"
+                                          Offset="0.1" />
+                    <GradientStop Color="#FFFFFF"
+                                          Offset="1.0" />
+                </LinearGradientBrush>
+            </Setter>
+            <Setter Property="BorderColor" Value="{StaticResource MdSeondaryVariantColor}"/>
+            <Setter Property="HasShadow" Value="False"/>
+            <Setter Property="CornerRadius" Value="10"/>
         </Style>
         <!--Entry Styles-->
         <Style TargetType="Entry"

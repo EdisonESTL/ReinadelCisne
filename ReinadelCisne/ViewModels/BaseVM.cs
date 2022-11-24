@@ -17,6 +17,12 @@ namespace ReinadelCisne.ViewModels
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
+        /*-----------------------------------------------------*/
+
+        public void CalcularPromedioPonderado(double UltimoSaldo, int unids, double Precio, int UnidsUltimoSaldo, out double vpp)
+        {
+            vpp = (UltimoSaldo - (unids * Precio)) / UnidsUltimoSaldo - unids;
+        }
 
         public void WeekDay(DateTime initDate, out DateTime datei, out DateTime datef)
         {

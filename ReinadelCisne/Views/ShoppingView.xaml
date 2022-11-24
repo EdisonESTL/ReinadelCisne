@@ -4,27 +4,145 @@
              xmlns:vm="clr-namespace:ReinadelCisne.ViewModels" 
              xmlns:autocomplete="clr-namespace:Syncfusion.SfAutoComplete.XForms;assembly=Syncfusion.SfAutoComplete.XForms"
              x:Class="ReinadelCisne.Views.ShoppingView"
-             Title="Nueva compra">
+             Title="Nueva compra"
+             BackgroundColor="#E4E4E4">
+    <Shell.BackButtonBehavior>
+        <BackButtonBehavior Command="{Binding BackCommand}"/>
+    </Shell.BackButtonBehavior>
     <ContentPage.BindingContext>
         <vm:ShoppingVM/>
     </ContentPage.BindingContext>
     <ContentPage.Content>
-        <Grid RowDefinitions="Auto, Auto, Auto, Auto, Auto, Auto, Auto, Auto, Auto, 2*, Auto" ColumnDefinitions="90, 2*, Auto" RowSpacing="3" Margin="7">
+        <StackLayout Padding="10,10,10,10">
+            <Label Text="{Binding Product.NameProduct}" 
+                   Grid.Row="0"
+                   Style="{StaticResource LabelTittlesColLectionView}"
+                   FontSize="Title"/>           
+            <Label Text="{Binding Product.DescriptionProduct}" 
+                   Grid.Row="1"
+                   Style="{StaticResource LabelTittles1}"
+                   FontSize="Subtitle"/>
+            <Grid Margin="0,20,0,0"
+                  RowDefinitions="Auto, Auto, Auto, Auto, Auto"
+                  RowSpacing="10">
+                <Label Text="Cantidad actual"
+                   Grid.Row="0" Grid.Column="0"
+                   Style="{StaticResource LabelTittlesColLectionView}"/>
+                <Label Text="{Binding Product.CantProduct}" 
+                       Grid.Row="1" Grid.Column="0"
+                       Style="{StaticResource LabelTittles1}"/>
+
+                <Label Text="Ultimo precio de compra" 
+                   Grid.Row="0" Grid.Column="1"
+                   Style="{StaticResource LabelTittlesColLectionView}"/>
+                <Label Text="{Binding Product.CostElaboracionProduct}" 
+                       Grid.Row="1" Grid.Column="1"
+                       Style="{StaticResource LabelTittles1}"/>
+            </Grid>
+            <BoxView HeightRequest="1" Color="Red"/>
+            <Grid Margin="0,0,0,20"
+                  RowDefinitions="Auto, Auto, Auto, Auto, Auto"
+                  RowSpacing="10">               
+
+                <Label Text="Compra" 
+                       Grid.Row="2" Grid.Column="0"
+                       Style="{StaticResource LabelTittlesColLectionView}"
+                       HorizontalOptions="Start"
+                       FontSize="Subtitle"
+                       FontAttributes="Bold,Italic"/>
+                <Label Text="Cantidad" 
+                       Grid.Row="3" Grid.Column="0"
+                       Style="{StaticResource LabelTittlesColLectionView}"/>
+                <Entry Style="{StaticResource Entry1}"
+                       Grid.Row="4" Grid.Column="0"/>
+                <Label Text="Precio de compra:" 
+                       Grid.Row="3" Grid.Column="1"
+                       Style="{StaticResource LabelTittlesColLectionView}"/>
+                <Entry Style="{StaticResource Entry1}"
+                       Grid.Row="4" Grid.Column="1"/>
+<!--
+                <RadioButton Content="Pagado" TextColor="Black"
+                             Grid.Row="5" Grid.Column="0"
+                             Value="Pagado"
+                             HorizontalOptions="Center"/>
+                <RadioButton Content="Por pagar" TextColor="Black"
+                             Value="porpagar"
+                             Grid.Row="5" Grid.Column="1"
+                             HorizontalOptions="Center"/>-->
+            </Grid>
+            
+            
+            <!--<RefreshView IsRefreshing="{Binding IsRefreshing}" Command="{Binding RefreshCommand}">
+                <CollectionView ItemsSource="{Binding ListPS}">
+                    <CollectionView.ItemsLayout>
+                        <LinearItemsLayout Orientation="Vertical" ItemSpacing="3"/>
+                    </CollectionView.ItemsLayout>
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <Frame Style="{StaticResource FrameProductss}" HorizontalOptions="CenterAndExpand"
+                               Padding="10"
+                               Margin="0">
+                                <Grid RowDefinitions="30,18, auto"
+                                          RowSpacing="0">
+                                    <Image Source="product.png"
+                                               Grid.Row="0"
+                                               Grid.RowSpan="2"
+                                               Grid.Column="0"
+                                               />
+                                    <Label Grid.Column="1" Text="{Binding Data1}" Style="{StaticResource LabelTittles1}"
+                                </Grid>
+                            </Frame>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+            </RefreshView>-->
+            
+            <StackLayout Orientation="Horizontal"
+                         HorizontalOptions="Center"
+                         VerticalOptions="EndAndExpand"
+                         Spacing="13">
+                <ImageButton Source="eliminar.png"
+                             Style="{StaticResource ImgButon1}"
+                             Margin="0"
+                             WidthRequest="50"
+                             Padding="0"
+                             BorderColor="Transparent"
+                             BackgroundColor="Transparent"
+                             Command="{Binding CancelCommand}"/>
+                <Button Text="Guardar"
+                        ImageSource="arbol1"
+                        Style="{StaticResource Button2}"
+                        FontAttributes="Bold"
+                        BorderWidth="6"
+                        Command="{Binding SaveCompra}"/>
+                <ImageButton Source="plus.png"
+                             Style="{StaticResource ImgButon1}"
+                             WidthRequest="50"
+                             Padding="0"
+                             BackgroundColor="Transparent"
+                             BorderColor="Transparent"
+                             BorderWidth="0"
+                             Command="{Binding NewShopCommand}"/>
+                              
+            </StackLayout>
+            
+        </StackLayout>
+        <!--<Grid RowDefinitions="Auto, Auto, Auto, Auto, Auto, Auto, Auto, Auto, Auto, 2*, Auto" ColumnDefinitions="90, 2*, Auto" RowSpacing="3" Margin="7">
             <Label Text="Nueva Compra" Grid.Row="0" IsVisible="false" Grid.ColumnSpan="3" HorizontalOptions="Center" Style="{StaticResource LabelTittlesColLectionView}"/>
             <Label x:Name="IdAux" Text="{Binding Id, Mode=TwoWay}" IsVisible="false"/>
 
             <Label Text="Fecha" Grid.Row="1" Style="{StaticResource LabelCuentaVenta}"/>
             <DatePicker Date="{Binding Date}" Format="m" Grid.Row="1" Grid.Column="1" Visual="Default"/>
-          <!--
+          
             <Label Text="Numero comprobante" Grid.Row="2" Grid.Column="0" Style="{StaticResource LabelCuentaVenta}"/>
             <Entry Placeholder="0*" Text="{Binding InvoiceNumber}" Grid.Row="2" Grid.Column="1" Visual="Default"/>
--->
+
             <Label Text="Total" Grid.Row="1" Grid.Column="2" HorizontalOptions="Center" Style="{StaticResource LabelCuentaVenta}"/>
             <Label Text="{Binding TotalInv}" Grid.Row="2" Grid.Column="2" HorizontalOptions="Center" VerticalOptions="Center" Style="{StaticResource LabelTittlesColLectionView}"/>
-            <!--
+            
             <Label Text="Almacén" Grid.Row="3" Grid.Column="0" Style="{StaticResource LabelCuentaVenta}"/>
             <Entry Placeholder="tienda abc*" Text="{Binding NameEstablishment}" Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="2" Visual="Default"/>
--->
+
             <Label Text="Cantidad" Grid.Row="4" Grid.Column="0" Style="{StaticResource LabelCuentaVenta}"/>
             <Entry Placeholder="3*" Text="{Binding Amount}" Grid.Row="5" Grid.Column="0" Visual="Default"/>
             
@@ -94,6 +212,6 @@
                     Command="{Binding CancelCommand}" Grid.Row="10" Grid.Column="0"/>
             <Button Text="Guardar" Style="{StaticResource ButtonSave}"
                     Command="{Binding SaveCompra}" Grid.Row="10" Grid.Column="1" Grid.ColumnSpan="2"/>
-        </Grid>
+        </Grid>-->
     </ContentPage.Content>
 </ContentPage>

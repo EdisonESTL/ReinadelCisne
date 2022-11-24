@@ -1,0 +1,73 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:ReinadelCisne.ViewModels"
+             x:Class="ReinadelCisne.Views.KardexView"
+             Title="Kardex">
+    <ContentPage.BindingContext>
+        <vm:KardexProductVM/>
+    </ContentPage.BindingContext>
+    <ContentPage.Content>
+        <Grid RowDefinitions="Auto, Auto, Auto, Auto"
+              ColumnDefinitions="Auto, Auto"
+              Margin="11"
+              ColumnSpacing="10" >
+            <Label Text="Producto" Grid.Row="0"
+                   Style="{StaticResource LabelTittlesColLectionView}"
+                   HorizontalOptions="Start"/>
+            <Label Text="Descripción" Grid.Row="1"
+                   Style="{StaticResource LabelTittlesColLectionView}"/>
+            <Label Text="{Binding Nombre}" Grid.Row="0"
+                   Grid.Column="1"
+                   HorizontalOptions="Start"
+                   Style="{StaticResource LabelTittles1}"/>
+            <Label Text="{Binding Descripcion}" Grid.Row="1"
+                   Grid.Column="1"
+                   HorizontalOptions="Start"
+                   Style="{StaticResource LabelTittlesColLectionView}"/>
+            <StackLayout Grid.Row="2" Grid.ColumnSpan="2"
+                         Padding="16,0,16,0"
+                         Margin="0,12,0,12"
+                         Orientation="Horizontal"
+                         
+                         BackgroundColor="LightGray">
+                <Button Text="Entradas"/>
+                <Button Text="Salidas"/>
+                <Button Text="Saldo"/>
+            </StackLayout>
+            <RefreshView IsRefreshing="{Binding IsRefreshing}" Command="{Binding RefreshCommand}" 
+                         Grid.Row="3" BackgroundColor="#00FF9E"
+                         Grid.ColumnSpan="2">
+                <CollectionView x:Name="MenuCV" SelectionMode="Single" 
+                                SelectionChangedCommand="{Binding SelectedCommand}" 
+                                SelectionChangedCommandParameter="{Binding SelectedItem , Source={x:Reference MenuCV}}" 
+                                ItemsSource="{Binding Kard}">
+                    <CollectionView.ItemsLayout>
+                        <GridItemsLayout Orientation="Vertical" Span="1" 
+                                         VerticalItemSpacing="7" HorizontalItemSpacing="7"/>
+                    </CollectionView.ItemsLayout>
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <Frame Style="{StaticResource FrameGoViewProducts}">
+                                <Grid ColumnDefinitions="2*, *,*,*">
+                                    <Label Grid.Row="0" Grid.Column="0"
+                                            Text="{Binding Data0}" 
+                                           FontSize="Default" TextColor="#0EFFF9"/>
+                                    <Label Grid.Row="0" Grid.Column="1"
+                                           Text="{Binding Data1}" 
+                                           FontSize="13" TextColor="#FFC745"/>
+                                    <Label Grid.Row="0" Grid.Column="2"
+                                           Text="{Binding Data2}" 
+                                           FontSize="13" TextColor="#FFC745"/>
+                                    <Label Grid.Row="0" Grid.Column="3"
+                                           Text="{Binding Data3}" 
+                                           FontSize="13" TextColor="#FFC745"/>
+                                </Grid>
+                            </Frame>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+            </RefreshView>
+        </Grid>
+    </ContentPage.Content>
+</ContentPage>

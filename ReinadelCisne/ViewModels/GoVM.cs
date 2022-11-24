@@ -166,14 +166,32 @@ namespace ReinadelCisne.ViewModels
 
         private void UpdateCantidadesInv(OrderModel obj)
         {
+            
+
             //actualiza cantidad de productos en poseción
             var id = obj.ProductModelId;
 
             ProductModel updt = App.Database.Get1Product(id).Result;
+            
+            var NewCantidad = updt.CantProduct - obj.AmountProduct;
+            //CalcularPromedioPonderado(updt.CantProduct * updt.PrecioVentaProduct, obj.AmountProduct, obj.ValorUnitario, updt.CantProduct, out double resp);
+            var NewValor = NewCantidad * obj.ValorUnitario;
 
-            updt.UnitProduct -= obj.AmountProduct;
+            KardexModel kardex = new KardexModel
+            {
+                Date = DateTime.Now,
+                Cantidad = NewCantidad,
+                Valor = NewValor,
+                ValorPromPond = obj.ValorUnitario
+            };
+            App.Database.SaveMovKardex(kardex);
+
+            kardex.ProductModel = updt;
+            
+            updt.CantProduct = NewCantidad;
 
             App.Database.SaveProduct(updt);
+            App.Database.UpdateRelationKardexProduct(kardex);
 
             //Actualiza cantidad de materia prima
             var aux = obj.ProductModelId;
@@ -190,7 +208,7 @@ namespace ReinadelCisne.ViewModels
                 foreach (var s in seleccion)
                 {
                     RawMaterialModel rm = App.Database.GetOneRM(s.RawMaterialModelId).Result;
-                    rm.AmountRM -= s.Amount;
+                    rm.CantidadRM -= s.Amount;
                     App.Database.UpdateRawMaterial(rm);
                 }
             }            
@@ -238,7 +256,7 @@ namespace ReinadelCisne.ViewModels
             {
                 foreach (ProductModel tp in lps)
                 {
-                    if (tp.UnitProduct > 0)
+                    if (tp.CantProduct > 0)
                     {
                         ListPS.Add(tp);
                     }
@@ -257,10 +275,12 @@ namespace ReinadelCisne.ViewModels
                 OrderModel pedido = new OrderModel
                 {
                     ProductModelId = selectedPS.Id,
-                    AmountProduct = int.Parse(res)
+                    ValorUnitario = selectedPS.PrecioVentaProduct,
+                    AmountProduct = int.Parse(res),
+                    Valor = selectedPS.PrecioVentaProduct * int.Parse(res)
                 };
 
-                Cuenta += selectedPS.PriceProduct * int.Parse(res);
+                Cuenta += selectedPS.PrecioVentaProduct * int.Parse(res);
 
                 Order.Add(pedido);
             }

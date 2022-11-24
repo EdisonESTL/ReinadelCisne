@@ -3,82 +3,100 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:VM="clr-namespace:ReinadelCisne.ViewModels" 
              x:Class="ReinadelCisne.Views.StockView"
-             Title="Nuevo producto/servicio"
+             Title="Nuevo producto"
              BackgroundColor="#E4E4E4">
     <ContentPage.BindingContext>
         <VM:StockpsVM/>
     </ContentPage.BindingContext>
+    <Shell.BackButtonBehavior>
+        <BackButtonBehavior
+        Command="{Binding GoBackCommand}"
+        IsEnabled="True" />
+    </Shell.BackButtonBehavior>
     <ContentPage.Content>
-        <Grid RowDefinitions="19, 60, 19, 2*, 19, 60, 19, 90, 3*, Auto"
+        <ScrollView>
+            <Grid RowDefinitions="Auto, Auto, Auto, Auto, Auto, Auto, Auto, Auto, Auto, Auto" 
               Margin="10,18,10,11">
 
-            <Label Text="Nombre del producto:" Grid.Row="0" Style="{StaticResource LabelCuentaVenta}"/>
-            <Entry Text="{Binding NamePS, Mode=TwoWay}" Placeholder="Nombre" Grid.Row="1" Grid.ColumnSpan="2"
+                <Label Text="Nombre del producto:" Grid.Row="0" Style="{StaticResource LabelCuentaVenta}"/>
+                <Entry Text="{Binding NamePS, Mode=TwoWay}" Placeholder="Nombre" Grid.Row="1" Grid.ColumnSpan="2"
                    Style="{StaticResource Entry1}"
                    />
 
-            <Label Text="Descripción:" Grid.Row="2" Style="{StaticResource LabelCuentaVenta}"/>
-            <Editor Grid.Row="3" Placeholder="Escribe la descripcion del producto"
+                <Label Text="Descripción:" Grid.Row="2" Style="{StaticResource LabelCuentaVenta}"/>
+                <Editor Grid.Row="3" Placeholder="Escribe la descripcion del producto"
+                    Text="{Binding DescripcionPS}"
                     Grid.ColumnSpan="2" Style="{StaticResource Editor1}"/>
 
-            <Label Text="Precio unitario de venta" VerticalOptions="Center" HorizontalOptions="Center" Grid.Column="0" Grid.Row="4" Style="{StaticResource LabelCuentaVenta}"/>
-            <Entry Text="{Binding PricePS, Mode=TwoWay}" Keyboard="Telephone" Grid.Column="0" 
-                   Grid.Row="5"
+                <Label Text="Precio" VerticalOptions="Center" HorizontalOptions="Center" Grid.Column="0" Grid.Row="4" Style="{StaticResource LabelCuentaVenta}"/>
+                <Entry Text="{Binding PricePS, Mode=TwoWay}" Keyboard="Telephone" Grid.Column="0" 
+                   Grid.Row="5" Placeholder="$$"
                    Style="{StaticResource Entry1}"/>
 
-            <Label Text="Unidad" VerticalOptions="Center" HorizontalOptions="Center" Grid.Column="1" 
-                   Grid.Row="4" Style="{StaticResource LabelCuentaVenta}"/>
-            <Entry Grid.Column="1" Grid.Row="5" Text=""
-                   Style="{StaticResource Entry1}"/>
+                <Label Text="Unidad de medida" VerticalOptions="Center" HorizontalOptions="Center" Grid.Column="1" 
+                   Grid.Row="4" Style="{StaticResource LabelCuentaVenta}"
+                   />
+                <Entry Grid.Column="1" Grid.Row="5" Text="{Binding UnidaddMedidaPS}"
+                   Style="{StaticResource Entry1}"
+                   Placeholder="Unidad"/>
 
-            <Label Text="Costo unitario de elaboración" VerticalOptions="Center" Grid.Column="0" 
+                <Label Text="Costo unitario de elaboración" VerticalOptions="Center" Grid.Column="0" 
                    Grid.ColumnSpan="2"
                    Grid.Row="6" Style="{StaticResource LabelCuentaVenta}"/>
-            <Entry Grid.Column="0" Grid.Row="7" Text="" Keyboard="Numeric"
+                <Entry Grid.Column="0" Grid.Row="7" Text="{Binding CostoUnitarioPS}" 
+                   Keyboard="Numeric"
                    Style="{StaticResource Entry1}"/>
 
-            <Button Text="Calcular costo" Style="{StaticResource ButtonAdd}"
+                <Button Text="Calcular costo" Style="{StaticResource ButtonAdd}"
                     Grid.Row="7" Grid.Column="1"
                     Margin="10,0,10,40"
                     VerticalOptions="CenterAndExpand" HorizontalOptions="Center"/>
 
-            <Image Source="product1.png" 
+                <Image Source="product1.png" 
                    Grid.Row="8"
                    Grid.Column="0"/>
 
-            <Grid Grid.Row="8" 
+                <Grid Grid.Row="8" 
                   Grid.Column="1"
                   ColumnDefinitions="50,50" 
-                  RowDefinitions="55, 2*"
+                  RowDefinitions="Auto,Auto, Auto"
                   HorizontalOptions="CenterAndExpand"
                   VerticalOptions="Center">
-                <Entry Grid.Column="0" 
-                       Grid.ColumnSpan="2"
+                    <Label Text="Cantidad" Style="{StaticResource LabelTittles1}"
                        Grid.Row="0"
+                       Grid.Column="0" 
+                       Grid.ColumnSpan="2"
+                       HorizontalOptions="Center"/>
+                    <Entry Grid.Column="0" 
+                       Grid.ColumnSpan="2"
+                       Grid.Row="1"
                        Text="{Binding UnitPS, Mode=TwoWay}" Keyboard="Numeric"
                        Style="{StaticResource Entry1}"
                        FontSize="20"
                        VerticalOptions="Center"
                        HorizontalOptions="Center"
                        Margin="0"/>
-                <Button Text="+"
-                        Style="{StaticResource Button1}"
-                        VerticalOptions="Center"
-                        FontSize="30"
-                        TextColor="Black"
-                        Grid.Column="0"
-                        Grid.Row="1"/>
-                
-                <Button Text="-"
+                    <Button Text="+"
                         Style="{StaticResource Button1}"
                         VerticalOptions="Center"
                         HorizontalOptions="Center"
                         FontSize="30"
                         TextColor="Black"
                         Grid.Column="1"
-                        Grid.Row="1"/>
-            </Grid>
-            <!--
+                        Grid.Row="2"
+                        Command="{Binding SumarCommand}"/>
+
+                    <Button Text="-"
+                        Style="{StaticResource Button1}"
+                        VerticalOptions="Center"
+                        HorizontalOptions="Center"
+                        FontSize="30"
+                        TextColor="Black"
+                        Grid.Column="0"
+                        Grid.Row="2"
+                        Command="{Binding RestarCommand}"/>
+                </Grid>
+                <!--
             <BoxView Color="#096BAF" Grid.Row="1" Grid.ColumnSpan="2"
              HorizontalOptions="Fill" />
             
@@ -94,15 +112,17 @@
 <BoxView Color="#096BAF" Grid.Row="9" Grid.ColumnSpan="2"/>
             </Grid>
             -->
-            
-            
-            <Grid Grid.Row="9" Grid.ColumnSpan="2"
+
+
+                <Grid Grid.Row="9" Grid.ColumnSpan="2"
                   Margin="0,18,0,0">
-                <Button Text="Borrar"
+                    <Button Text="Borrar"
                     Command="{Binding Cancel}" Grid.Column="0" Style="{StaticResource ButtonCancel}"/>
-                <Button Text="Guardar"
+                    <Button Text="Guardar"
                     Command="{Binding Save}" Grid.Column="1" Style="{StaticResource ButtonSave}"/>
+                </Grid>
             </Grid>
-        </Grid>
+        </ScrollView>
+        
     </ContentPage.Content>
 </ContentPage>

@@ -1,0 +1,77 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:ReinadelCisne.ViewModels"
+             x:Class="ReinadelCisne.Views.ShoppingProdServView"
+             Title="Añadir elemento a comprar">
+    <ContentPage.BindingContext>
+        <vm:ShoppingProdServVM/>
+    </ContentPage.BindingContext>
+    <Shell.BackButtonBehavior>
+        <BackButtonBehavior Command="{Binding BackCommand}"/>
+    </Shell.BackButtonBehavior>
+    <ContentPage.Content>
+        <StackLayout Padding="10">
+            <Label Text="Seleciona elemento a comprar" Style="{StaticResource LabelTittlesColLectionView}"
+                VerticalOptions="CenterAndExpand" 
+                HorizontalOptions="CenterAndExpand" 
+                   />
+            <RefreshView>
+                <CollectionView x:Name="ListProdServ"
+                            ItemsSource="{Binding ListPS, Mode=TwoWay}"
+                            Margin="0,12,0,12"
+                            SelectionMode="Single"
+                            SelectionChangedCommand="{Binding SelectedCommnad}"
+                            SelectionChangedCommandParameter="{Binding SelectedItem, Source={x:Reference ListProdServ}}">
+                    <CollectionView.ItemsLayout>
+                        <LinearItemsLayout Orientation="Vertical" ItemSpacing="3"/>
+                    </CollectionView.ItemsLayout>
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <Frame Style="{StaticResource FrameProductss}" HorizontalOptions="CenterAndExpand"
+                               Padding="10"
+                               Margin="0">
+                                <Grid RowDefinitions="30,18"
+                                          RowSpacing="0">
+                                    <Image Source="product.png"
+                                               Grid.Row="0"
+                                               Grid.RowSpan="2"
+                                               Grid.Column="0"
+                                               />
+                                    <Label Grid.Column="1" Text="{Binding Data0}" Style="{StaticResource LabelValorsTittles}"
+                                               Grid.Row="0"/>
+
+                                    <Label Grid.Column="1" Text="{Binding Data1}" Style="{StaticResource LabelTittles1}"
+                                               Grid.Row="1"/>
+                                    <Label Grid.Column="2" Text="{Binding Data2}" Style="{StaticResource LabelTittles1}"
+                                               Grid.Row="0"/>
+                                </Grid>
+                            </Frame>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+            </RefreshView>            
+            <Label Text="Hola, ¿Qué desea comprar?" Style="{StaticResource LabelTittlesColLectionView}"
+                VerticalOptions="CenterAndExpand" 
+                HorizontalOptions="CenterAndExpand" />
+            <StackLayout Orientation="Vertical"
+                         Padding="10">
+                <Button Text="Producto"
+                        FontAttributes="Bold"
+                        ImageSource="inventory1.png"
+                        ContentLayout="left, 6"
+                        Style="{StaticResource Button2}"
+                        Command="{Binding PushCommand}"
+                        CommandParameter="productos"/>
+                <Button Text="Materia prima"
+                        ImageSource="rawmaterial1.png"
+                        ContentLayout="left, 6"
+                        Style="{StaticResource Button2}"
+                        FontAttributes="Bold"
+                        Command="{Binding PushCommand}"
+                        CommandParameter="materiaprima"/>
+            </StackLayout>
+            
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

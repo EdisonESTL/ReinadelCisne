@@ -9,9 +9,10 @@ namespace ReinadelCisne.Models
     public class ShoppingListModel
     {
         [PrimaryKey, AutoIncrement]
-        public int Id { get; set; }        
+        public int Id { get; set; }
+        public DateTime Date { get; set; }
         public double Amount { get; set; }    //Cantidad comprada 
-        public double UnitCost { get; set; }     //Unidades compradas
+        public double ValorUnitario { get; set; }     //Unidades compradas
         public double TotalCost { get; set; }
 
         [ForeignKey(typeof(ShoppingModel))]
@@ -19,9 +20,14 @@ namespace ReinadelCisne.Models
         [ManyToOne]
         public ShoppingModel ShoppingModel { get; set; }
 
+        [ForeignKey(typeof(KardexRMModel))]
+        public int KardexRMModelId { get; set; }
+        [ManyToOne]
+        public KardexRMModel KardexRMModel { get; set; }
+        /*
         [ForeignKey(typeof(RawMaterialModel))]
         public int RawMaterialModelId { get; set; }
         [ManyToOne]
-        public RawMaterialModel RawMaterial { get; set; }
+        public RawMaterialModel RawMaterial { get; set; }*/
     }
 }

@@ -8,7 +8,7 @@
     </ContentPage.BindingContext>
     <ContentPage.Content>
         <Grid>
-            <Button Text="Semana" Grid.Row="0" Grid.Column="0" Command="{Binding DayCommand}" Style="{StaticResource ButtonDayWeekMonh}"/>
+            <Button Text="Filtrar por fecha " Grid.Row="0" Grid.Column="0" Command="{Binding DayCommand}" Style="{StaticResource ButtonDayWeekMonh}"/>
             <Button Text="Mes" Grid.Row="0" Grid.Column="1" Command="{Binding DayCommand}" Style="{StaticResource ButtonDayWeekMonh}"/>
             <Button Text="Año" Grid.Row="0" Grid.Column="2" Command="{Binding DayCommand}" Style="{StaticResource ButtonDayWeekMonh}"/>
             <RefreshView IsRefreshing="{Binding IsRefreshing}" Command="{Binding RefreshCommand}" Grid.Row="1" Grid.ColumnSpan="3" BackgroundColor="#00FF9E">

@@ -44,7 +44,7 @@ namespace ReinadelCisne.ViewModels
 
         public ICommand DayCommand => new Command(() =>
         {
-            LoadShopsDay();
+            //LoadShopsDay();
         });
         public ShopsVM()
         {
@@ -52,7 +52,7 @@ namespace ReinadelCisne.ViewModels
             //LoadShops();
         }
 
-        private void LoadShopsDay()
+        /*private void LoadShopsDay()
         {
             var sales = App.Database.ListShopping().Result;
             var shops = App.Database.ListShoppingList().Result;
@@ -66,7 +66,7 @@ namespace ReinadelCisne.ViewModels
                             rmId = s.RawMaterialModelId,
                             datem = ss.ShoppingDate,
                             cantm = s.Amount,
-                            costu = s.UnitCost,
+                            costu = s.ValorUnitario,
                             total = s.TotalCost
                         };
 
@@ -120,7 +120,7 @@ namespace ReinadelCisne.ViewModels
                           measurement = m.UnitMeasurementRM,
                           datem = ss.ShoppingDate,
                           cantm = s.Amount,
-                          costu = s.UnitCost,
+                          costu = s.ValorUnitario,
                           total = s.TotalCost
                       };
 
@@ -132,7 +132,7 @@ namespace ReinadelCisne.ViewModels
                        group s by s.RawMaterialModelId into groupShopsRm
                        select groupShopsRm).ToList();*/
             List<DetailShopRM> rmdet = new List<DetailShopRM>();
-            foreach (var materialGroup in fgn)
+            /*foreach (var materialGroup in fgn)
             {
                 foreach (var rm in materialGroup)
                 {
@@ -150,6 +150,6 @@ namespace ReinadelCisne.ViewModels
 
                 RMs.Add(new DetailShopRMGroup(materialGroup.Key, rmdet));
             }
-        }
+        }*/
     }
 }

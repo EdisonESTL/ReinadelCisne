@@ -11,14 +11,34 @@ namespace ReinadelCisne.Models
     {
         [PrimaryKey, AutoIncrement, Column("_id")]
         public int Id { get; set; }
+        public DateTime DateTime { get; set; }
         public string NameProduct { get; set; }
-        public int UnitProduct { get; set; }
-        public double UtilityProduct { get; set; }
-        public double PriceProduct { get; set; }
+        public string DescriptionProduct { get; set; }
+        public string LocationProduct { get; set; }
+        public string ProductSupplier { get; set; }
+        public int MinimalExistence { get; set; }
+        public int MaximumExistence { get; set; }    
+        public int CantProduct { get; set; }
+        public string UnidadMedida { get; set; }
+        public double PrecioVentaProduct { get; set; }
+        public double CostElaboracionProduct { get; set; }
 
-        //Relacion con OrderModel
+
+
+        //public double UtilityProduct { get; set; }
+
+
+        //Relacion con OrderModel (Ventas)
         [OneToMany("ProductModelId")]
         public List<OrderModel> Orders { get; set; }
+
+        //Relacion con ProductShoppingList (Compras)
+        [OneToMany("ProductModelId")]
+        public List<ProductShoppingList> productShoppingLists { get; set; }
+
+        //Relacion con Kardex
+        [OneToMany("IdProduct")]
+        public List<KardexModel> Kardices { get; set; }
 
         //Relacion con ListRMModel
         [ForeignKey(typeof(ListRMModel))]

@@ -13,7 +13,7 @@ namespace ReinadelCisne.Views
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class InRawMaterialView : ContentPage
     {
-        public string Medida
+        /*public string Medida
         {
             get => MedidaLabel.Text;
             set
@@ -21,8 +21,8 @@ namespace ReinadelCisne.Views
                 MedidaLabel.Text = value;
                 OnPropertyChanged();
             }
-        }
-        public string CostoU
+        }*/
+        /*public string CostoU
         {
             get => CostoUlabel.Text;
             set
@@ -30,9 +30,9 @@ namespace ReinadelCisne.Views
                 CostoUlabel.Text = value;
                 OnPropertyChanged();
             }
-        }
+        }*/
 
-        public string AuxId
+        /*public string AuxId
         {
             get => IdAux.Text;
             set
@@ -40,12 +40,12 @@ namespace ReinadelCisne.Views
                 IdAux.Text = value;
                 OnPropertyChanged();
             }
-        }
+        }*/
         public InRawMaterialView()
         {
             InitializeComponent();
         }
-        async void Handle_SelectionChanged(object sender, Syncfusion.SfAutoComplete.XForms.SelectionChangedEventArgs e)
+        /*async void Handle_SelectionChanged(object sender, Syncfusion.SfAutoComplete.XForms.SelectionChangedEventArgs e)
         {
             if (autoComplete.SelectedValue != null && autoComplete.SelectedValue.ToString() != "")
             {
@@ -53,13 +53,13 @@ namespace ReinadelCisne.Views
                 bool answ = await DisplayAlert("Pregunta", "¿Usar " + gg.UnitMeasurementRM + " como unidad de medida?", "Si", "No");
                 if (answ)
                 {
-                    AuxId = gg.Id.ToString();
+                    //AuxId = gg.Id.ToString();
                     Medida = gg.UnitMeasurementRM;
                     CostoU = gg.CostoRM.ToString("N2");
                     autoComplete.Text = gg.NameRM;
                 }
             }
 
-        }
+        }*/
     }
 }

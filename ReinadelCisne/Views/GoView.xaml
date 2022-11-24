@@ -19,18 +19,25 @@
             <Button Text="x Cobrar" Command="{Binding WaytoPayCommand}" Grid.Row="0" Grid.Column="0" VerticalOptions="Center" HorizontalOptions="Center" FontSize="11"/>
             <BoxView Color="#096BAF" Grid.Row="1" Grid.ColumnSpan="3"
              HorizontalOptions="Fill" />
-            <RefreshView IsRefreshing="{Binding IsRefreshing}" Command="{Binding RefreshCommand}" Grid.Row="2" Grid.ColumnSpan="3" BackgroundColor="#00FF9E">
-                <CollectionView x:Name="MenuCV" SelectionMode="Single" SelectionChangedCommand="{Binding SelectedCommand}" 
-                                SelectionChangedCommandParameter="{Binding SelectedItem , Source={x:Reference MenuCV}}" ItemsSource="{Binding ListPS}">
+            
+            <RefreshView IsRefreshing="{Binding IsRefreshing}" Command="{Binding RefreshCommand}" 
+                         Grid.Row="2" Grid.ColumnSpan="3" BackgroundColor="#00FF9E">
+                <CollectionView x:Name="MenuCV" SelectionMode="Single" 
+                                SelectionChangedCommand="{Binding SelectedCommand}" 
+                                SelectionChangedCommandParameter="{Binding SelectedItem , Source={x:Reference MenuCV}}" 
+                                ItemsSource="{Binding ListPS}">
                     <CollectionView.ItemsLayout>
-                        <GridItemsLayout Orientation="Vertical" Span="3" VerticalItemSpacing="7" HorizontalItemSpacing="7"/>
+                        <GridItemsLayout Orientation="Vertical" Span="3" 
+                                         VerticalItemSpacing="7" HorizontalItemSpacing="7"/>
                     </CollectionView.ItemsLayout>
                     <CollectionView.ItemTemplate>
                         <DataTemplate>
                             <Frame Style="{StaticResource FrameGoViewProducts}">
                                 <Grid RowDefinitions="Auto, 20">
-                                    <Label Grid.Row="0" Text="{Binding NameProduct}" FontSize="Default" TextColor="#0EFFF9"/>
-                                    <Label Grid.Row="1" Text="{Binding PriceProduct}" FontSize="13" TextColor="#FFC745"/>
+                                    <Label Grid.Row="0" Text="{Binding NameProduct}" 
+                                           FontSize="Default" TextColor="#0EFFF9"/>
+                                    <Label Grid.Row="1" Text="{Binding PriceProduct}" 
+                                           FontSize="13" TextColor="#FFC745"/>
                                 </Grid>
                             </Frame>
                         </DataTemplate>

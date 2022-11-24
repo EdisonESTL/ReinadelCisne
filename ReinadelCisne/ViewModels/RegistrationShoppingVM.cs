@@ -22,7 +22,7 @@ namespace ReinadelCisne.ViewModels
             }
         }
 
-        private DateTime _finishDate;
+        private DateTime _finishDate = DateTime.Now;
         public DateTime FinishDate
         {
             get { return _finishDate; }
@@ -56,6 +56,18 @@ namespace ReinadelCisne.ViewModels
                 OnPropertyChanged();
             }
         }
+
+        private bool _onDate = false;
+        public bool OnDate
+        {
+            get => _onDate;
+            set
+            {
+                _onDate = value;
+                OnPropertyChanged();
+            }
+        }
+        
         private AuzListShop _shop;
         public AuzListShop Shop
         {
@@ -67,6 +79,10 @@ namespace ReinadelCisne.ViewModels
             }
         }
 
+        public ICommand BackCommand => new Command(() =>
+        {
+            Shell.Current.GoToAsync("//Rini/RMateriaPrima");
+        });
         public ICommand DayShopping => new Command(() =>
         {
             ShoppingDay();
@@ -89,7 +105,17 @@ namespace ReinadelCisne.ViewModels
         });
         public ICommand NewSCommand => new Command(() =>
         {
-            Shell.Current.GoToAsync("NewShopping");
+            Shell.Current.GoToAsync("//Rini/RCompras/SelectionPS");
+            
+        });
+
+        public Command OnFechaCommand => new Command(() =>
+        {
+            OnDate = !OnDate;
+        });
+        public Command FechaCommand => new Command(() =>
+        {
+            ConsultarCompras();
         });
         private async void SelectShop()
         {
@@ -179,7 +205,28 @@ namespace ReinadelCisne.ViewModels
                 aux += obj.TotalShop;
             }
             ShoppingTotal = aux.ToString("N2") + "$";
-        }      
+        }
+
+        private void ConsultarCompras()
+        {
+            aux = 0;
+            shoppings.Clear();
+
+            var shoppingsList = App.Database.ListShopping().Result;
+            var ListandDate = (from obj in shoppingsList
+                               where obj.ShoppingDate.Date >= InitDate.Date && obj.ShoppingDate.Date <= FinishDate.Date
+                               select obj).ToList();
+            if(ListandDate.Count >= 0)
+            {
+                Shell.Current.DisplayAlert("Aviso", "no hay compras hechas", "aceptar");
+            }
+            else
+            {
+                mostrarL(ListandDate);
+            }
+            
+        }
+
         public RegistrationShoppingVM()
         {
             Shop = new AuzListShop();

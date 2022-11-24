@@ -10,7 +10,7 @@
         <vm:LoginVM/>
     </ContentPage.BindingContext>
     <ContentPage.Content>
-        <Grid RowDefinitions="20, Auto" RowSpacing="0">
+        <Grid RowDefinitions="20, *" RowSpacing="0">
             <Frame Grid.Row="0"
                        HasShadow="False"
                        Visual="Default"
@@ -35,17 +35,21 @@
                 </Frame.Background>                
             </Frame>      
             
-            <Grid Grid.Row="1" BackgroundColor="White" Padding="0, 30, 0, 10" RowDefinitions="Auto, 30, 2*, Auto, 60, Auto">
+            <Grid Grid.Row="1" BackgroundColor="White" 
+                  Padding="10, 30, 10, 15"
+                  RowDefinitions="3*, *, 4*, *, 0.9*, *">
                 <StackLayout Orientation="Horizontal" Grid.Row="0"
+                             Margin="0"
+                             Padding="0"
                              HorizontalOptions="CenterAndExpand"
                              Grid.ColumnSpan="2">
                     <Image Source="arbol.png" Aspect="AspectFit"
                            HorizontalOptions="Center"                           
                            HeightRequest="110"/>
                     <Label Text="Yintu." HorizontalOptions="Center" TextColor="DimGray"
-                           VerticalOptions="EndAndExpand"
+                           VerticalOptions="Center"
                            FontSize="70"
-                           Margin="0,55,0,0"
+                           Margin="0,0,0,0"
                            FontAttributes="Bold"/>                    
                 </StackLayout>
                 
@@ -53,28 +57,31 @@
                        FontSize="16"
                        FontAttributes="Bold"
                        TextColor="Black"
-                       Margin="10, 10, 0, 0"/>
+                       Margin="10, 10, 0, 0"
+                       Padding="0"/>
                 
                 <Grid Grid.Row="2" Grid.ColumnSpan="2"
-                      Margin="30, 20, 30, 20"
-                      RowDefinitions="0, 20, Auto, 20, Auto"
-                      IsVisible="{Binding Frame1}">                    
-                    <Label Text="Usuario:" Grid.Row="1"
+                      Margin="30, 0, 30, 0"
+                      Padding="0,0,0,0"
+                      RowDefinitions="20, *, 20, *"
+                      IsVisible="{Binding Frame1}"
+                      VerticalOptions="Center">                    
+                    <Label Text="Usuario:" Grid.Row="0"
                            FontSize="16"
                            TextColor="Black"/>
-                    <Entry Placeholder="Usuario" BackgroundColor="White" Grid.Row="2"
+                    <Entry Placeholder="Usuario" BackgroundColor="White" Grid.Row="1"
                            ClearButtonVisibility="WhileEditing"
                            Text="{Binding CiUser}"/>
-                    <Label Text="Contraseña:" Grid.Row="3"
+                    <Label Text="Contraseña:" Grid.Row="2"
                            FontSize="16"
                            TextColor="Black"/>
-                    <Entry IsPassword="True" BackgroundColor="White" Grid.Row="4"
+                    <Entry IsPassword="True" BackgroundColor="White" Grid.Row="3"
                            Placeholder="Contraseña"
                            Text="{Binding PasswordUser}"/>
                 </Grid>
-                <Grid RowDefinitions="50,50,50,50" ColumnDefinitions="50, 50, 50, 50, 50"
-                      Grid.Row="2" Grid.ColumnSpan="2" IsVisible="{Binding Frame2}"
-                      Margin="30, 10, 30, 10" HorizontalOptions="Center">
+                <Grid Grid.Row="2" Grid.ColumnSpan="2" IsVisible="{Binding Frame2}"
+                      Margin="30, 0, 30, 0" HorizontalOptions="Center"
+                      VerticalOptions="Center">
                     <Button Text="0" Grid.Row="2" Grid.Column="3"
                             Command="{Binding PinCommand}" CommandParameter="0"/>
                     <Button Text="1" Grid.Row="2" Grid.Column="1"
@@ -102,50 +109,36 @@
                            />
                 </Grid>
                 
-                <Frame BorderColor="Transparent"
-                       HasShadow="True"
+                <Frame Style="{StaticResource FrameButton1}"
                        Visual="Default"
-                       CornerRadius="30"
                        HeightRequest="60"
                        WidthRequest="160"
                        Grid.Row="3"
                        Grid.ColumnSpan="2"
                        HorizontalOptions="CenterAndExpand"
-                       Padding="0">      
-                    <Frame.Background>
-                        <!-- StartPoint defaults to (0,0) -->
-                        <LinearGradientBrush EndPoint="0,1"
-                                             StartPoint="0,0">
-                            <GradientStop Color="#9df0bd"
-                          Offset="0.0" />
-                            <GradientStop Color="#6CBD8D"
-                          Offset="0.5" />
-                            <GradientStop Color="#9df0bd"
-                          Offset="1.0" />
-                        </LinearGradientBrush>
-                    </Frame.Background>
-                    <Button Text="Ingresar" Margin="0" Padding="10,0,10,0" Visual="Default" TextColor="White"
-                        FontSize="20" CornerRadius="30" BackgroundColor="Transparent" 
+                       Padding="0"
+                       Margin="0,10,0,0">
+                    <Button Text="Ingresar" Style="{StaticResource Button1Login}"
+                        CornerRadius="30" BackgroundColor="Transparent" 
                         Command="{Binding EntryCommand}">
                     </Button>
                 </Frame>                
 
                 <Label Text="Registrarse" Grid.Row="4" Grid.ColumnSpan="2" HorizontalOptions="Center"
-                       FontSize="16" TextColor="#6CBD8D" Margin="0,9,0,30"
+                       VerticalOptions="Center"
+                       FontSize="16" TextColor="#6CBD8D" 
                        FontAttributes="Bold">
                     <Label.GestureRecognizers>
                         <TapGestureRecognizer Command="{Binding RegisterCommand}"/>
                     </Label.GestureRecognizers>
                 </Label>
                 
-                <Button Text="Usuario" Grid.Row="5" Grid.Column="0" CornerRadius="30" BorderWidth="0.2" BorderColor="DarkGray"
-                        BackgroundColor="White" TextColor="{StaticResource MdPrimaryColor}"
-                        Command="{Binding UsuarioButonnCommand}"
-                        Margin="10,0,10,0"/>
-                <Button Text="Pin" Grid.Row="5" Grid.Column="1" CornerRadius="30" BorderWidth="0.2" BorderColor="DarkGray"
-                        BackgroundColor="White" TextColor="{StaticResource MdPrimaryColor}"
-                        Command="{Binding TecladoButonnCommand}"
-                        Margin="10,0,10,0"/>
+                <Button Text="Usuario" Grid.Row="5" Grid.Column="0"
+                        Style="{StaticResource Button2}"
+                        Command="{Binding UsuarioButonnCommand}"/>
+                <Button Text="Pin" Grid.Row="5" Grid.Column="1" 
+                        Style="{StaticResource Button2}"
+                        Command="{Binding TecladoButonnCommand}"/>
             </Grid>            
 
             <!--
