@@ -13,93 +13,85 @@
         <vm:ShoppingVM/>
     </ContentPage.BindingContext>
     <ContentPage.Content>
-        <StackLayout Padding="10,10,10,10">
-            <Label Text="{Binding Product.NameProduct}" 
-                   Grid.Row="0"
-                   Style="{StaticResource LabelTittlesColLectionView}"
-                   FontSize="Title"/>           
-            <Label Text="{Binding Product.DescriptionProduct}" 
-                   Grid.Row="1"
-                   Style="{StaticResource LabelTittles1}"
-                   FontSize="Subtitle"/>
-            <Grid Margin="0,20,0,0"
-                  RowDefinitions="Auto, Auto, Auto, Auto, Auto"
-                  RowSpacing="10">
-                <Label Text="Cantidad actual"
-                   Grid.Row="0" Grid.Column="0"
-                   Style="{StaticResource LabelTittlesColLectionView}"/>
-                <Label Text="{Binding Product.CantProduct}" 
-                       Grid.Row="1" Grid.Column="0"
-                       Style="{StaticResource LabelTittles1}"/>
+        <StackLayout Padding="10,10,10,10"
+                     VerticalOptions="CenterAndExpand">
+            <StackLayout BindingContext="{Binding RawMat}">
+                <Label Grid.Row="0"
+                       Style="{StaticResource LabelTittles1}"
+                       HorizontalOptions="StartAndExpand">
+                    <Label.FormattedText>
+                        <FormattedString>
+                            <Span Text="Materia prima: " FontAttributes="Bold"/>
+                            <Span Text="{Binding NameRM}"/>
+                        </FormattedString>
+                    </Label.FormattedText>
+                </Label>
+                <Label Grid.Row="1"
+                       Style="{StaticResource LabelTittles1}"
+                       HorizontalOptions="StartAndExpand">
+                    <Label.FormattedText>
+                        <FormattedString>
+                            <Span Text="Descripción: " FontAttributes="Bold"/>
+                            <Span Text="{Binding DescriptionRM}" />
+                        </FormattedString>
+                    </Label.FormattedText>
+                </Label>
+                <Grid Margin="0,20,0,0"
+                      RowDefinitions="Auto, Auto, Auto, Auto, Auto"
+                      ColumnDefinitions="*, *">
+                    <Label Grid.Row="0" 
+                           Grid.Column="0"
+                           Style="{StaticResource LabelTittles1}">
+                        <Label.FormattedText>
+                            <FormattedString>
+                                <Span Text="Cant. en poseción: " />
+                                <Span Text="{Binding CantidadRM} " FontAttributes="Bold"/>
+                                <Span Text=" " FontAttributes="Bold"/>
+                                <Span Text="{Binding UMedidaRM.Description}" FontAttributes="Bold"/>
+                            </FormattedString>
+                        </Label.FormattedText>
+                    </Label>
 
-                <Label Text="Ultimo precio de compra" 
-                   Grid.Row="0" Grid.Column="1"
-                   Style="{StaticResource LabelTittlesColLectionView}"/>
-                <Label Text="{Binding Product.CostElaboracionProduct}" 
-                       Grid.Row="1" Grid.Column="1"
-                       Style="{StaticResource LabelTittles1}"/>
-            </Grid>
+                    <Label Grid.Row="0" Grid.Column="1"
+                           Style="{StaticResource LabelTittles1}">
+                        <Label.FormattedText>
+                            <FormattedString>
+                                <Span Text="Ultimo precio de compra: "/>
+                                <Span Text="{Binding CostoRM, StringFormat=\{0:C\}}" FontAttributes="Bold"/>
+                            </FormattedString>
+                        </Label.FormattedText>
+                    </Label>
+                </Grid>
+            </StackLayout>
+            
             <BoxView HeightRequest="1" Color="Red"/>
+            
             <Grid Margin="0,0,0,20"
                   RowDefinitions="Auto, Auto, Auto, Auto, Auto"
                   RowSpacing="10">               
 
-                <Label Text="Compra" 
+                <Label Text="Registre la nueva compra" 
                        Grid.Row="2" Grid.Column="0"
-                       Style="{StaticResource LabelTittlesColLectionView}"
+                       Grid.ColumnSpan="2"
+                       Style="{StaticResource LabelTittles1}"
                        HorizontalOptions="Start"
-                       FontSize="Subtitle"
-                       FontAttributes="Bold,Italic"/>
+                       FontSize="Subtitle"/>
                 <Label Text="Cantidad" 
                        Grid.Row="3" Grid.Column="0"
                        Style="{StaticResource LabelTittlesColLectionView}"/>
                 <Entry Style="{StaticResource Entry1}"
+                       Text="{Binding CantCompra}"
                        Grid.Row="4" Grid.Column="0"/>
                 <Label Text="Precio de compra:" 
                        Grid.Row="3" Grid.Column="1"
                        Style="{StaticResource LabelTittlesColLectionView}"/>
                 <Entry Style="{StaticResource Entry1}"
+                       Text="{Binding PrecioCompra}"
                        Grid.Row="4" Grid.Column="1"/>
-<!--
-                <RadioButton Content="Pagado" TextColor="Black"
-                             Grid.Row="5" Grid.Column="0"
-                             Value="Pagado"
-                             HorizontalOptions="Center"/>
-                <RadioButton Content="Por pagar" TextColor="Black"
-                             Value="porpagar"
-                             Grid.Row="5" Grid.Column="1"
-                             HorizontalOptions="Center"/>-->
             </Grid>
-            
-            
-            <!--<RefreshView IsRefreshing="{Binding IsRefreshing}" Command="{Binding RefreshCommand}">
-                <CollectionView ItemsSource="{Binding ListPS}">
-                    <CollectionView.ItemsLayout>
-                        <LinearItemsLayout Orientation="Vertical" ItemSpacing="3"/>
-                    </CollectionView.ItemsLayout>
-                    <CollectionView.ItemTemplate>
-                        <DataTemplate>
-                            <Frame Style="{StaticResource FrameProductss}" HorizontalOptions="CenterAndExpand"
-                               Padding="10"
-                               Margin="0">
-                                <Grid RowDefinitions="30,18, auto"
-                                          RowSpacing="0">
-                                    <Image Source="product.png"
-                                               Grid.Row="0"
-                                               Grid.RowSpan="2"
-                                               Grid.Column="0"
-                                               />
-                                    <Label Grid.Column="1" Text="{Binding Data1}" Style="{StaticResource LabelTittles1}"
-                                </Grid>
-                            </Frame>
-                        </DataTemplate>
-                    </CollectionView.ItemTemplate>
-                </CollectionView>
-            </RefreshView>-->
-            
+                        
             <StackLayout Orientation="Horizontal"
                          HorizontalOptions="Center"
-                         VerticalOptions="EndAndExpand"
                          Spacing="13">
                 <ImageButton Source="eliminar.png"
                              Style="{StaticResource ImgButon1}"
@@ -122,96 +114,9 @@
                              BackgroundColor="Transparent"
                              BorderColor="Transparent"
                              BorderWidth="0"
-                             Command="{Binding NewShopCommand}"/>
-                              
+                             Command="{Binding NewShopCommand}"/>                              
             </StackLayout>
             
         </StackLayout>
-        <!--<Grid RowDefinitions="Auto, Auto, Auto, Auto, Auto, Auto, Auto, Auto, Auto, 2*, Auto" ColumnDefinitions="90, 2*, Auto" RowSpacing="3" Margin="7">
-            <Label Text="Nueva Compra" Grid.Row="0" IsVisible="false" Grid.ColumnSpan="3" HorizontalOptions="Center" Style="{StaticResource LabelTittlesColLectionView}"/>
-            <Label x:Name="IdAux" Text="{Binding Id, Mode=TwoWay}" IsVisible="false"/>
-
-            <Label Text="Fecha" Grid.Row="1" Style="{StaticResource LabelCuentaVenta}"/>
-            <DatePicker Date="{Binding Date}" Format="m" Grid.Row="1" Grid.Column="1" Visual="Default"/>
-          
-            <Label Text="Numero comprobante" Grid.Row="2" Grid.Column="0" Style="{StaticResource LabelCuentaVenta}"/>
-            <Entry Placeholder="0*" Text="{Binding InvoiceNumber}" Grid.Row="2" Grid.Column="1" Visual="Default"/>
-
-            <Label Text="Total" Grid.Row="1" Grid.Column="2" HorizontalOptions="Center" Style="{StaticResource LabelCuentaVenta}"/>
-            <Label Text="{Binding TotalInv}" Grid.Row="2" Grid.Column="2" HorizontalOptions="Center" VerticalOptions="Center" Style="{StaticResource LabelTittlesColLectionView}"/>
-            
-            <Label Text="Almacén" Grid.Row="3" Grid.Column="0" Style="{StaticResource LabelCuentaVenta}"/>
-            <Entry Placeholder="tienda abc*" Text="{Binding NameEstablishment}" Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="2" Visual="Default"/>
-
-            <Label Text="Cantidad" Grid.Row="4" Grid.Column="0" Style="{StaticResource LabelCuentaVenta}"/>
-            <Entry Placeholder="3*" Text="{Binding Amount}" Grid.Row="5" Grid.Column="0" Visual="Default"/>
-            
-            <Label Text="Descripción" Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="2" Style="{StaticResource LabelCuentaVenta}"/>
-            <autocomplete:SfAutoComplete x:Name="autoComplete" Text="{Binding Description}" SuggestionMode="StartsWith" ShowClearButton="True" SelectionChanged="Handle_SelectionChanged"
-                                     HeightRequest="40" DataSource="{Binding NamesRM}" DisplayMemberPath="NameRM" Grid.Row="5" Grid.Column="1" Grid.ColumnSpan="2">
-            </autocomplete:SfAutoComplete>
-            
-            <Label Text="Unidad de medida" Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="2" Style="{StaticResource LabelCuentaVenta}"/>
-            <Entry x:Name="descf" Placeholder="metro*" Text="{Binding Measurement}" Grid.Row="7" Grid.Column="0" Grid.ColumnSpan="2" Visual="Default"/>
-            
-
-            <Label Text="Costo Unitario" Grid.Row="6" Grid.Column="2" Style="{StaticResource LabelCuentaVenta}"/>
-            <Entry Placeholder="0*" Text="{Binding UnitCost}" Grid.Row="7" Grid.Column="2" Visual="Default"/>
-
-            <StackLayout Grid.Row="8" Grid.Column="0" Orientation="Horizontal" VerticalOptions="Center">
-                <Label Text="# Elem." Style="{StaticResource LabelCuentaVenta}"/>
-                <Label Text="{Binding LongList}" Style="{StaticResource LabelCuentaVenta}"/>
-            </StackLayout>
-
-            <Button Text="Añadir" Command="{Binding AddCompra}" Grid.Row="8" Grid.Column="2" Style="{StaticResource ButtonAdd}"/>
-
-            <RefreshView IsRefreshing="{Binding IsRefreshing}"
-                             Command="{Binding Path=RefreshCommand}"  Grid.Row="9" Grid.ColumnSpan="3">
-                <CollectionView ItemsSource="{Binding ListCompra, Mode=OneWay}" SelectionMode="None" x:Name="listaCompra">
-                    <CollectionView.ItemsLayout>
-                        <GridItemsLayout Orientation="Vertical" VerticalItemSpacing="3"/>
-                    </CollectionView.ItemsLayout>
-                    <CollectionView.Header>
-                        <Grid ColumnDefinitions="50, 120, 50, 2*">
-                            <Label Text="Cant." FontSize="15" FontAttributes="Bold" TextColor="Black" Grid.Column="0" HorizontalTextAlignment="Center"/>
-                            <Label Text="Descripción" FontSize="15" FontAttributes="Bold" TextColor="Black" Grid.Column="1" HorizontalTextAlignment="Center"/>
-                            <Label Text="C/U $" FontSize="15" FontAttributes="Bold" TextColor="Black" Grid.Column="2" HorizontalTextAlignment="Center"/>
-                            <Label Text="Total $" FontSize="15" FontAttributes="Bold" TextColor="Black" Grid.Column="3" HorizontalTextAlignment="Center"/>
-                        </Grid>
-                    </CollectionView.Header>
-                    <CollectionView.ItemTemplate>
-                        <DataTemplate>
-                            <Frame BorderColor="Black" Padding="7" BackgroundColor="Transparent">
-                                <SwipeView BackgroundColor="Transparent">
-                                    <SwipeView.RightItems>
-                                        <SwipeItems>
-                                            <SwipeItem Text="Eliminar"
-                                                   BackgroundColor="Red"
-                                                   Command="{Binding Path=BindingContext.DeleteCommand,Source={x:Reference listaCompra}}" CommandParameter="{Binding .}"
-                                                   />
-                                            <SwipeItem Text="Modificar"
-                                                   BackgroundColor="Blue"
-                                                   Command="{Binding Path=BindingContext.ModifyCommand,Source={x:Reference listaCompra}}" CommandParameter="{Binding .}"
-                                                   />
-                                        </SwipeItems>
-                                    </SwipeView.RightItems>
-                                    <Grid ColumnDefinitions="50, 120, 50, 2*">
-                                        <Label Grid.Column="0" Text="{Binding AmountRM}" TextColor="#102949" FontSize="16" HorizontalTextAlignment="Center"/>
-                                        <Label Grid.Column="1" Text="{Binding NameRM}" TextColor="#102949" FontSize="16" HorizontalTextAlignment="Center"/>
-                                        <Label Grid.Column="2" Text="{Binding CostoRM}" TextColor="#102949" FontSize="16" HorizontalTextAlignment="Center"/>
-                                        <Label Grid.Column="3" Text="{Binding TotalCost}" TextColor="#102949" FontSize="16" HorizontalTextAlignment="Center"/>
-                                    </Grid>
-                                </SwipeView>
-                            </Frame>
-                        </DataTemplate>
-                    </CollectionView.ItemTemplate>
-                </CollectionView>
-            </RefreshView>
-            
-            <Button Text="Borrar" Style="{StaticResource ButtonCancel}"
-                    Command="{Binding CancelCommand}" Grid.Row="10" Grid.Column="0"/>
-            <Button Text="Guardar" Style="{StaticResource ButtonSave}"
-                    Command="{Binding SaveCompra}" Grid.Row="10" Grid.Column="1" Grid.ColumnSpan="2"/>
-        </Grid>-->
     </ContentPage.Content>
 </ContentPage>

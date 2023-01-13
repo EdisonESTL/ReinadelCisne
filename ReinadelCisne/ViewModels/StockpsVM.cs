@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Text;
 using System.Web;
 using System.Windows.Input;
@@ -14,6 +15,8 @@ namespace ReinadelCisne.ViewModels
         private ProductModel _objMod;
         public ProductModel ObjModify { get => _objMod; set { _objMod = value; OnPropertyChanged(); } }
 
+        private GroupsProductModel _groupProd;
+        public GroupsProductModel GroupProd { get => _groupProd; set { _groupProd = value; OnPropertyChanged(); } }
 
         private int _id;
         public int Id
@@ -59,7 +62,7 @@ namespace ReinadelCisne.ViewModels
             }
         }
 
-        private string _unidadmedidaPS;
+        private string _unidadmedidaPS = "Unidad";
         public string UnidaddMedidaPS
         {
             get => _unidadmedidaPS;
@@ -91,8 +94,6 @@ namespace ReinadelCisne.ViewModels
                 OnPropertyChanged();
             }
         }
-
-        
         
         private double _utilityPS = 1;
         public double UtilityPS
@@ -105,8 +106,8 @@ namespace ReinadelCisne.ViewModels
             }
         }   
                 
-        private string _rawMaterialT;
-        public string RawMaterialT 
+        private double _rawMaterialT;
+        public double RawMaterialT 
         {
             get { return _rawMaterialT; }
             set 
@@ -142,7 +143,10 @@ namespace ReinadelCisne.ViewModels
         public int IdListRM;
         public int IdListWF;
         public int IdListOC;
+
+        public ObservableCollection<GroupsProductModel> GroupsProducts { get; set; } = new ObservableCollection<GroupsProductModel>();
         /*-----------------------------------------------*/
+        #region Icommands
         public ICommand Save { get; }
         public ICommand Cancel { get; }
         public ICommand Registration { get; }
@@ -155,19 +159,57 @@ namespace ReinadelCisne.ViewModels
         });
         public ICommand SumarCommand => new Command(() =>
         {
-            UnitPS += 1; 
+            UnitPS += 1;
         });
         public ICommand RestarCommand => new Command(() =>
         {
-            if(UnitPS >= 0)
+            if (UnitPS >= 0)
             {
                 UnitPS -= 1;
-            }            
+            }
         });
         public ICommand GoBackCommand => new Command(() =>
         {
-            Shell.Current.GoToAsync("..");
+            Shell.Current.GoToAsync("//Rini/Productos");
+        }); 
+        //Nuevo Grupo
+        public ICommand NewGroup => new Command(async () =>
+        {
+            string result = await Shell.Current.DisplayPromptAsync("Nuevo Grupo", "¿Cuál es el nombre del grupo?");
+
+            if (!string.IsNullOrEmpty(result))
+            {
+                var resp = App.Database.GetGroupsProduct().Result;
+                var coincidencias = resp.Where(x => x.Description == result).ToList();
+
+                if (coincidencias.Count == 0)
+                {
+                    CrearNuevoGrupo(result);
+                    await Shell.Current.DisplayAlert("Éxito", "El nuevo grupo ha sido guardado", "OK");
+                }
+                else
+                {
+                    await Shell.Current.DisplayAlert("Error", "Ya existe un grupo con ese nombre", "OK");
+                }
+            }
+
         });
+
+        public ICommand CostoProduccionCommand => new Command(async () =>
+        {
+            string cnt = await Shell.Current.DisplayPromptAsync("Pregunta", "¿Cuántas unidades va a fabricar?");
+            if (UnitPS > 0)
+            {
+                cnt = UnitPS.ToString();
+            }
+            if (!string.IsNullOrEmpty(cnt))
+            {
+                UnitPS = int.Parse(cnt);
+                await Shell.Current.GoToAsync($"//Rini/Productos/NewStock/CostoProduccion?IdRM=0&IdWF=0");
+
+            }
+        });
+        #endregion
         /*---------------------------------------------------*/
         public StockpsVM()
         {
@@ -177,9 +219,31 @@ namespace ReinadelCisne.ViewModels
             Registration = new Command(RegistrationPS);
             RawMaterialCommand = new Command(RawMaterial);
             WorkForceCommand = new Command(WorkForce);
-            OtherCostCommand = new Command(OtherCost);            
-        }
+            OtherCostCommand = new Command(OtherCost);
 
+            ListaGruposProductos();
+        }
+        private void CrearNuevoGrupo(string result)
+        {
+            GroupsProductModel groups = new GroupsProductModel
+            {
+                Description = result
+            };
+            
+            App.Database.SaveGRoupProduct(groups);
+            ListaGruposProductos();
+        }
+        private void ListaGruposProductos()
+        {
+            GroupsProducts.Clear();
+            var grupos = App.Database.GetGroupsProduct();
+
+            foreach(var a in grupos.Result)
+            {
+                GroupsProducts.Add(a);
+            }
+            //GroupsProducts = new ObservableCollection<GroupsProductModel>(grupos.Result);
+        }
         private void CalculateCost()
         {
             double ManufacturingCosto  = Convert.ToDouble(RawMaterialT) + WorkForceT + OtherCostT; //Costo de fabricación
@@ -219,48 +283,36 @@ namespace ReinadelCisne.ViewModels
                     NameProduct = NamePS,
                     DateTime = DateTime.Now,
                     DescriptionProduct = DescripcionPS,
-                    CantProduct = UnitPS,
                     UnidadMedida = UnidaddMedidaPS,
                     PrecioVentaProduct = double.Parse(PricePS),
                     CostElaboracionProduct = CostoUnitarioPS
                 };
 
                 var resp = App.Database.SaveProduct(product);
+                resp.Wait();
 
                 //Trabajo con materia prima
-                if (IdListRM == 0)
-                {
-                    product.ListRMModel = null;
-                }
-                else
+                if (IdListRM != 0)
                 {
                     var Lrm = App.Database.GetListRM(IdListRM).Result;
                     product.ListRMModel = Lrm;
                 }
-
+                
                 //Trabajo con mano de obra
-                if (IdListWF == 0)
-                {
-                    product.ListWFModel = null;
-                }
-                else
+                if (IdListWF != 0)
                 {
                     var Lwf = App.Database.GetListWF(IdListWF).Result;
                     product.ListWFModel = Lwf;
                 }
 
                 //trabajo con otros costos
-                if (IdListOC == 0)
-                {
-                    product.ListOCModel = null;
-                }
-                else
+                if (IdListOC != 0)
                 {
                     var Loc = App.Database.GetListOC(IdListOC).Result;
                     product.ListOCModel = Loc;
                 }
-                
 
+                product.Groups = GroupProd;
                 //Actualizo relación de productos
                 App.Database.UpdateRelationsRM(product);
 
@@ -279,7 +331,7 @@ namespace ReinadelCisne.ViewModels
             }
             else
             {
-                Shell.Current.DisplayAlert("Error", "Ingrese el nombre del producto y el precio", "ok");
+                Shell.Current.DisplayAlert("Error", "Ingrese el nombre del producto y el precio de venta", "ok");
             }
         }
 
@@ -291,8 +343,8 @@ namespace ReinadelCisne.ViewModels
                 KardexModel kardex = new KardexModel
                 {
                     Date = DateTime.Now,
-                    Valor = product.PrecioVentaProduct * product.CantProduct,
-                    Cantidad = product.CantProduct,
+                    //Valor = product.PrecioVentaProduct * product.CantProduct,
+                    //Cantidad = product.CantProduct,
                     ValorPromPond = product.PrecioVentaProduct 
                 };
 
@@ -310,7 +362,7 @@ namespace ReinadelCisne.ViewModels
                     var d = bb[0];
 
                     d.Valor = product.PrecioVentaProduct;
-                    d.Cantidad = product.CantProduct;
+                    //d.Cantidad = product.CantProduct;
                     d.ValorPromPond = product.PrecioVentaProduct;
                     App.Database.SaveMovKardex(d);
 
@@ -339,78 +391,60 @@ namespace ReinadelCisne.ViewModels
         }
 
         public void ApplyQueryAttributes(IDictionary<string, string> query)
-        {            
-            try
-            {                
-                string idListOC = HttpUtility.UrlDecode(query["IdListOC"]);    //Recepcion del Id de lista de otros costos            
-                string idListRM = HttpUtility.UrlDecode(query["IdlistRM"]);    //Recepcion del Id de lista de materiales            
-                string idListWF = HttpUtility.UrlDecode(query["IdlistWF"]); //Recepción Id de lista de fuerza de trabajo
-                string idProduct = HttpUtility.UrlDecode(query["idProduct"]); //Recepción Id del producto para modificar
+        {
+            string idListWF = HttpUtility.UrlDecode(query["IdListWF"]);    //Recepcion del Id de lista de otros costos            
+            string idListOC = HttpUtility.UrlDecode(query["IdListCI"]);    //Recepcion del Id de lista de materiales            
+            string idListRM = HttpUtility.UrlDecode(query["IdListRM"]); //Recepción Id de lista de fuerza de trabajo
+            string idProduct = HttpUtility.UrlDecode(query["IdProduct"]); //Recepción Id del producto para modificar
 
-                Enrutar(idListOC, idListRM, idListWF, idProduct);
-                
+            Enrutar(idListOC, idListRM, idListWF, idProduct);            
+        }
+        private void Enrutar(string idListOC, string idListRM, string idListWF, string idProduct)
+        {
+            try
+            {
+                if (int.Parse(idListOC) >= 0 &&
+                int.Parse(idListRM) >= 0 &&
+                int.Parse(idListWF) >= 0)
+                {
+                    LoadDates(idListOC, idListRM, idListWF);    //Carga Otros Costos
+                }
+                if (int.Parse(idProduct) != 0)
+                {
+                    LoadProductS(idProduct);      //carga producto a modificar
+                }
+
             }
             catch (Exception)
             {
                 Console.WriteLine("Failed to load idproduct.");
             }
+                      
         }
-        private void Enrutar(string idListOC, string idListRM, string idListWF, string idProduct)
-        {
-            if (int.Parse(idListOC) != 0)
-            {
-                LoadOtherCosts(idListOC);    //Carga Otros Costos
-            }
-            if (int.Parse(idListRM) != 0)
-            {
-                LoadRawMaterials(idListRM);    //Carga Materia Prima
-            }
-            if(int.Parse(idListWF) != 0)
-            {
-                LoadWorkForce(idListWF);       //Carga mano de obra
-            }
-            if (int.Parse(idProduct) != 0)
-            {
-                LoadProductS(idProduct);      //carga producto a modificar
-            }            
-        }
-        private async void LoadOtherCosts(string idListOC)
+        private async void LoadDates(string idListOC, string idListRM, string idListWF)
         {
             OtherCostT = 0;
-            ListOCModel listOC = await App.Database.GetListOC(int.Parse(idListOC));
-            List<OtherCostModel> otherCosts = listOC.OtherCosts;
-
-            foreach(var a in otherCosts)
+            if(int.Parse(idListOC) > 0)
             {
-                OtherCostT += a.CostOC;
+                ListOCModel listOC = await App.Database.GetListOC(int.Parse(idListOC));
+                OtherCostT = listOC.OtherCostsxProduct.Sum(x => x.CostOC);
             }
-            IdListOC = int.Parse(idListOC);
-        }
-        private async void LoadWorkForce(string id)
-        {
-            WorkForceT = 0;
-            ListWFModel l = await App.Database.GetListWF(int.Parse(id));
-            List<WorkForceModel> b = l.WorkForces;
-
-            foreach (var a in b)
+            
+            if(int.Parse(idListWF) > 0)
             {
-                WorkForceT = WorkForceT + (a.Amount * a.UnitSalary);
+                WorkForceT = 0;
+                ListWFModel l = await App.Database.GetListWF(int.Parse(idListWF));
+                WorkForceT = l.PersonalxProduct.Sum(x => x.Pay);
             }
-            IdListWF = int.Parse(id);
-        }
-        private async void LoadRawMaterials(string id)
-        {
-            RawMaterialT = string.Empty;
-            //float d = 0;
-            ListRMModel l = await App.Database.GetListRM(int.Parse(id));
-            //List<RawMaterialModel> b = l.RawMaterials;
-            /*
-            foreach(var a in b)
+            
+            if(int.Parse(idListRM) > 0)
             {
-                d += (float)(a.CostoRM * a.AmountRM);
-            }*/
-            RawMaterialT = l.Total.ToString("N2");
-            IdListRM = int.Parse(id);
+                RawMaterialT = 0;
+                ListRMModel li = await App.Database.GetListRM(int.Parse(idListRM));
+                RawMaterialT = li.ListMaterialxProduct.Sum(x => x.TotalCost);
+            }            
+
+            CostoUnitarioPS = (OtherCostT + WorkForceT + RawMaterialT) / UnitPS;
         }
         private async void LoadProductS(string idProd)
         {
@@ -425,7 +459,7 @@ namespace ReinadelCisne.ViewModels
         {
             Id =  product.Id;
             NamePS = product.NameProduct;
-
+            /*
             if(product.ListRMModelId != 0) 
             {
                 LoadRawMaterials(Convert.ToString(product.ListRMModelId));
@@ -437,9 +471,9 @@ namespace ReinadelCisne.ViewModels
             if(product.ListOCModelId != 0)
             {
                 LoadOtherCosts(Convert.ToString(product.ListOCModelId));
-            }                      
+            }  */                    
             
-            UnitPS = product.CantProduct;
+            //UnitPS = product.CantProduct;
             //UtilityPS = product.UtilityProduct;
             PricePS = product.PrecioVentaProduct.ToString("N2");
         }

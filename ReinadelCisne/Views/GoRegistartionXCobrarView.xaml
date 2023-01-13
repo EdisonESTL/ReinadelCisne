@@ -31,6 +31,18 @@
                     </Frame>
                 </DataTemplate>
             </CollectionView.ItemTemplate>
+            <CollectionView.EmptyView>
+                <StackLayout HorizontalOptions="CenterAndExpand"
+                             VerticalOptions="CenterAndExpand">
+                    <Label Text="Hola, no hay ventas por cobrar registradas."
+                           Margin="10,25,10,10"
+                           Style="{StaticResource LabelTittlesColLectionView}"
+                           HorizontalOptions="Fill"
+                           HorizontalTextAlignment="Center" 
+                           TextColor="Black"
+                           FontAttributes="None,Italic"/>
+                </StackLayout>
+            </CollectionView.EmptyView>
         </CollectionView>
     </ContentPage.Content>
 </ContentPage>

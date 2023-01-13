@@ -14,7 +14,7 @@
     </Shell.BackButtonBehavior>
     <ContentPage.Content>
         <ScrollView VerticalOptions="CenterAndExpand">
-            <Grid RowDefinitions="Auto, Auto, Auto, Auto, Auto, Auto, Auto, Auto, Auto, Auto, Auto, Auto"
+            <Grid RowDefinitions="Auto, Auto, Auto, Auto, Auto, Auto, Auto, Auto, Auto, Auto, Auto, Auto, Auto"
               Margin="7">
                 <Label Text="Nuevo Material" 
                    Grid.RowSpan="2" 
@@ -74,7 +74,7 @@
 
                 <StackLayout Grid.Row="6" Grid.Column="1"
                              Grid.RowSpan="2">
-                    <Label Text="Unidad de medida" 
+                    <Label Text="Medida" 
                            Style="{StaticResource LabelCuentaVenta}"/>
                     
                     <Picker BackgroundColor="White"
@@ -98,19 +98,13 @@
                     </Label>
                 </StackLayout>
                 
-
-                <!--<Entry Grid.Row="7" Grid.Column="1"
-                   ClearButtonVisibility="WhileEditing"                        
-                   Text="{Binding UnitMeasurementRM, Mode=TwoWay}"
-                   Style="{StaticResource Entry1}"/>-->
-
                 <Label Grid.Row="9" Grid.ColumnSpan="2"                   
                    Text="Cantidad:" 
                    Style="{StaticResource LabelCuentaVenta}"
                    HorizontalOptions="StartAndExpand"/>
                 <Grid Grid.Row="10" Grid.ColumnSpan="2" 
                   ColumnDefinitions="Auto"
-                  Padding="0,0,0,20">
+                  Padding="0,0,0,10">
                     <Image Source="rawmaterial.png"
                        Grid.Column="0"
                        Grid.RowSpan="2"/>
@@ -151,120 +145,38 @@
                 <StackLayout Orientation="Horizontal" Grid.Row="11"
                              Grid.ColumnSpan="2"
                              RadioButtonGroup.SelectedValue="{Binding TypeRM}"
-                             HorizontalOptions="Center"
-                             Padding="0,0,0,0">
+                             Padding="0,0,0,0"
+                             HorizontalOptions="CenterAndExpand">
                     <Label Text="Tipo de material:" 
-                   Style="{StaticResource LabelTittlesColLectionView}"
-                   HorizontalOptions="Start"
+                           Style="{StaticResource LabelTittlesColLectionView}"
+                           HorizontalOptions="Start"
                            VerticalOptions="Center"/>
-                    <RadioButton Content="Directo"
-                     TextColor="Red"
-                     Value="Directa"
-                     GroupName="MaterPrim"
-                             FontSize="18"/>
-                    <RadioButton Content="Indirecto"
-                     TextColor="Green"
-                     Value="Indirecta"
-                     GroupName="MaterPrim"
-                             FontSize="18"/>
+                    <Picker x:Name="picker"
+                            BackgroundColor="White"
+                            WidthRequest="150"
+                            HeightRequest="50"
+                            FontSize="16"
+                            SelectedItem="{Binding TypeRM}">
+                        <Picker.ItemsSource>
+                            <x:Array Type="{x:Type x:String}">
+                                <x:String>Directo</x:String>
+                                <x:String>Indirecto</x:String>
+                            </x:Array>
+                        </Picker.ItemsSource>
+                    </Picker>
                 </StackLayout>
 
                 <Grid Grid.Row="12" HorizontalOptions="CenterAndExpand"
                   VerticalOptions="CenterAndExpand"
                   Grid.ColumnSpan="2"
-                      Padding="0,0,0,20">
+                      Padding="0,10,0,0">
                     <Button Text="Borrar" Grid.Column="0" 
                         Style="{StaticResource ButtonCancel}"
                     Command="{Binding CancelRM}"/>
-                    <!--<Button Text="Añadir" Grid.Column="1"
-                        Style="{StaticResource ButtonAdd}"
-                    Command="{Binding AddRM}"/>-->
                     <Button Text="Guardar" Grid.Column="1" 
                         Style="{StaticResource ButtonSave}" FontSize="11"
                     Command="{Binding FinishRM}"/>
                 </Grid>
-                <!--<Label Grid.ColumnSpan="3" Text="Ingresando Materia Prima" TextColor="Black" FontAttributes="Bold" HorizontalOptions="Center" Padding="7" FontSize="20" IsVisible="false"/>
-            <Label x:Name="IdAux" Text="{Binding Id, Mode=TwoWay}" IsVisible="false"/>
-            
-            <Label Grid.Row="1" Grid.Column="0" Text="Cant." Style="{StaticResource LabelTittlesColLectionView}"/>
-            <Entry Grid.Row="2" Grid.Column="0" Placeholder="1*" Visual="Default"
-                   ClearButtonVisibility="WhileEditing"
-                   Keyboard="Numeric"
-                   Text="{Binding AmountRM, Mode=TwoWay}"/>-->
-
-                <!--<Label Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" Text="Nombre de Material" Style="{StaticResource LabelTittlesColLectionView}"/>
-            <autocomplete:SfAutoComplete x:Name="autoComplete" Text="{Binding NameRM}" SuggestionMode="Contains" ShowClearButton="True" SelectionChanged="Handle_SelectionChanged"
-                                     HeightRequest="40" DataSource="{Binding RawsExist}" DisplayMemberPath="NameRM" Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="2">
-                <autocomplete:SfAutoComplete.ItemTemplate>
-                    <DataTemplate>
-                        <StackLayout Orientation="Horizontal">
-                            <Label Text="{Binding NameRM}"/>
-                            <Label Text="{Binding UnitMeasurementRM}"/>
-                        </StackLayout>
-                    </DataTemplate>
-                </autocomplete:SfAutoComplete.ItemTemplate>
-            </autocomplete:SfAutoComplete>
-            <Label x:Name="MedidaLabel" Text="{Binding UnitMeasurementRM, Mode=TwoWay}" Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2"/>
-
-            -->
-
-                <!--<Label x:Name="CostoUlabel" Text="{Binding CostRM, Mode=TwoWay}" Grid.Row="4" Grid.Column="2"/>
--->
-
-                <!--
-            <Label Text="Elementos" Grid.Row="6" Grid.Column="0" Style="{StaticResource LabelTittlesColLectionView}"/>
-            <Label Text="{Binding LongList}" Grid.Row="7" Grid.Column="0" Style="{StaticResource LabelTittlesColLectionView}"/>
-            <Label Text="Total $ Materia Prima" Grid.Row="6" Grid.Column="2" Style="{StaticResource LabelTittlesColLectionView}"/>
-            <Label Text="{Binding Count}" Grid.Row="7" Grid.Column="2" Style="{StaticResource LabelRegistroVenta}"/>
-
-            <BoxView Color="#096BAF" Grid.Row="8" Grid.ColumnSpan="3"
-             HorizontalOptions="Fill" />-->
-
-                <!--
-            <RefreshView IsRefreshing="{Binding IsRefreshing}"
-                             Command="{Binding Path=RefreshCommand}"  Grid.Row="9" Grid.ColumnSpan="3">
-                <CollectionView ItemsSource="{Binding ListRawMl, Mode=OneWay}" SelectionMode="None" x:Name="listaMateriaPrima"> 
-                    <CollectionView.ItemsLayout>
-                        <GridItemsLayout Orientation="Vertical" VerticalItemSpacing="3"/>
-                    </CollectionView.ItemsLayout>
-                    <CollectionView.ItemTemplate>
-                        <DataTemplate>
-                            <Frame Style="{StaticResource FrameGoRegistroSales}">
-                                <SwipeView BackgroundColor="Transparent">
-                                    <SwipeView.RightItems>
-                                        <SwipeItems>
-                                            <SwipeItem Text="Eliminar"
-                                                   BackgroundColor="Red"
-                                                   Command="{Binding Path=BindingContext.DeleteCommand,Source={x:Reference listaMateriaPrima}}" CommandParameter="{Binding .}"
-                                                   />
-                                            <SwipeItem Text="Modificar"
-                                                   BackgroundColor="Blue"
-                                                   Command="{Binding Path=BindingContext.ModifyCommand,Source={x:Reference listaMateriaPrima}}" CommandParameter="{Binding .}"
-                                                   />
-                                        </SwipeItems>
-                                    </SwipeView.RightItems>
-                                    <Grid Margin="0" Padding="4" HorizontalOptions="CenterAndExpand" RowDefinitions="Auto, Auto" ColumnDefinitions="50, Auto, 55, Auto, 10">
-
-                                        <Label Grid.Column="2" Grid.Row="0" Text="Materia"/>
-                                        <Label Grid.Column="3" Grid.Row="0" Text="{Binding NameRM}" TextColor="#102949" FontSize="16"/>
-                                        <Label Grid.Column="0" Grid.Row="1" Text="Unidad"/>
-                                        <Label Grid.Column="1" Grid.Row="1" Text="{Binding UnitMeasurementRM}" TextColor="#102949" FontSize="16"/>
-                                        <Label Grid.Column="2" Grid.Row="1" Text="Costo U."/>
-                                        <Label Grid.Column="3" Grid.Row="1" Text="{Binding CostoRM}" TextColor="#102949" FontSize="16"/>
-                                        <Label Grid.Column="4" Grid.Row="1" Text="$" TextColor="#102949" FontSize="16"/>
-                                        <Label Grid.Column="0" Grid.Row="0" Text="Cant."/>
-                                        <Label Grid.Column="1" Grid.Row="0" Text="{Binding AmountRM}" TextColor="#102949" FontSize="16"/>
-                                    </Grid>
-                                </SwipeView>
-                            </Frame>
-                        </DataTemplate>
-                    </CollectionView.ItemTemplate>
-                </CollectionView>
-            </RefreshView>
-
-            <BoxView Color="#096BAF" Grid.Row="10"
-             HorizontalOptions="Fill" />-->
-
 
 
             </Grid>

@@ -10,8 +10,10 @@ namespace ReinadelCisne.Models
     {
         [PrimaryKey, AutoIncrement]
         public int Id { get; set; }
-
         public DateTime Date { get; set; }
+        public int AmountProduct { get; set; }
+        public double ValorUnitario { get; set; }
+        public double Valor { get; set; }
 
         //Relacion con SaleModel
         [ForeignKey(typeof(SaleModel))]
@@ -25,8 +27,5 @@ namespace ReinadelCisne.Models
         [ManyToOne]
         public ProductModel ProductModel {get;set;}
    
-        public int AmountProduct { get; set; }
-        public double ValorUnitario { get; set; }
-        public double Valor { get; set; }
     }
 }

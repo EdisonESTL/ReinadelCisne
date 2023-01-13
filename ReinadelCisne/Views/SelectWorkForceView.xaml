@@ -1,0 +1,106 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:ReinadelCisne.ViewModels"
+             x:Class="ReinadelCisne.Views.SelectWorkForceView"
+             Title="Añadir mano de obra">
+    <ContentPage.BindingContext>
+        <vm:SelectWorkForceVM/>
+    </ContentPage.BindingContext>
+    <Shell.BackButtonBehavior>
+        <BackButtonBehavior Command="{Binding BackCommand}"/>
+    </Shell.BackButtonBehavior>
+    <ContentPage.Content>
+        <ScrollView VerticalOptions="CenterAndExpand">
+            <StackLayout 
+                     Margin="10">
+                <Label Text="Elija perfil del puesto"
+                   Style="{StaticResource LabelTittlesColLectionView}"/>
+                <Picker x:Name="grupos"
+                        Title="Puesto"
+                        BackgroundColor="White"
+                        Grid.Row="0"
+                        Grid.Column="1"
+                        ItemsSource="{Binding PerfilesLaborales}"
+                        ItemDisplayBinding="{Binding Name}"
+                        SelectedItem="{Binding PerfilWF}">
+                </Picker>
+                <Label Text="Tipo de contrato"
+                   Style="{StaticResource LabelTittlesColLectionView}"/>
+                <Picker x:Name="picker"
+                    BackgroundColor="White"
+                    WidthRequest="150"
+                    HeightRequest="50"
+                    FontSize="16"
+                    SelectedItem="{Binding TypeContrato}">
+                    <Picker.ItemsSource>
+                        <x:Array Type="{x:Type x:String}">
+                            <x:String>Por horas</x:String>
+                            <x:String>Mensual</x:String>
+                            <x:String>Por obra</x:String>
+                            <x:String>Por dias</x:String>
+                        </x:Array>
+                    </Picker.ItemsSource>
+                </Picker>
+                <Label Text="Nombres completos"
+                   Style="{StaticResource LabelTittlesColLectionView}"/>
+                <Entry Style="{StaticResource Entry1}"
+                   Text="{Binding Name}"/>
+                <Label Text="Numero de contacto"
+                   Style="{StaticResource LabelTittlesColLectionView}"/>
+                <Entry Style="{StaticResource Entry1}"
+                   Text="{Binding Cellnumber}"/>
+                <!--<Label Text="Pagado"
+                   Style="{StaticResource LabelTittlesColLectionView}"/>
+            <Entry Style="{StaticResource Entry1}"
+                   Text="{Binding States}"/>-->
+                <Label Text="Paga"
+                   Style="{StaticResource LabelTittlesColLectionView}"/>
+                <Entry Style="{StaticResource Entry1}"
+                   Text="{Binding Pay}"/>
+                <StackLayout IsVisible="{Binding IsMonth}">
+                    <Label Text="Fecha inicio:"
+                       Style="{StaticResource LabelTittlesColLectionView}"/>
+                    <DatePicker x:Name="startDatePicker"
+                    Format="D"
+                    Margin="30, 0, 0, 30"
+                    Date="{Binding MinDate}"
+                            BackgroundColor="White"/>
+                    <Label Text="Fecha fin:"
+                       Style="{StaticResource LabelTittlesColLectionView}"/>
+                    <DatePicker x:Name="endDatePicker"
+                    Format="D"
+                    Margin="30, 0, 0, 30"
+                    Date="{Binding MaxDate}"
+                            BackgroundColor="White"/>
+                </StackLayout>
+                <StackLayout IsVisible="{Binding IsHoursDays}">
+                    <Label Text="Ingrese la cantidad de días o horas"
+                       Style="{StaticResource LabelTittlesColLectionView}"/>
+                    <Entry Text="{Binding CantDiasHoras}"
+                       Style="{StaticResource Entry1}"/>
+                </StackLayout>
+                <StackLayout IsVisible="{Binding IsObra}">
+                    <Label Text="Ingrese una descripción de la obra"
+                       Style="{StaticResource LabelTittlesColLectionView}"/>
+                    <Editor Text="{Binding DescripcionObra}"
+                        AutoSize="TextChanges"
+                        Style="{StaticResource Editor1}"/>
+                </StackLayout>
+                <StackLayout Orientation="Horizontal"
+                         HorizontalOptions="CenterAndExpand"
+                         Padding="0,16,0,10">
+                    <Button Text="Cancelar"
+                        Style="{StaticResource ButtonCancel}"
+                        Command="{Binding PushCommand}"
+                        CommandParameter="cancelar"/>
+                    <Button Text="Guardar"
+                        Style="{StaticResource Button1}"
+                        Command="{Binding PushCommand}"
+                        CommandParameter="guardar"/>
+                </StackLayout>
+            </StackLayout>
+        </ScrollView>
+        
+    </ContentPage.Content>
+</ContentPage>

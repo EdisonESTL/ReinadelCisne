@@ -28,7 +28,8 @@
                    Padding="9,16,9,16">
                 <Grid BackgroundColor="Transparent"
                       ColumnSpacing="11"
-                      RowDefinitions="Auto, Auto, Auto">
+                      RowDefinitions="Auto, Auto, Auto"
+                      ColumnDefinitions="*, *">
                     <Label Text="Desde"
                    Style="{StaticResource LabelTittlesColLectionView}"
                    VerticalOptions="Center"
@@ -42,11 +43,13 @@
                     <DatePicker Grid.Row="1"
                         Grid.Column="0"
                         BackgroundColor="White"
-                        Date="{Binding InitDate}"/>
+                        Date="{Binding InitDate}"
+                                Format="d/MMM/yyy"/>
                     <DatePicker Grid.Row="1"
                         Grid.Column="1"
                         BackgroundColor="White"
-                        Date="{Binding FinishDate}"/>
+                        Date="{Binding FinishDate}"
+                                Format="d/MMM/yyy"/>
 
                     <ImageButton Source="buscar.png"
                                  Grid.Row="2"
@@ -55,13 +58,12 @@
                                  Style="{StaticResource ImgButon1}"/>
                 </Grid>
             </Frame>
-            
-            <!--<BoxView Color="#096BAF" Grid.Row="1" Grid.ColumnSpan="3" HorizontalOptions="Fill" />-->
 
-            <CollectionView ItemsSource="{Binding shoppings, Mode=OneWay}" 
+            
+
+            <CollectionView ItemsSource="{Binding Shoppings, Mode=OneWay}" 
                             SelectionMode="Single" x:Name="listaMateriaPrima" 
                             SelectionChangedCommand="{Binding SelectedCommand}" 
-                            SelectedItem="{Binding Shop}" 
                             SelectionChangedCommandParameter="{Binding SelectedItem , Source={x:Reference listaMateriaPrima}}" 
                             Grid.ColumnSpan="2" Grid.Row="2" 
                             HorizontalOptions="Center"
@@ -70,21 +72,49 @@
                     <LinearItemsLayout Orientation="Vertical" ItemSpacing="2"/>
                 </CollectionView.ItemsLayout>
                 <CollectionView.Header>
-                    <Grid >
-                        <Label Text="Fecha compra" Grid.Column="0" Style="{StaticResource LabelTittlesColLectionView}"/>
-                        <Label Text="Total compra $$" Grid.Column="1" Style="{StaticResource LabelTittlesColLectionView}"/>
-                    </Grid>
+                    <StackLayout>
+                        <Label Text="Listado de compras"
+                               Style="{StaticResource LabelValorsTittles}"
+                               Margin="0,20,0,0"/>
+                    </StackLayout>
                 </CollectionView.Header>
                 <CollectionView.ItemTemplate>
                     <DataTemplate>
-                        <Frame Style="{StaticResource FrameGoRegistroSales}">
+                        <Frame Style="{StaticResource Frame1}">
                             <Grid Padding="0">
-                                <Label Grid.Column="0" Text="{Binding fecha}" Style="{StaticResource LabelRegistroVenta}"/>
-                                <Label Grid.Column="1" Text="{Binding total}" Style="{StaticResource LabelRegistroVenta}"/>
+                                <Label Grid.Column="0"  
+                                       Style="{StaticResource LabelRegistroVenta}">
+                                    <Label.FormattedText>
+                                        <FormattedString>
+                                            <Span Text="Fecha compra: "/>
+                                            <Span Text="{Binding ShoppingDate, StringFormat=\{0:dddd d MMM yyy\}}"/>
+                                        </FormattedString>
+                                    </Label.FormattedText>
+                                </Label>
+                                <Label Grid.Column="1"  
+                                       Style="{StaticResource LabelRegistroVenta}">
+                                    <Label.FormattedText>
+                                        <FormattedString>
+                                            <Span Text="Total: "/>
+                                            <Span Text="{Binding TotalShop, StringFormat=\{0:c\}}"/>
+                                        </FormattedString>
+                                    </Label.FormattedText>
+                                </Label>
                             </Grid>
                         </Frame>                        
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
+                <CollectionView.EmptyView>
+                    <StackLayout HorizontalOptions="CenterAndExpand"
+                             VerticalOptions="CenterAndExpand">
+                        <Label Text="Hola, no hay compras registradas."
+                                   Margin="10,25,10,10"
+                                   Style="{StaticResource LabelTittlesColLectionView}"
+                                   HorizontalOptions="Fill"
+                                   HorizontalTextAlignment="Center" 
+                                   TextColor="Black"/>
+                    </StackLayout>
+                </CollectionView.EmptyView>
             </CollectionView>
             <Label Text="Total comprado" Grid.Row="3" Grid.Column="0" 
                    FontSize="17" FontAttributes="Bold" 

@@ -1,0 +1,47 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:ReinadelCisne.ViewModels"
+             x:Class="ReinadelCisne.Views.IndirectCostView">
+    <ContentPage.BindingContext>
+        <vm:IndirectCostVM/>
+    </ContentPage.BindingContext>
+    <ContentPage.Content>
+        <StackLayout Padding="7">
+            <CollectionView BackgroundColor="BlanchedAlmond"
+                            x:Name="ListWF"
+                            ItemsSource="{Binding WorkForces}">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+                <CollectionView.EmptyView>
+                    <StackLayout HorizontalOptions="CenterAndExpand"
+                             VerticalOptions="CenterAndExpand">
+                        <Label Text="Hola, no hay costos indirectos para la producción de un producto."
+                                   Margin="10,25,10,10"
+                                   Style="{StaticResource LabelTittlesColLectionView}"
+                                   HorizontalOptions="Fill"
+                                   HorizontalTextAlignment="Center" 
+                                   TextColor="Black"/>
+                    </StackLayout>
+                </CollectionView.EmptyView>
+            </CollectionView>
+            <Grid ColumnDefinitions="Auto, Auto"
+                  RowDefinitions="Auto"
+                  HorizontalOptions="Center">
+                <Button Text="Regresar"
+                        Grid.Column="0"
+                        Style="{StaticResource ButtonCancel}"
+                        Command="{Binding PushCommand}"
+                        CommandParameter="regresar"/>
+                <Button Text="Nuevo producto"
+                        Grid.Column="1"
+                        Style="{StaticResource ButtonAdd}"
+                        Command="{Binding PushCommand}"
+                        CommandParameter="nuevoP"/>
+            </Grid>
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

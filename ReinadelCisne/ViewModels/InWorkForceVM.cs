@@ -76,7 +76,7 @@ namespace ReinadelCisne.ViewModels
 
         public int IdList;
         public string IdMOD;
-        public ObservableCollection<WorkForceModel> Works { get; set; } = new ObservableCollection<WorkForceModel>();
+        public ObservableCollection<PersonalModel> Works { get; set; } = new ObservableCollection<PersonalModel>();
         
         public ICommand goback
         {
@@ -96,7 +96,7 @@ namespace ReinadelCisne.ViewModels
 
             IsRefreshing = false;
         });
-        public ICommand AddWFCommand => new Command(() =>
+        /*public ICommand AddWFCommand => new Command(() =>
         {
             if(NumberProf != 0 & !string.IsNullOrWhiteSpace(Profesional))
             {
@@ -140,6 +140,7 @@ namespace ReinadelCisne.ViewModels
             }
 
         });
+        */
         public ICommand FinshCommand => new Command(() =>
         {
             if(Works.Count != 0)
@@ -150,12 +151,12 @@ namespace ReinadelCisne.ViewModels
                 };
                 App.Database.SaveListWF(listWF);
 
-                listWF.WorkForces = new List<WorkForceModel>();
+                listWF.PersonalxProduct = new List<PersonalModel>();
 
                 foreach (var f in Works)
                 {
-                    App.Database.SaveWorkForce(f);
-                    listWF.WorkForces.Add(f);
+                    App.Database.SavePersonal(f);
+                    listWF.PersonalxProduct.Add(f);
 
                     App.Database.UpdateListWF(listWF);
                 }
@@ -190,17 +191,17 @@ namespace ReinadelCisne.ViewModels
         public Command<WorkForceModel> ModifyCommand { get; set; }
         public InWorkForceVM()
         {
-            DeleteCommand = new Command<WorkForceModel>(DeleteWF);
-            ModifyCommand = new Command<WorkForceModel>(ModifyWF);
+            //DeleteCommand = new Command<WorkForceModel>(DeleteWF);
+           // ModifyCommand = new Command<WorkForceModel>(ModifyWF);
         }
 
-        private void DeleteWF(WorkForceModel obj)
+        /*private void DeleteWF(WorkForceModel obj)
         {
             Works.Remove(obj);
             Count -= obj.Amount * obj.UnitSalary;
             LongList = Works.Count;
-        }
-        private void ModifyWF(WorkForceModel obj)
+        }*/
+        /*private void ModifyWF(WorkForceModel obj)
         {
             IdMOD = Convert.ToString(Works.IndexOf(obj));
 
@@ -208,7 +209,7 @@ namespace ReinadelCisne.ViewModels
             Profesional = obj.Profesional;
             NumberProf = obj.Amount;
             Salary = obj.UnitSalary.ToString();            
-        }
+        }*/
 
         public void ApplyQueryAttributes(IDictionary<string, string> query)
         {
@@ -230,14 +231,14 @@ namespace ReinadelCisne.ViewModels
             Count = 0;
             ListWFModel t = App.Database.GetListWF(int.Parse(idListWF)).Result;
 
-            foreach (WorkForceModel d in t.WorkForces)
+            foreach (PersonalModel d in t.PersonalxProduct)
             {
                 Works.Add(d);
-                Count += d.Amount * d.UnitSalary;
+                //Count += d.Amount * d.UnitSalary;
             }
 
             IdList = int.Parse(idListWF);
-            LongList = t.WorkForces.Count;
+            LongList = t.PersonalxProduct.Count;
         }
     }
 }

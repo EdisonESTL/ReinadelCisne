@@ -44,6 +44,7 @@ namespace ReinadelCisne.ViewModels
             }
         }
         public ObservableCollection<AuzListShop> shoppings { get; set; } = new ObservableCollection<AuzListShop>();
+        public ObservableCollection<ShoppingModel> Shoppings { get; set; } = new ObservableCollection<ShoppingModel>();
         private float aux;
 
         private string _shoppingTotal;
@@ -95,13 +96,16 @@ namespace ReinadelCisne.ViewModels
         {
             ShoppingMonth();
         });
-        public ICommand SelectedCommand => new Command(() =>
+        public ICommand SelectedCommand => new Command((obj) =>
         {
-            if(Shop != null)
+            var sel = obj as ShoppingModel;
+            ShoppingList();
+            SelectShop(sel);
+
+            /*if (Shop != null)
             {
-                SelectShop();
                 Shop = null;
-            }
+            }*/
         });
         public ICommand NewSCommand => new Command(() =>
         {
@@ -115,21 +119,22 @@ namespace ReinadelCisne.ViewModels
         });
         public Command FechaCommand => new Command(() =>
         {
+            Shoppings.Clear();
             ConsultarCompras();
         });
-        private async void SelectShop()
+        private void SelectShop(ShoppingModel sel)
         {
-            await Shell.Current.GoToAsync($"ShoppingDetail?ShopId={Shop.IdShop}");
+            Shell.Current.GoToAsync($"//Rini/RMateriaPrima/RCompras/ShoppingDetail?ShopId={sel.Id}");
         }
 
         private void ShoppingList()
         {
             aux = 0;
-            shoppings.Clear();
+            Shoppings.Clear();
 
             var shoppingsList = App.Database.ListShopping().Result;
 
-            mostrarL(shoppingsList);
+            MostrarListShopping(shoppingsList);
         }
 
         private void ShoppingMonth()
@@ -143,7 +148,7 @@ namespace ReinadelCisne.ViewModels
                                where obj.ShoppingDate.Date.Month == InitDate.Month
                                select obj).ToList();
 
-            mostrarL(ListandDate);
+            MostrarListShopping(ListandDate);
         }
 
         private void ShoppingWeek()
@@ -159,7 +164,7 @@ namespace ReinadelCisne.ViewModels
                                where obj.ShoppingDate.Date >= di.Date & obj.ShoppingDate.Date <= df.Date
                                select obj).ToList();
 
-            mostrarL(ListandDate);
+            MostrarListShopping(ListandDate);
         }
 
         private void ShoppingDay()
@@ -188,20 +193,14 @@ namespace ReinadelCisne.ViewModels
                                where obj.ShoppingDate == InitDate
                                select obj).ToList();
 
-            mostrarL(ListandDate);
+            MostrarListShopping(ListandDate);
         }
-        private void mostrarL(List<ShoppingModel> list)
+        private void MostrarListShopping(List<ShoppingModel> list)
         {
+            shoppings.Clear();
             foreach (var obj in list)
             {
-                AuzListShop auzList = new AuzListShop
-                {
-                    IdShop = obj.Id,
-                    fecha = obj.ShoppingDate.Date.ToString("M"),
-                    total = obj.TotalShop.ToString("N2") + "$"
-                };
-
-                shoppings.Add(auzList);
+                Shoppings.Add(obj);
                 aux += obj.TotalShop;
             }
             ShoppingTotal = aux.ToString("N2") + "$";
@@ -218,13 +217,14 @@ namespace ReinadelCisne.ViewModels
                                select obj).ToList();
             if(ListandDate.Count >= 0)
             {
-                Shell.Current.DisplayAlert("Aviso", "no hay compras hechas", "aceptar");
+                MostrarListShopping(ListandDate);
             }
             else
             {
-                mostrarL(ListandDate);
+                Shell.Current.DisplayAlert("Aviso", "no hay compras hechas", "aceptar");
+                MostrarListShopping(shoppingsList);
             }
-            
+
         }
 
         public RegistrationShoppingVM()

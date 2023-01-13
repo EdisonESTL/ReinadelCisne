@@ -95,126 +95,44 @@
     <ShellItem Route="login" FlyoutItemIsVisible="False">
         <ShellContent ContentTemplate="{DataTemplate views:LoginView }"/>
     </ShellItem>
+    
     <FlyoutItem Title="Inicio" Route="Rini"
                 Icon="arbol.png">
-        <!--<ShellContent ContentTemplate="{DataTemplate views:YintuView}" Route="RYintuRoom"/>-->
-        <ShellContent Title="Inicio" ContentTemplate="{DataTemplate views:YintuView}" Route="RYintuRoom"/>
-        <!--<Tab>
-            
-            <ShellContent Title="Movimientos" ContentTemplate="{DataTemplate views:MovementsView}" Route="RMovView"/>
-        </Tab>-->
+        <ShellContent Title="Inicio" ContentTemplate="{DataTemplate views:YintuView}" Route="RYintuRoom"/>        
     </FlyoutItem>
+    
     <FlyoutItem Title="Productos" Route="Rprod"
-                Icon="inventory.png">        
-        <Tab>
-            <ShellContent Title="Productos"
+                Icon="inventory.png">
+        <ShellContent Title="Productos"
                           ContentTemplate="{DataTemplate views:StockRegistrationView}" Route="RStock"/>
-            <ShellContent Title="Servicios" ContentTemplate="{DataTemplate views:ServicesView}" Route="RServices"/>
-            <ShellContent Title="Compras" ContentTemplate="{DataTemplate views:RegistrationShoppingView}" Route="RShopping"/>
-            <ShellContent Title="Ventas" ContentTemplate="{DataTemplate views:SalesView}" Route="RSales"/>
-            <ShellContent Title="Materia Prima" ContentTemplate="{DataTemplate views:RawMaterial}" Route="RRaw"/>
-            <ShellContent Title="Ingresos - Egresos extras" ContentTemplate="{DataTemplate views:IngresoEgresoView}" Route="RInout"/>
-            <ShellContent Title="Reportes" ContentTemplate="{DataTemplate views:ReportesView}" Route="RSales"/>
-
-        </Tab>
     </FlyoutItem>
-    <FlyoutItem Title="Servicios" Route="Rserv"
+    
+    <FlyoutItem Title="Productos en proceso" Route="Rserv"
                 Icon="services.png">
-        <Tab>
-            <ShellContent Title="Servicios" ContentTemplate="{DataTemplate views:ServicesView}" Route="RServices"/>            
-            <ShellContent Title="Compras" ContentTemplate="{DataTemplate views:RegistrationShoppingView}" Route="RShopping"/>
-            <ShellContent Title="Ventas" ContentTemplate="{DataTemplate views:SalesView}" Route="RSales"/>
-            <ShellContent Title="Materia Prima" ContentTemplate="{DataTemplate views:RawMaterial}" Route="RRaw"/>
-            <ShellContent Title="Ingresos - Egresos extras" ContentTemplate="{DataTemplate views:IngresoEgresoView}" Route="RInout"/>
-            <ShellContent Title="Reportes" ContentTemplate="{DataTemplate views:SalesView}" Route="RSales"/>
-            <ShellContent Title="Productos"
-                          ContentTemplate="{DataTemplate views:StockRegistrationView}" Route="RStock"/>
-        </Tab>
+        <ShellContent Title="Productos en proceso" ContentTemplate="{DataTemplate views:ServicesView}" Route="RPProceso"/>
     </FlyoutItem>
-    <FlyoutItem Title="Compras" Route="Rcomp"
-                Icon="shops.png">
-        <Tab>
-            <ShellContent Title="Compras" ContentTemplate="{DataTemplate views:RegistrationShoppingView}" Route="RShopping"/>            
-            <ShellContent Title="Ventas" ContentTemplate="{DataTemplate views:SalesView}" Route="RSales"/>
-            <ShellContent Title="Materia Prima" ContentTemplate="{DataTemplate views:RawMaterial}" Route="RRaw"/>
-            <ShellContent Title="Ingresos - Egresos extras" ContentTemplate="{DataTemplate views:IngresoEgresoView}" Route="RInout"/>
-            <ShellContent Title="Reportes" ContentTemplate="{DataTemplate views:ReportesView}" Route="RSales"/>            
-            <ShellContent Title="Productos"
-                          ContentTemplate="{DataTemplate views:StockRegistrationView}" Route="RStock"/>
-            <ShellContent Title="Servicios" ContentTemplate="{DataTemplate views:ServicesView}" Route="RServices"/>
-        </Tab>
-    </FlyoutItem>
-    <FlyoutItem Title="Ventas" Route="Rven"
-                Icon="sales.png">
-        <Tab>
-            <ShellContent Title="Ventas" ContentTemplate="{DataTemplate views:SalesView}" Route="RSales"/>
-            <ShellContent Title="Materia Prima" ContentTemplate="{DataTemplate views:RawMaterial}" Route="RRaw"/>
-            <ShellContent Title="Ingresos - Egresos extras" ContentTemplate="{DataTemplate views:IngresoEgresoView}" Route="RInout"/>
-            <ShellContent Title="Reportes" ContentTemplate="{DataTemplate views:ReportesView}" Route="RReports"/>
-            <ShellContent Title="Productos"
-                          ContentTemplate="{DataTemplate views:StockRegistrationView}" Route="RStock"/>
-            <ShellContent Title="Servicios" ContentTemplate="{DataTemplate views:ServicesView}" Route="RServices"/>
-            <ShellContent Title="Compras" ContentTemplate="{DataTemplate views:RegistrationShoppingView}" Route="RShopping"/>
-        </Tab>
-           
-    </FlyoutItem>
+
     <FlyoutItem Title="Materia Prima" Route="Rmat"
                 Icon="rawmaterial.png">
-        <Tab>
-            <ShellContent Title="Materia Prima" ContentTemplate="{DataTemplate views:RawMaterial}" Route="RRaw"/>
-            <ShellContent Title="Ingresos - Egresos extras" ContentTemplate="{DataTemplate views:IngresoEgresoView}" Route="RInout"/>
-            <ShellContent Title="Reportes" ContentTemplate="{DataTemplate views:SalesView}" Route="RSales"/>
-            <ShellContent Title="Productos"
-                          ContentTemplate="{DataTemplate views:StockRegistrationView}" Route="RStock"/>
-            <ShellContent Title="Servicios" ContentTemplate="{DataTemplate views:ServicesView}" Route="RServices"/>
-            <ShellContent Title="Compras" ContentTemplate="{DataTemplate views:RegistrationShoppingView}" Route="RShopping"/>
-            <ShellContent Title="Ventas" ContentTemplate="{DataTemplate views:SalesView}" Route="RSales"/>
-        </Tab>
-        
+        <ShellContent Title="Materia Prima" ContentTemplate="{DataTemplate views:RawMaterial}" Route="RRaw"/>
     </FlyoutItem>
-    <!--<FlyoutItem Title="Actividades">
-        <ShellContent ContentTemplate="{DataTemplate views:ActivytiesView}" Route="RRaw"/>
-    </FlyoutItem>-->
-    <FlyoutItem Title="Ingresos - Egresos extras" Route="Ring"
-                Icon="inoutex.png">
-        <Tab>
-            <ShellContent Title="Ingresos - Egresos extras" ContentTemplate="{DataTemplate views:IngresoEgresoView}" Route="RInout"/>
-            <ShellContent Title="Reportes" ContentTemplate="{DataTemplate views:ReportesView}" Route="RSales"/>
-            <ShellContent Title="Productos"
-                          ContentTemplate="{DataTemplate views:StockRegistrationView}" Route="RStock"/>
-            <ShellContent Title="Servicios" ContentTemplate="{DataTemplate views:ServicesView}" Route="RServices"/>
-            <ShellContent Title="Compras" ContentTemplate="{DataTemplate views:RegistrationShoppingView}" Route="RShopping"/>
-            <ShellContent Title="Ventas" ContentTemplate="{DataTemplate views:SalesView}" Route="RSales"/>
-            <ShellContent Title="Materia Prima" ContentTemplate="{DataTemplate views:RawMaterial}" Route="RRaw"/>
-        </Tab>
-    </FlyoutItem>          
-    <FlyoutItem Title="Reportes" Route="Rrep"
-                Icon="reports.png">
-        <Tab>
-            <ShellContent Title="Reportes" ContentTemplate="{DataTemplate views:ReportesView}" Route="RReports"/>
-            <ShellContent Title="Productos"
-                          ContentTemplate="{DataTemplate views:StockRegistrationView}" Route="RStock"/>
-            <ShellContent Title="Servicios" ContentTemplate="{DataTemplate views:ServicesView}" Route="RServices"/>
-            <ShellContent Title="Compras" ContentTemplate="{DataTemplate views:RegistrationShoppingView}" Route="RShopping"/>
-            <ShellContent Title="Ventas" ContentTemplate="{DataTemplate views:SalesView}" Route="RSales"/>
-            <ShellContent Title="Materia Prima" ContentTemplate="{DataTemplate views:RawMaterial}" Route="RRaw"/>
-            <ShellContent Title="Ingresos - Egresos extras" ContentTemplate="{DataTemplate views:IngresoEgresoView}" Route="RInout"/>
-        </Tab>        
-        <!--<Tab Title="Ventas">
-            <ShellContent ContentTemplate="{DataTemplate views:SalesView}" Route="RSales"/>
-        </Tab>
-        <Tab Title="Compras">
-            <ShellContent ContentTemplate="{DataTemplate views:ShopsView}" Route="RShops"/>
-        </Tab>
-        <Tab Title="Total">
-            <ShellContent ContentTemplate="{DataTemplate views:ResultsTotalView}" Route="RTotals"/>
-        </Tab>-->
+    
+    <FlyoutItem Title="Mano de obra" Route="RManobra"
+                Icon="manobra.png">
+        <ShellContent Title="Mano de obra" ContentTemplate="{DataTemplate views:WorkForceView}" Route="RMO"/>
     </FlyoutItem>
+    
+    <FlyoutItem Title="Costos indirectos" Route="RCostInd"
+                Icon="costind.png">
+        <ShellContent Title="Costos indirectos" ContentTemplate="{DataTemplate views:IndirectCostView}" Route="RCI"/>           
+    </FlyoutItem>
+    
     <FlyoutItem Title="Ventanilla"
                 Icon="window.png"
                 Route="Rvent">
         <ShellContent ContentTemplate="{DataTemplate views:GoView}" Route="RGo"/>
     </FlyoutItem>
+    
     <FlyoutItem Title="Ajustes"
                 Icon="configg.png"
                 Route="Rcon">

@@ -24,6 +24,7 @@ namespace ReinadelCisne.ViewModels
                 OnPropertyChanged();
             }
         }
+        
         private string _costo;
         public string Costo
         {
@@ -34,6 +35,7 @@ namespace ReinadelCisne.ViewModels
                 OnPropertyChanged();
             }
         }
+        
         private bool _isRefreshing = false;
         public bool IsRefreshing
         {
@@ -44,7 +46,20 @@ namespace ReinadelCisne.ViewModels
                 OnPropertyChanged();
             }
         }
+       
+        private GroupsProductModel _groupsSelected;
+        public GroupsProductModel GroupsSelected
+        {
+            get => _groupsSelected;
+            set
+            {
+                _groupsSelected = value;
+                OnPropertyChanged();
+            }
+        }
+        
         public ObservableCollection<PassString> ListPS { get; private set; } = new ObservableCollection<PassString>();
+        public ObservableCollection<GroupsProductModel> GroupsProducts { get; private set; } = new ObservableCollection<GroupsProductModel>();
 
         public ICommand RefreshCommand
         {
@@ -64,7 +79,7 @@ namespace ReinadelCisne.ViewModels
         }
         public ICommand NewStockCommand => new Command(() =>
         {
-            Shell.Current.GoToAsync("NewStock");
+            Shell.Current.GoToAsync($"//Rini/Productos/NewStock?IdListWF=0&IdListCI=0&IdListRM=0&IdProduct=0");
         });
         public ICommand SelectedCommnad => new Command((obj) =>
         {
@@ -72,8 +87,22 @@ namespace ReinadelCisne.ViewModels
             ListProductStock();
             Shell.Current.GoToAsync($"//Rini/Productos/Kardex?objId={pass.Data3}");
         });
-        
-
+        public ICommand GoBackCommand => new Command(() =>
+        {
+            Shell.Current.GoToAsync("//Rini");
+        });
+        public ICommand SearchCommand => new Command(() =>
+        {
+            FiltrarGrupo();
+        });
+        public ICommand ProductsCommand => new Command(() =>
+        {
+            ListProductStock();
+        });
+        public ICommand VentasCommand => new Command(() =>
+        {
+            Shell.Current.GoToAsync("//Rini/Productos/Ventas");
+        });
         public Command<PassString> Delete { get; }
         public Command<PassString> Modify { get; }
         
@@ -83,20 +112,60 @@ namespace ReinadelCisne.ViewModels
             ListProductStock();
             NumProducts();
             CostProduct();
+            GroupProds();
             Delete = new Command<PassString>(DeletePS);
             Modify = new Command<PassString>(ModifyPS);
         }
 
+        private void FiltrarGrupo()
+        {
+            ListPS.Clear();
+            var prods = App.Database.ListProduct().Result;
+
+            if (GroupsSelected != null) 
+            {
+                var filtro = (from prd in prods
+                              where prd.GroupProductId == GroupsSelected.Id
+                              select prd).ToList();
+                if (filtro.Count != 0)
+                {
+                    foreach (var tp in filtro.OrderByDescending(x => x.Id))
+                    {
+                        PassString pass = new PassString
+                        {
+                            Data0 = tp.NameProduct,
+                            Data1 = "$" + tp.PrecioVentaProduct.ToString(),
+                            //Data2 = tp.CantProduct.ToString(),
+                            Data3 = tp.Id.ToString()
+                        };
+                        ListPS.Add(pass);
+                    }
+                }
+            }
+
+            
+        }
+        private void GroupProds()
+        {
+            var groupsP = App.Database.GetGroupsProduct().Result;
+            if(groupsP.Count != 0)
+            {
+                foreach(var gr in groupsP)
+                {
+                    GroupsProducts.Add(gr);
+                }
+            }
+        }
         private async void CostProduct()
         {
             List<ProductModel> lps = await App.Database.ListProduct();
             
             if (lps.Count >= 0)
             {
-                var result = lps.Sum(x => (x.PrecioVentaProduct * x.CantProduct));
-                var costsuma = "$" + result.ToString();
+                //var result = lps.Sum(x => (x.PrecioVentaProduct * x.CantProduct));
+                //var costsuma = "$" + result.ToString();
 
-                Costo = costsuma;
+                //Costo = costsuma;
             }
             else
             {
@@ -108,10 +177,10 @@ namespace ReinadelCisne.ViewModels
             var resp = await App.Database.GetTotalProducts();
             Productos = resp.ToString();
         }
-
         private async void ListProductStock()
         {
             ListPS.Clear();
+            GroupsSelected = null;
             List<string> products = new List<string>();
             List<ProductModel> lps = await App.Database.ListProduct();
             if (lps != null)
@@ -121,7 +190,7 @@ namespace ReinadelCisne.ViewModels
                     PassString pass = new PassString{
                         Data0 = tp.NameProduct,
                         Data1 = "$" + tp.PrecioVentaProduct.ToString(),
-                        Data2 = tp.CantProduct.ToString(),
+                        //Data2 = tp.CantProduct.ToString(),
                         Data3 = tp.Id.ToString()
                     };
                     ListPS.Add(pass);
@@ -139,7 +208,6 @@ namespace ReinadelCisne.ViewModels
             NumProducts();
             CostProduct();
         }
-
         private async void ModifyPS(PassString obj)
         {
             await Shell.Current.GoToAsync($"//Rini/Productos/NewStock?IdListOC=0&IdlistRM=0&IdlistWF=0&idProduct={obj.Data3}");

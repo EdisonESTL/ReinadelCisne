@@ -12,13 +12,13 @@
     </Shell.BackButtonBehavior>
     <ContentPage.Content>
         <StackLayout Padding="10">
-            <Label Text="Seleciona elemento a comprar" Style="{StaticResource LabelTittlesColLectionView}"
+            <Label Text="Hola, seleciona materia prima a comprar" Style="{StaticResource LabelTittlesColLectionView}"
                 VerticalOptions="CenterAndExpand" 
                 HorizontalOptions="CenterAndExpand" 
                    />
             <RefreshView>
                 <CollectionView x:Name="ListProdServ"
-                            ItemsSource="{Binding ListPS, Mode=TwoWay}"
+                            ItemsSource="{Binding ListCompras2, Mode=TwoWay}"
                             Margin="0,12,0,12"
                             SelectionMode="Single"
                             SelectionChangedCommand="{Binding SelectedCommnad}"
@@ -31,47 +31,34 @@
                             <Frame Style="{StaticResource FrameProductss}" HorizontalOptions="CenterAndExpand"
                                Padding="10"
                                Margin="0">
-                                <Grid RowDefinitions="30,18"
+                                <Grid RowDefinitions="Auto,Auto"
                                           RowSpacing="0">
                                     <Image Source="product.png"
                                                Grid.Row="0"
                                                Grid.RowSpan="2"
                                                Grid.Column="0"
                                                />
-                                    <Label Grid.Column="1" Text="{Binding Data0}" Style="{StaticResource LabelValorsTittles}"
+                                    <Label Grid.Column="1" Text="{Binding NameRM}" Style="{StaticResource LabelValorsTittles}"
                                                Grid.Row="0"/>
-
-                                    <Label Grid.Column="1" Text="{Binding Data1}" Style="{StaticResource LabelTittles1}"
-                                               Grid.Row="1"/>
-                                    <Label Grid.Column="2" Text="{Binding Data2}" Style="{StaticResource LabelTittles1}"
-                                               Grid.Row="0"/>
+                                    <Label Text="{Binding DescriptionRM}"
+                                           Grid.Row="1"
+                                           Grid.Column="1"
+                                           Style="{StaticResource LabelValorsTittles}"/>
                                 </Grid>
                             </Frame>
                         </DataTemplate>
                     </CollectionView.ItemTemplate>
+                    <CollectionView.EmptyView>
+                        <StackLayout HorizontalOptions="CenterAndExpand"
+                                    VerticalOptions="CenterAndExpand">
+                            <Label Text="No hay materia prima registrada"
+                                   Style="{StaticResource LabelTittlesColLectionView}"
+                                   FontAttributes="Italic,None"
+                                   TextColor="Black"/>
+                        </StackLayout>
+                    </CollectionView.EmptyView>
                 </CollectionView>
-            </RefreshView>            
-            <Label Text="Hola, ¿Qué desea comprar?" Style="{StaticResource LabelTittlesColLectionView}"
-                VerticalOptions="CenterAndExpand" 
-                HorizontalOptions="CenterAndExpand" />
-            <StackLayout Orientation="Vertical"
-                         Padding="10">
-                <Button Text="Producto"
-                        FontAttributes="Bold"
-                        ImageSource="inventory1.png"
-                        ContentLayout="left, 6"
-                        Style="{StaticResource Button2}"
-                        Command="{Binding PushCommand}"
-                        CommandParameter="productos"/>
-                <Button Text="Materia prima"
-                        ImageSource="rawmaterial1.png"
-                        ContentLayout="left, 6"
-                        Style="{StaticResource Button2}"
-                        FontAttributes="Bold"
-                        Command="{Binding PushCommand}"
-                        CommandParameter="materiaprima"/>
-            </StackLayout>
-            
+            </RefreshView>                        
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>

@@ -18,6 +18,7 @@ namespace ReinadelCisne.Services
             var options = new SQLiteConnectionString(dbPath, true, key: "222706");
             _database = new SQLiteAsyncConnection(options);
             _database.CreateTableAsync<ProductModel>();
+            _database.CreateTableAsync<GroupsProductModel>();
             _database.CreateTableAsync<SaleModel>();
             _database.CreateTableAsync<OrderModel>();
             _database.CreateTableAsync<RawMaterialModel>();
@@ -25,6 +26,8 @@ namespace ReinadelCisne.Services
             _database.CreateTableAsync<ItemsListRMModel>();
             _database.CreateTableAsync<WorkForceModel>();
             _database.CreateTableAsync<ListWFModel>();
+            _database.CreateTableAsync<PersonalModel>();
+            _database.CreateTableAsync<PaymentsModel>();
             _database.CreateTableAsync<OtherCostModel>();
             _database.CreateTableAsync<ListOCModel>();
             _database.CreateTableAsync<ShoppingModel>();
@@ -34,54 +37,14 @@ namespace ReinadelCisne.Services
             _database.CreateTableAsync<UserModel>();
             _database.CreateTableAsync<KardexModel>();
             _database.CreateTableAsync<KardexRMModel>();
+            _database.CreateTableAsync<SaldosRMModel>();
             _database.CreateTableAsync<ProductShoppingList>();
             _database.CreateTableAsync<ProductShoppingModel>();
             _database.CreateTableAsync<GroupsRMModel>();
             _database.CreateTableAsync<UMedidasRMModel>();
         }
 
-        //Proceso Kardex productos
-        public Task<int> SaveMovKardex(KardexModel kardex)
-        {
-            if(kardex.Id != 0)
-            {
-                return Task<int>.Run(() =>
-                {
-                    int ctr;
-                    _database.UpdateAsync(kardex);
-                    ctr = 2;
-                    return ctr;
-                });
-            }
-            else
-            {
-                return _database.InsertAsync(kardex);
-            }
-        }
-
-        public Task UpdateRelationKardexProduct(KardexModel kardex)
-        {
-            return _database.UpdateWithChildrenAsync(kardex);
-        }
-        public Task<List<KardexModel>> GetKardices(ProductModel product)
-        {
-            var fg = _database.Table<KardexModel>();
-            //var fg = _database.Table<KardexModel>().OrderByDescending(x=>x.Id);
-            var resp = (from a in fg
-                       where a.IdProduct == product.Id
-                        select a).ToListAsync();
-            return resp;
-        }
-        
-        public Task<KardexModel> GetFirstKardex(ProductModel Producto)
-        {
-            var lis = _database.Table<KardexModel>().OrderByDescending(x => x.Date).Where(x => x.IdProduct == Producto.Id).FirstOrDefaultAsync();
-            /*var resp = (from a in lis
-                       where a.IdProduct == Producto.Id
-                       select a).FirstOrDefaultAsync();*/
-            return lis;
-        }
-        
+                
         //Proceso Usuario
         public Task<UserModel> GetUser()
         {
@@ -144,8 +107,399 @@ namespace ReinadelCisne.Services
         public Task<ActivityModel> getActivity(int id)
         {
             return _database.GetWithChildrenAsync<ActivityModel>(id);
+        }       
+                
+
+        //Procesos de Productos
+        #region Productos
+        /*GuardarProducto*/
+        public Task<int> SaveProduct(ProductModel product)
+        {
+            if (product.Id != 0)
+            {
+
+                return Task.Run(() =>
+                {
+                    int ctr;
+                    _database.UpdateAsync(product);
+                    ctr = 1;
+                    return ctr;
+                });
+            }
+            else
+            {
+                return Task.Run(() =>
+                {
+                    int ctr;
+                    _database.InsertAsync(product);
+                    ctr = 2;
+                    return ctr;
+                });
+                //var g =_database.InsertAsync(product);
+                /*KardexModel kardex = new KardexModel
+                {
+                    ValorUnitario = product.PrecioVentaProduct,
+                    Cantidad = product.CantProduct,
+                    ValorPromPond = product.PrecioVentaProduct
+                };
+
+                SaveMovKardex(kardex);
+
+                kardex.ProductModel = product;
+                
+                UpdateRelationKardexProduct(kardex);*/
+                //return g;
+            }
+        }
+        /*Actualizar Relaciones de Materia Prima*/
+        public Task UpdateRelationsRM(ProductModel product)
+        {
+            return _database.UpdateWithChildrenAsync(product);
+        }
+        /*Listar Productos*/
+        public Task<List<ProductModel>> ListProduct()
+        {
+            var g = _database.GetAllWithChildrenAsync<ProductModel>();
+            return g;
+        }
+        /*Borrar Producto*/
+        public Task DeleteProduct(ProductModel obj)
+        {
+            return _database.DeleteAsync(obj);
+        }
+        /*Obtener un producto*/
+        public Task<ProductModel> Get1Product(int idproduct)
+        {
+            return _database.GetWithChildrenAsync<ProductModel>(idproduct);
+        }
+        /*Total de productos*/
+        public Task<int> GetTotalProducts()
+        {
+            return _database.Table<ProductModel>().CountAsync();
         }
 
+        //Procesos Compras productos
+        public Task<int> SaveShoppingProduct(ProductShoppingModel shopping)
+        {
+            if (shopping.Id != 0)
+            {
+                return _database.UpdateAsync(shopping);
+            }
+            else
+            {
+                return _database.InsertAsync(shopping);
+            }
+        }
+
+        //Proceso Kardex productos
+
+        /*Guardar movimineto en el kardex*/
+        public Task<int> SaveMovKardex(KardexModel kardex)
+        {
+            if (kardex.Id != 0)
+            {
+                return Task<int>.Run(() =>
+                {
+                    int ctr;
+                    _database.UpdateAsync(kardex);
+                    ctr = 2;
+                    return ctr;
+                });
+            }
+            else
+            {
+                return _database.InsertAsync(kardex);
+            }
+        }
+        /*Actualizar relaciones kardex*/
+        public Task UpdateRelationKardexProduct(KardexModel kardex)
+        {
+            return _database.UpdateWithChildrenAsync(kardex);
+        }
+        /*Obtener listado de kardex de un producto*/
+        public Task<List<KardexModel>> GetKardices(ProductModel product)
+        {
+            var fg = _database.Table<KardexModel>();
+            //var fg = _database.Table<KardexModel>().OrderByDescending(x=>x.Id);
+            var resp = (from a in fg
+                        where a.IdProduct == product.Id
+                        select a).ToListAsync();
+            return resp;
+        }
+        /*Obtener el primer movimiento kardex de un producto*/
+        public Task<KardexModel> GetFirstKardex(ProductModel Producto)
+        {
+            var lis = _database.Table<KardexModel>().OrderByDescending(x => x.Date).Where(x => x.IdProduct == Producto.Id).FirstOrDefaultAsync();
+            /*var resp = (from a in lis
+                       where a.IdProduct == Producto.Id
+                       select a).FirstOrDefaultAsync();*/
+            return lis;
+        }
+
+        //Procesos Grupos Productos
+
+        /*Guardar Grupo de productos*/
+        public Task<int> SaveGRoupProduct(GroupsProductModel groups)
+        {
+            if(groups.Id != 0)
+            {
+                return _database.UpdateAsync(groups);
+            }
+            else
+            {
+                return _database.InsertAsync(groups);
+            }
+        }
+
+        /*Obtener lista de grupos de productos*/
+        public Task<List<GroupsProductModel>> GetGroupsProduct()
+        {
+            return _database.Table<GroupsProductModel>().ToListAsync();
+        }
+
+        /*Eliminar grupo de productos*/
+        public Task<int> DeleteGroupProduct(GroupsProductModel groups)
+        {
+            return _database.DeleteAsync(groups);
+        }
+        #endregion
+
+        //Procesos de Ventas
+        #region Ventas
+        public Task<int> SaveSale(SaleModel sale)
+        {
+            if (sale.Id != 0)
+            {
+                return _database.UpdateAsync(sale);
+            }
+            else
+            {
+                return _database.InsertAsync(sale);
+            }
+        }
+        public Task<List<SaleModel>> ListSales()
+        {
+            return _database.GetAllWithChildrenAsync<SaleModel>();
+        }
+        public Task<List<OrderModel>> ListOrders()
+        {
+            return _database.GetAllWithChildrenAsync<OrderModel>();
+        }
+        public Task DeleteSale(SaleModel sale)
+        {
+            return _database.DeleteAsync(sale, recursive: true);
+        }
+        public Task SaveOrder(OrderModel order)
+        {//se aumento if.. f21/07 1:01
+            if (order.Id != 0)
+            {
+                return _database.UpdateAsync(order);
+            }
+            else
+            {
+                return _database.InsertAsync(order);
+            }
+
+        }
+        public Task UpdateRealtionSales(SaleModel sale)
+        {
+            return _database.UpdateWithChildrenAsync(sale);
+        }
+        public Task<SaleModel> GetSale(int idsale)
+        {
+            return _database.GetWithChildrenAsync<SaleModel>(idsale);
+        }
+        public Task<SaleModel> GetOrder(int idOrder)
+        {
+            return _database.GetWithChildrenAsync<SaleModel>(idOrder);
+        } 
+        #endregion
+        
+        //Procesos de Materia prima
+        #region Materia Prima
+        public Task<int> SaveRawMaterial(RawMaterialModel rawMaterial)
+        {
+            if (rawMaterial.Id != 0)
+            {
+                return _database.UpdateAsync(rawMaterial);
+            }
+            else
+            {
+                return _database.InsertAsync(rawMaterial);
+            }
+        }
+        public Task<int> SaveItemListRM(ItemsListRMModel itemsListRM)
+        {
+            if (itemsListRM.Id != 0)
+            {
+                return _database.UpdateAsync(itemsListRM);
+            }
+            else
+            {
+                return _database.InsertAsync(itemsListRM);
+            }
+        }
+        public Task UpdateRelationItemRM(ItemsListRMModel itemsListRM)
+        {
+            return _database.UpdateWithChildrenAsync(itemsListRM);
+        }
+        private async void calculatePriceponderd(RawMaterialModel rawMaterial)
+        {
+            var inPos = _database.GetWithChildrenAsync<RawMaterialModel>(rawMaterial.Id).Result;
+            var cpp = ((inPos.CantidadRM * inPos.CostoRM) + (rawMaterial.CantidadRM * rawMaterial.CostoRM)) / (inPos.CantidadRM + rawMaterial.CantidadRM);
+            inPos.CostoRM = (float)cpp;
+            await _database.UpdateAsync(inPos);
+        }
+        public Task<int> UpdateRawMaterial(RawMaterialModel rawMaterial)
+        {
+            if (rawMaterial.Id != 0)
+            {
+                return _database.UpdateAsync(rawMaterial);
+            }
+            else
+            {
+                return Task.FromResult(0);
+            }
+        }
+        public Task UpdateRealtionRawMat(RawMaterialModel rawMaterial)
+        {
+            return _database.UpdateWithChildrenAsync(rawMaterial);
+        }
+        public Task<int> SaveListRM(ListRMModel listRawMaterial)
+        {
+            if (listRawMaterial.Id != 0)
+            {
+
+                return _database.UpdateAsync(listRawMaterial);
+            }
+            else
+            {
+                return _database.InsertAsync(listRawMaterial);
+            }
+
+        }
+        public Task<List<ItemsListRMModel>> GetAllItems()
+        {
+            return _database.GetAllWithChildrenAsync<ItemsListRMModel>();
+        }
+        public Task<ListRMModel> GetListRM(int i)
+        {
+            return _database.GetWithChildrenAsync<ListRMModel>(i);
+        }
+        public Task<RawMaterialModel> GetOneRM(int i)
+        {
+            return _database.GetWithChildrenAsync<RawMaterialModel>(i);
+        }
+        public Task<List<ListRMModel>> GetAllRMList()
+        {
+            return _database.GetAllWithChildrenAsync<ListRMModel>();
+        }
+        public Task<List<RawMaterialModel>> GetMR()
+        {
+            return _database.GetAllWithChildrenAsync<RawMaterialModel>();
+        }
+        public Task UpdateListRM(ListRMModel listRMModel)
+        {
+            var t = _database.UpdateWithChildrenAsync(listRMModel);
+
+            return t;
+        }
+        public Task<int> DeleteRawMaterial(RawMaterialModel rawMaterial)
+        {
+            return _database.DeleteAsync(rawMaterial);
+        }
+        public void UpdateInvRM(List<RawMaterialModel> rawMaterials)
+        {
+            foreach (var raw in rawMaterials)
+            {
+                var query = (from a in _database.Table<RawMaterialModel>()
+                             where a.NameRM == raw.NameRM & a.UnitMeasurementRM == raw.UnitMeasurementRM
+                             select a).FirstOrDefaultAsync().Result;
+
+                query.CantidadRM += raw.CantidadRM;
+                _database.UpdateAsync(query);
+            }
+        }
+
+        //procesos de Kardex de materia prima
+        public Task<int> SaveKardesxRM(KardexRMModel kardexRM)
+        {
+            if (kardexRM.Id != 0)
+            {
+                return _database.UpdateAsync(kardexRM);
+            }
+            else
+            {
+                return _database.InsertAsync(kardexRM);
+            }
+        }
+        public Task UpdateRelationsKardexRM(KardexRMModel kardexModel)
+        {
+            return _database.UpdateWithChildrenAsync(kardexModel);
+        }
+        public Task<List<KardexRMModel>> GetKardexsRM()
+        {
+            return _database.GetAllWithChildrenAsync<KardexRMModel>();
+        }
+        public Task<KardexRMModel> GetKardexRM(KardexRMModel kardexRM)
+        {
+            return _database.GetWithChildrenAsync<KardexRMModel>(kardexRM.Id);
+        }
+        public Task<KardexRMModel> GetKardexXRM(RawMaterialModel rawMaterial)
+        {
+            var krs = _database.Table<KardexRMModel>();
+
+            var kr = (from k in krs
+                      where k.IdRawMaterial == rawMaterial.Id
+                      select k).FirstOrDefaultAsync();
+            return kr;
+        }
+
+        //Procesos Grupos de Materia Prima
+        public Task<int> SaveGroupRM(GroupsRMModel group)
+        {
+            if (group.Id != 0)
+            {
+                return _database.UpdateAsync(group);
+            }
+            else
+            {
+                return _database.InsertAsync(group);
+            }
+        }
+        public Task<List<GroupsRMModel>> GetGroupRM()
+        {
+            return _database.Table<GroupsRMModel>().ToListAsync();
+        }
+        public Task<GroupsRMModel> GetESpecificGroup(GroupsRMModel rMModel)
+        {
+            //return _database.Table<GroupsRMModel>().Where(x => x.Id == rMModel.Id).FirstOrDefaultAsync();
+            return _database.GetWithChildrenAsync<GroupsRMModel>(rMModel.Id);
+        }
+        public Task UpdateRelationGroupRM(GroupsRMModel groupsRM)
+        {
+            return _database.UpdateWithChildrenAsync(groupsRM);
+        }
+        //Procesos Unidades de medida de Materia prima
+        public Task<int> SaveUMedidaRM(UMedidasRMModel uMedida)
+        {
+            if (uMedida.Id != 0)
+            {
+                return _database.UpdateAsync(uMedida);
+            }
+            else
+            {
+                return _database.InsertAsync(uMedida);
+            }
+        }
+        public Task<List<UMedidasRMModel>> GetUMedidadRM()
+        {
+            return _database.Table<UMedidasRMModel>().ToListAsync();
+        }
+        public Task UpdateRelationUMedidasRM(UMedidasRMModel uMedidasRM)
+        {
+            return _database.UpdateWithChildrenAsync(uMedidasRM);
+        }
         //Procesos de Compras - Materia Prima
         public Task<int> SaveShopping(ShoppingModel shopping)
         {
@@ -193,305 +547,43 @@ namespace ReinadelCisne.Services
         {
             return _database.GetAllWithChildrenAsync<ShoppingListModel>();
         }
-
-        //Procesos Compras productos
-        public Task<int> SaveShoppingProduct(ProductShoppingModel shopping)
-        {
-            if (shopping.Id != 0)
-            {
-                return _database.UpdateAsync(shopping);
-            }
-            else
-            {
-                return _database.InsertAsync(shopping);
-            }
-        }
-
-        //Procesos de Productos
-        public Task<int> SaveProduct(ProductModel product)
-        {
-            if(product.Id != 0)
-            {
-
-                return Task.Run(() =>
-                {
-                    int ctr;
-                    _database.UpdateAsync(product);
-                    ctr = 1;
-                    return ctr;
-                });
-            }
-            else
-            {
-                return Task.Run(() =>
-                {
-                    int ctr;
-                    _database.InsertAsync(product);
-                    ctr = 2;
-                    return ctr;
-                });
-                //var g =_database.InsertAsync(product);
-                /*KardexModel kardex = new KardexModel
-                {
-                    ValorUnitario = product.PrecioVentaProduct,
-                    Cantidad = product.CantProduct,
-                    ValorPromPond = product.PrecioVentaProduct
-                };
-
-                SaveMovKardex(kardex);
-
-                kardex.ProductModel = product;
-                
-                UpdateRelationKardexProduct(kardex);*/
-                //return g;
-            }
-        }
-        public Task UpdateRelationsRM(ProductModel product)
-        {
-            return _database.UpdateWithChildrenAsync(product);
-        }
-        public Task<List<ProductModel>> ListProduct()
-        {
-            var g = _database.GetAllWithChildrenAsync<ProductModel>();
-            return g;
-        }
-        public Task DeleteProduct(ProductModel obj)
-        {
-            return _database.DeleteAsync(obj);
-        }
-        public Task<ProductModel> Get1Product(int idproduct)
-        {
-            return _database.GetWithChildrenAsync<ProductModel>(idproduct);
-        }
-        public Task<int> GetTotalProducts()
-        {
-            return _database.Table<ProductModel>().CountAsync();
-        }
         
-        //Procesos de Ventas
-        public Task<int> SaveSale(SaleModel sale)
+        //Procesos Saldos RM
+        public Task<int> SaveSaldoRM(SaldosRMModel saldosRM)
         {
-            if (sale.Id != 0)
+            if(saldosRM.Id != 0)
             {
-                return _database.UpdateAsync(sale);
+                return _database.UpdateAsync(saldosRM);
             }
             else
             {
-                return _database.InsertAsync(sale);
-            }
-        }
-        public Task<List<SaleModel>> ListSales()
-        {
-            return _database.GetAllWithChildrenAsync<SaleModel>();
-        }
-        public Task<List<OrderModel>> ListOrders()
-        {
-            return _database.GetAllWithChildrenAsync<OrderModel>();
-        }
-        public Task DeleteSale(SaleModel sale)
-        {
-            return _database.DeleteAsync(sale, recursive: true);
-        }
-        public Task SaveOrder(OrderModel order)
-        {//se aumento if.. f21/07 1:01
-            if (order.Id != 0)
-            {
-                return _database.UpdateAsync(order);
-            }
-            else
-            {
-                return _database.InsertAsync(order);
-            }
-            
-        }
-        public Task UpdateRealtionSales(SaleModel sale)
-        {
-            return _database.UpdateWithChildrenAsync(sale);
-        }
-        public Task<SaleModel> GetSale(int idsale)
-        {
-            return _database.GetWithChildrenAsync<SaleModel>(idsale);
-        }
-        public Task<SaleModel> GetOrder(int idOrder)
-        {
-            return _database.GetWithChildrenAsync<SaleModel>(idOrder);
-        }
-        //Procesos de Materia prima
-        public Task<int> SaveRawMaterial(RawMaterialModel rawMaterial)
-        {
-            /*var fb = _database.Table<RawMaterialModel>().ToListAsync();
-
-            var query = (from a in fb.Result
-                        where a.NameRM == rawMaterial.NameRM & a.UnitMeasurementRM == rawMaterial.UnitMeasurementRM
-                        select a).FirstOrDefault();*/
-
-            if (rawMaterial.Id != 0)
-            {
-                var nn = _database.GetWithChildrenAsync<RawMaterialModel>(rawMaterial.Id).Result;
-                if (rawMaterial.CostoRM != nn.CostoRM)
-                {
-                    calculatePriceponderd(rawMaterial);
-                }
-                return Task.FromResult(0);
-            }
-            else
-            {
-                //rawMaterial.AmountRM = 0;
-                return _database.InsertAsync(rawMaterial);
-            }
-        }
-        public Task<int> SaveItemListRM (ItemsListRMModel itemsListRM)
-        {
-            if(itemsListRM.Id != 0)
-            {
-                return _database.UpdateAsync(itemsListRM);
-            } else
-            {
-                return _database.InsertAsync(itemsListRM);
-            }
-        }
-        public Task UpdateRelationItemRM(ItemsListRMModel itemsListRM)
-        {
-            return _database.UpdateWithChildrenAsync(itemsListRM);
-        }
-        private async void calculatePriceponderd(RawMaterialModel rawMaterial)
-        {
-            var inPos = _database.GetWithChildrenAsync<RawMaterialModel>(rawMaterial.Id).Result;
-            var cpp = ((inPos.CantidadRM * inPos.CostoRM) + (rawMaterial.CantidadRM * rawMaterial.CostoRM)) / (inPos.CantidadRM + rawMaterial.CantidadRM);
-            inPos.CostoRM = (float)cpp;
-            await _database.UpdateAsync(inPos);
-        }
-        public Task<int> UpdateRawMaterial(RawMaterialModel rawMaterial)
-        {
-            if (rawMaterial.Id != 0)
-            {
-                return _database.UpdateAsync(rawMaterial);
-            } else
-            {
-                return Task.FromResult(0);
-            }
-        }
-        public Task UpdateRealtionRawMat(RawMaterialModel rawMaterial)
-        {
-            return _database.UpdateWithChildrenAsync(rawMaterial);
-        }
-        public Task<int> SaveListRM(ListRMModel listRawMaterial)
-        {
-            if (listRawMaterial.Id != 0)
-            {
-                
-                return _database.UpdateAsync(listRawMaterial);
-            }
-            else
-            {
-                return _database.InsertAsync(listRawMaterial);
-            }
-            
-        }
-        public Task<List<ItemsListRMModel>> GetAllItems()
-        {
-            return _database.GetAllWithChildrenAsync<ItemsListRMModel>();
-        }
-        public Task<ListRMModel> GetListRM(int i)
-        {
-            return _database.GetWithChildrenAsync<ListRMModel>(i);  
-        }
-        public Task<RawMaterialModel> GetOneRM(int i)
-        {
-            return _database.GetWithChildrenAsync<RawMaterialModel>(i);
-        }
-        public Task<List<ListRMModel>> GetAllRMList()
-        {
-            return _database.GetAllWithChildrenAsync<ListRMModel>();
-        }
-        public Task<List<RawMaterialModel>> GetMR()
-        {
-            return _database.GetAllWithChildrenAsync<RawMaterialModel>();
-        }
-        public Task UpdateListRM(ListRMModel listRMModel)
-        {
-            var t = _database.UpdateWithChildrenAsync(listRMModel);
-
-            return t;
-        }
-        public Task<int> DeleteRawMaterial(RawMaterialModel rawMaterial)
-        {
-            return _database.DeleteAsync(rawMaterial);
-        }
-        public void UpdateInvRM(List<RawMaterialModel> rawMaterials)
-        {
-            foreach (var raw in rawMaterials)
-            {
-                var query = (from a in _database.Table<RawMaterialModel>()
-                             where a.NameRM == raw.NameRM & a.UnitMeasurementRM == raw.UnitMeasurementRM
-                             select a).FirstOrDefaultAsync().Result;
-               
-                query.CantidadRM += raw.CantidadRM;
-                _database.UpdateAsync(query);
+                return _database.InsertAsync(saldosRM);
             }
         }
 
-        //procesos de Kardex de materia prima
-        public Task<int> SaveKardesxRM(KardexRMModel kardexRM)
+        public Task UpdateRelationsSaldosRM(SaldosRMModel saldosRM)
         {
-            if(kardexRM.Id != 0)
-            {
-                return _database.UpdateAsync(kardexRM);
-            }
-            else 
-            {
-                return _database.InsertAsync(kardexRM);
-            }
+            return _database.UpdateWithChildrenAsync(saldosRM);
         }
 
-        public Task UpdateRelationsKardexRM(KardexRMModel kardexModel)
+        public Task<List<SaldosRMModel>> GetAllSaldos()
         {
-            return _database.UpdateWithChildrenAsync(kardexModel);
+            return _database.GetAllWithChildrenAsync<SaldosRMModel>();
         }
 
-        //Procesos Grupos de Materia Prima
-        public Task<int> SaveGroupRM(GroupsRMModel group)
+        public Task<List<SaldosRMModel>> GetSaldosxKardex(KardexRMModel kardexRM)
         {
-            if(group.Id != 0)
-            {
-                return _database.UpdateAsync(group);
-            }
-            else
-            {
-                return _database.InsertAsync(group);
-            }
-        }
+            var saldoss = _database.Table<SaldosRMModel>();
 
-        public Task<List<GroupsRMModel>> GetGroupRM()
-        {
-            return _database.Table<GroupsRMModel>().ToListAsync();
+            var cons = (from a in saldoss
+                        where a.KardexRMModelId == kardexRM.Id
+                        select a).ToListAsync();
+            return cons;
         }
+        #endregion
 
-        public Task<GroupsRMModel> GetESpecificGroup(GroupsRMModel rMModel)
-        {
-            //return _database.Table<GroupsRMModel>().Where(x => x.Id == rMModel.Id).FirstOrDefaultAsync();
-            return _database.GetWithChildrenAsync<GroupsRMModel>(rMModel.Id);
-        }
-
-        //Procesos Unidades de medida de Materia prima
-        public Task<int> SaveUMedidaRM(UMedidasRMModel uMedida)
-        {
-            if(uMedida.Id != 0) 
-            {
-                return _database.UpdateAsync(uMedida);
-            }
-            else
-            {
-                return _database.InsertAsync(uMedida);
-            }
-        }
-
-        public Task<List<UMedidasRMModel>> GetUMedidadRM()
-        {
-            return _database.Table<UMedidasRMModel>().ToListAsync();
-        }
-
-        //Metodos de Mano de Obra (Work Force)
+        /*Metodos de Mano de Obra (Work Force)*/
+        #region Mano de Obra
         public Task<int> SaveWorkForce(WorkForceModel workForce)
         {
             if (workForce.Id != 0)
@@ -506,6 +598,14 @@ namespace ReinadelCisne.Services
                 return m;
             }
         }
+        public Task UpdateRelationWF(WorkForceModel workForce)
+        {
+            return _database.UpdateWithChildrenAsync(workForce);
+        }
+        public Task<List<WorkForceModel>> GetAllWorkForce()
+        {
+            return _database.GetAllWithChildrenAsync<WorkForceModel>();
+        }
         public Task<int> SaveListWF(ListWFModel listWF)
         {
             if (listWF.Id != 0)
@@ -515,9 +615,7 @@ namespace ReinadelCisne.Services
             }
             else
             {
-                var m = _database.InsertAsync(listWF);
-
-                return m;
+                return _database.InsertAsync(listWF);
             }
         }
         public Task UpdateListWF(ListWFModel listWF)
@@ -537,9 +635,60 @@ namespace ReinadelCisne.Services
         public Task<int> DeleteWorkcForce(WorkForceModel workForce)
         {
             return _database.DeleteAsync(workForce);
+        } 
+        public Task<int> SavePersonal(PersonalModel personal)
+        {
+            if (personal.Id != 0)
+            {
+
+                return _database.UpdateAsync(personal);
+            }
+            else
+            {
+                return _database.InsertAsync(personal);                
+            }
         }
-        
-        //Funciones Otros Costos
+        public Task<int> DeletePersonal(PersonalModel personal)
+        {
+            return _database.DeleteAsync(personal);
+        }
+        public Task UpdateRelationsPersonal(PersonalModel personal)
+        {
+            return _database.UpdateWithChildrenAsync(personal);
+        }
+        public Task UpdateRelationsPayments(PaymentsModel payments)
+        {
+            return _database.UpdateWithChildrenAsync(payments);
+        }
+        public Task<int> SavePayments(PaymentsModel payments)
+        {
+            if (payments.Id != 0)
+            {
+
+                return _database.UpdateAsync(payments);
+            }
+            else
+            {
+                return _database.InsertAsync(payments);
+            }
+        }
+        public Task<int> DeletePayment(PaymentsModel payments)
+        {
+            return _database.DeleteAsync(payments);
+        }
+        public Task<WorkForceModel> GetWorkForce(int workForce)
+        {
+            return _database.GetWithChildrenAsync<WorkForceModel>(workForce);
+        }
+
+        public Task<PersonalModel> GetPersonal(int personal)
+        {
+            return _database.GetWithChildrenAsync<PersonalModel>(personal);
+        }
+        #endregion
+
+        //Funciones Otros Costos o Costos Indirectos
+        #region Otros Costos
         public Task<int> SaveOtherCost(OtherCostModel otherCost)
         {
             if (otherCost.Id != 0)
@@ -554,6 +703,14 @@ namespace ReinadelCisne.Services
                 return m;
             }
         }
+        public Task UpdateRelationOC(OtherCostModel otherCost)
+        {
+            return _database.UpdateWithChildrenAsync(otherCost);
+        }
+        public Task<List<OtherCostModel>> GetAllOtherCost()
+        {
+            return _database.GetAllWithChildrenAsync<OtherCostModel>();
+        }
         public Task<int> SaveListOC(ListOCModel listOC)
         {
             if (listOC.Id != 0)
@@ -563,14 +720,12 @@ namespace ReinadelCisne.Services
             }
             else
             {
-                var m = _database.InsertAsync(listOC);
-
-                return m;
+                return _database.InsertAsync(listOC);
             }
         }
         public Task UpdateListOC(ListOCModel listOC)
         {
-            return _database.UpdateWithChildrenAsync(listOC);            
+            return _database.UpdateWithChildrenAsync(listOC);
         }
         public Task<List<ListOCModel>> GetListsOC()
         {
@@ -583,6 +738,7 @@ namespace ReinadelCisne.Services
         public Task<int> DeleteOtherCost(OtherCostModel otherCost)
         {
             return _database.DeleteAsync(otherCost);
-        }
+        } 
+        #endregion
     }
 }

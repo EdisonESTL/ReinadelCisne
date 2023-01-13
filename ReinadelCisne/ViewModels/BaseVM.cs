@@ -57,6 +57,27 @@ namespace ReinadelCisne.ViewModels
             Raws = rawMaterials;
         }
 
+        public bool CampsNullsEmpty(List<string> vals)
+        {
+            int aux = 0;
+            foreach(var s in vals)
+            {
+                if (string.IsNullOrWhiteSpace(s))
+                {
+                    aux = 1;
+                }
+            }
+
+            if(aux == 0)
+            {
+                return false;
+            }
+            else
+            {
+                return true;
+            }
+        }
+
         public BaseVM()
         {
             ObtenerUser();

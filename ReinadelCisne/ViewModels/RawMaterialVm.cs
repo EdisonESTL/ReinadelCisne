@@ -23,7 +23,22 @@ namespace ReinadelCisne.ViewModels
                 OnPropertyChanged();
             }
         }
+        
+        private GroupsRMModel _groupSelected;
+        public GroupsRMModel GroupSelected
+        {
+            get => _groupSelected;
+            set
+            {
+                if (_groupSelected != value)
+                {
+                    _groupSelected = value;
+                    OnPropertyChanged();
 
+                }
+            }
+        }
+        
         private List<GroupsRMModel> searchResults = App.Database.GetGroupRM().Result;
         public List<GroupsRMModel> SearchResults
         {
@@ -37,45 +52,12 @@ namespace ReinadelCisne.ViewModels
                 OnPropertyChanged();
             }
         }
+        
         public ObservableCollection<RawMaterialModel> RawMaterials { get; set; } = new ObservableCollection<RawMaterialModel>();
         public ObservableCollection<GroupsRMModel> GroupsRMs { get; set; } = new ObservableCollection<GroupsRMModel>();
+        public ObservableCollection<KardexRMModel> KardexRMs { get; set; } = new ObservableCollection<KardexRMModel>();
 
-
-        private GroupsRMModel _groupSelected;
-        public GroupsRMModel GroupSelected
-        {
-            get => _groupSelected;
-            set
-            {
-                if(_groupSelected != value)
-                {
-                    _groupSelected = value;
-                    OnPropertyChanged();
-                    
-                }
-            }
-        }
-
-        private void BuscarGR(GroupsRMModel groupSelected)
-        {
-            var resp = App.Database.GetESpecificGroup(groupSelected).Result;
-            var resp2 = App.Database.GetMR().Result;
-
-            var g = (from a in resp2
-                     where a.UGroupModel == groupSelected.Id
-                     select a).ToList();
-
-            if(g != null)
-            {
-                RawMaterials.Clear();
-                foreach (var n in g)
-                {
-                    RawMaterials.Add(n);
-                }
-            }
-            
-        }
-
+ 
         public ICommand PerformSearch => new Command(() =>
         {
             BuscarGR(GroupSelected);
@@ -89,13 +71,33 @@ namespace ReinadelCisne.ViewModels
 
             IsRefreshing = false;
         });
-
         public ICommand PushCommand => new Command((obj) =>
         {
             string butt = obj as string;
             Direccionar(butt);
         });
+        public ICommand SelectdCommand => new Command((obj) =>
+         {
+             var rm = obj as RawMaterialModel;
+             ListRMs();
+             Shell.Current.GoToAsync($"//Rini/RMateriaPrima/KardeRM?IdRM={rm.Id}");
+         });
 
+        public ICommand EliminarCommand => new Command((obj) =>
+        {
+            RawMaterialModel raw = obj as RawMaterialModel;
+            App.Database.DeleteRawMaterial(raw);
+            ListRMs();
+            Shell.Current.DisplayAlert("Elemento Eliminado", "Materia prima eliminada correctamente", "ok");
+            
+        });
+
+        public ICommand ModificarCommand => new Command((obj) =>
+        {
+            RawMaterialModel raw = obj as RawMaterialModel;
+
+            Shell.Current.GoToAsync($"//Rini/RMateriaPrima/NewMP?modificarRM={raw.Id}");
+        });
         private void Direccionar(string butt)
         {
             switch (butt)
@@ -116,7 +118,28 @@ namespace ReinadelCisne.ViewModels
                     break;
             }
         }
+        private void BuscarGR(GroupsRMModel groupSelected)
+        {
+            if(groupSelected != null)
+            {
+                var resp = App.Database.GetESpecificGroup(groupSelected).Result;
+                var resp2 = App.Database.GetMR().Result;
 
+                var g = (from a in resp2
+                         where a.UGroupModel == groupSelected.Id
+                         select a).ToList();
+
+                if (g != null)
+                {
+                    RawMaterials.Clear();
+                    foreach (var n in g)
+                    {
+                        RawMaterials.Add(n);
+                    }
+                }
+            }           
+
+        }
         private void ListGroupsRM()
         {
             List<GroupsRMModel> result = App.Database.GetGroupRM().Result;
@@ -132,33 +155,38 @@ namespace ReinadelCisne.ViewModels
 
 
         }
+        private void ListRMs()
+        {
+            GroupSelected = null;
+            RawMaterials.Clear();
+
+            var resp = App.Database.GetKardexsRM().Result;
+            
+            if (resp.Count > 0)
+            {
+                foreach (var obj in resp)
+                {
+                    if (obj.SaldosRMs.Count > 0 && obj.RawMaterialModell != null) 
+                    {
+                        var respi = App.Database.GetSaldosxKardex(obj).Result;
+                        var ord = respi.OrderByDescending(x => x.Date).FirstOrDefault();
+
+                        RawMaterialModel rrm = App.Database.GetOneRM(obj.RawMaterialModell.Id).Result;
+                        rrm.CantidadRM = ord.Cantidad;
+                        rrm.CostoRM = (float)ord.ValorUnitario;
+                        rrm.TotalCost = (float)ord.SaldoTotal;
+
+                        RawMaterials.Add(rrm);
+                    }                    
+                }
+            }
+
+        }
 
         public RawMaterialVm()
         {
             ListRMs();
             ListGroupsRM();
-        }
-
-        private async void ListRMs()
-        {
-            GroupSelected = null;
-            RawMaterials.Clear();
-            List<RawMaterialModel> lrm = await App.Database.GetMR();
-            if(lrm != null)
-            {
-                foreach (var obj in lrm)
-                {
-                    RawMaterials.Add(obj);
-                    /*RawMaterials.Add(new RawMaterialShModel()
-                    {
-                        Description = obj.NameRM,
-                        Measurament = obj.UMedidaRM.Description,
-                        Amount = obj.AmountRM,
-                        UnitCost = obj.CostoRM.ToString("N2")
-                    });*/
-                }
-            }
-            
         }
     }
 }

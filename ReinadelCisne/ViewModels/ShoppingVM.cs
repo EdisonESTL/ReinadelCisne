@@ -15,6 +15,17 @@ namespace ReinadelCisne.ViewModels
 {
     public class ShoppingVM : BaseVM, IQueryAttributable
     {
+        private RawMaterialModel _rawMat;
+        public RawMaterialModel RawMat
+        {
+            get => _rawMat;
+            set
+            {
+                _rawMat = value;
+                OnPropertyChanged();
+            }
+        }
+
         private bool _isRefreshing = false;
         public bool IsRefreshing
         {
@@ -47,7 +58,7 @@ namespace ReinadelCisne.ViewModels
                 OnPropertyChanged();
             }
         }
-        private DateTime _date = DateTime.Now.Date;
+        private DateTime _date = DateTime.Now;
         public DateTime Date
         {
             get { return _date; }
@@ -81,94 +92,7 @@ namespace ReinadelCisne.ViewModels
                 OnPropertyChanged();
             }
         }
-        /*
-        private string _id = "0";
-        public string Id
-        {
-            get { return _id; }
-            set
-            {
-                _id = value;
-                OnPropertyChanged();
-            }
-        }
-        
-        private float _amount;
-        public float Amount
-        {
-            get => _amount;
-            set
-            {
-                _amount = value;
-                OnPropertyChanged();
-            }
-        }
-
-        private string _measurement;
-        public string Measurement
-        {
-            get { return _measurement; }
-            set
-            {
-                _measurement = value;
-                OnPropertyChanged();
-            }
-        }
-
-        private string _description;
-        public string Description
-        {
-            get { return _description; }
-            set
-            {
-                _description = value;
-                OnPropertyChanged();
-            }
-        }
-
-        private string _unitCost;
-        public string UnitCost
-        {
-            get { return _unitCost; }
-            set
-            {
-                _unitCost = value;
-                OnPropertyChanged();
-            }
-        }
-
-        private string _totalInv;
-        public string TotalInv
-        {
-            get { return _totalInv; }
-            set 
-            { 
-                _totalInv = value;
-                OnPropertyChanged();
-            }
-        }
-        
-        private float _count = 0;
-        public float Count
-        {
-            get { return _count; }
-            set
-            {
-                _count = value;
-                OnPropertyChanged();
-            }
-        }
-
-        private int _longList = 0;
-        public int LongList
-        {
-            get { return _longList; }
-            set
-            {
-                _longList = value;
-                OnPropertyChanged();
-            }
-        } */
+       
         public ObservableCollection<RawMaterialModel> ListCompra { get; set; } = new ObservableCollection<RawMaterialModel>();
         public ObservableCollection<RawMaterialModel> NamesRM { get; set; } = new ObservableCollection<RawMaterialModel>();
         public ObservableCollection<PassString> ListPS { get; private set; } = new ObservableCollection<PassString>();
@@ -193,75 +117,35 @@ namespace ReinadelCisne.ViewModels
         });
         public ICommand BackCommand => new Command(() =>
         {
-            Shell.Current.GoToAsync("//Rini/RCompras/SelectionPS");
+            Shell.Current.GoToAsync("//Rini/RMateriaPrima/RCompras/SelectionRM");
         });
-        /*public ICommand AddCompra => new Command(() =>
-        {
-            if(Amount != 0 & !string.IsNullOrEmpty(Description) & !string.IsNullOrEmpty(UnitCost))
-            {
-                var totalC = (float)(Amount * Convert.ToDouble(UnitCost));
-
-                RawMaterialModel shModel = new RawMaterialModel
-                {
-                    Id = int.Parse(Id),
-                    AmountRM = Convert.ToDouble(Amount),
-                    UnitMeasurementRM = Measurement,
-                    NameRM = Description,
-                    CostoRM = float.Parse(UnitCost),
-                    TotalCost = totalC
-                };
-
-                if (IdMOD != null)
-                {
-                    ListCompra.RemoveAt(int.Parse(IdMOD));
-                    ListCompra.Insert(int.Parse(IdMOD), shModel);
-                    Count = 0;
-                    foreach (var a in ListCompra)
-                    {
-                        Count += (float)(a.CostoRM * a.AmountRM);
-                    }
-
-                    IdMOD = null;
-                }
-                else
-                {
-                    ListCompra.Add(shModel);
-                    Count += totalC;
-                }
-
-                LongList = ListCompra.Count;
-
-                TotalInv = Count.ToString("N2") + "$";
-
-                Measurement = string.Empty;
-                Description = string.Empty;
-                UnitCost = string.Empty;
-                Amount = 0;
-            }
-        });*/
+        
 
         public ICommand SaveCompra => new Command(() =>
         {
-            if(PrecioCompra != 0 && CantCompra > 0)
+            if (PrecioCompra != 0 && CantCompra > 0)
             {
-                if(Product != null)
-                {
-                    GuardarProd(Product);
-                }
-                
+                GuardarComp();
+                Shell.Current.DisplayAlert("Éxito", "se ha guardado", "ok");
+                Shell.Current.GoToAsync("//Rini/RMateriaPrima");
             }
+            
+            
         });
 
         
-
         public ICommand CancelCommand => new Command(() =>
         {
-            //ClearShopping();
-            Shell.Current.GoToAsync("..");
+            Shell.Current.GoToAsync("//Rini/RMateriaPrima/RCompras/SelectionRM");
         });
         public ICommand NewShopCommand => new Command(() =>
         {
-            Shell.Current.GoToAsync("//Rini/RCompras/NewShopping/SelectionPS");
+            if (PrecioCompra != 0 && CantCompra > 0)
+            {
+                GuardarComp();
+                Shell.Current.GoToAsync("//Rini/RCompras/NewShopping/SelectionPS");
+            }
+            
         });
         public ICommand RegistrationComand => new Command(() =>
         {
@@ -271,150 +155,82 @@ namespace ReinadelCisne.ViewModels
         public Command<RawMaterialModel> ModifyCommand { get; set; }
         public ShoppingVM()
         {
-            //DeleteCommand = new Command<RawMaterialModel>(DeleteItemShop);
-            //ModifyCommand = new Command<RawMaterialModel>(ModifyItemShop);
-            //LoadNames();
         }
 
-        /*private void LoadNames()
+        private void GuardarComp()
         {
-            NamesRM.Clear();
-            var a = App.Database.GetMR().Result;
+            List<KardexRMModel> ListKar = App.Database.GetKardexsRM().Result;
+            KardexRMModel Kardex = (from a in ListKar
+                          where a.IdRawMaterial == RawMat.Id
+                          select a).FirstOrDefault();
 
-            foreach(var b in a)
-            {
-                NamesRM.Add(b);
-            }
-        }*/
-
-        public string IdMOD;
-        /*private void ModifyItemShop(RawMaterialModel obj)
-        {
-            IdMOD = Convert.ToString(ListCompra.IndexOf(obj));
-
-            Id = obj.Id.ToString();
-            Amount = (float)obj.AmountRM;
-            Measurement = obj.UnitMeasurementRM;
-            Description = obj.NameRM;
-            UnitCost = obj.CostoRM.ToString("N2");
-        }
-        private void DeleteItemShop(RawMaterialModel obj)
-        {
-            ListCompra.Remove(obj);
-            Count = 0;
-            foreach (var a in ListCompra)
-            {
-                Count += (float)(a.CostoRM * a.AmountRM);
-            }
-            TotalInv = Count.ToString("N2") + "$";
-            LongList = ListCompra.Count;
-        }
-        private void ClearShopping()
-        {
-            InvoiceNumber = string.Empty;
-            NameEstablishment = string.Empty;
-            Measurement = string.Empty;
-            Description = string.Empty;
-            UnitCost = string.Empty;
-            TotalInv = string.Empty;
-            Amount = 0;
-            Count = 0;
-            LongList = 0;
-            ListCompra.Clear();
-        }
-
-        public List<RawMaterialModel> rgm { get; set; } = new List<RawMaterialModel>();
-        private async void SaveShopping()
-        {
+            #region Guardar compra
             ShoppingModel shopping = new ShoppingModel
             {
-                ShoppingDate = Date,
-                NameEstablishment = NameEstablishment,
-                InvoiceNumber = InvoiceNumber,
-                TotalShop = Count
+                ShoppingDate = DateTime.Now,
+                TotalShop = (float)(PrecioCompra * CantCompra)
+            };
+            var cc = App.Database.SaveShopping(shopping);
+            cc.Wait();
+            ShoppingListModel shoppingList = new ShoppingListModel
+            {
+                Date = DateTime.Now,
+                Amount = CantCompra,
+                ValorUnitario = PrecioCompra,
+                TotalCost = CantCompra * PrecioCompra
+            };
+            var ff = App.Database.SaveListShop(shoppingList);
+            ff.Wait();
+
+            shoppingList.ShoppingModel = shopping;
+            shoppingList.KardexRMModel = Kardex;
+
+            App.Database.UpdateRelationsListShop(shoppingList);
+
+            Kardex.ShoppingModell.Add(shoppingList);
+            App.Database.UpdateRelationsKardexRM(Kardex);
+
+         
+            #endregion
+
+            ActualizarSaldos(Kardex, shopping.Id);
+
+        }
+
+        private void ActualizarSaldos(KardexRMModel kardex, int id)
+        {
+            var saldos = App.Database.GetSaldosxKardex(kardex).Result;
+            var ultsaldo = saldos.LastOrDefault();
+
+            double newCant = ultsaldo.Cantidad + CantCompra;
+            double newSaldo = ultsaldo.SaldoTotal + (CantCompra * PrecioCompra);
+
+            SaldosRMModel saldosRM = new SaldosRMModel()
+            {
+                Date = Date,
+                Cantidad = newCant,
+                SaldoTotal = newSaldo,
+                ValorUnitario = newSaldo / newCant,
+                IdReconcimiento = id,
+                NombreReconocimiento = "Compra"
             };
 
-            await App.Database.SaveShopping(shopping);
+            App.Database.SaveSaldoRM(saldosRM);
 
-            foreach (var obj in ListCompra)
-            {
-                RawMaterialModel rawMaterial = new RawMaterialModel
-                {
-                    Id = obj.Id,
-                    NameRM = obj.NameRM,
-                    AmountRM = obj.AmountRM,
-                    CostoRM = obj.CostoRM, 
-                    UnitMeasurementRM = obj.UnitMeasurementRM
-                };
+            kardex.SaldosRMs.Add(saldosRM);
 
-                ShoppingListModel shoppingItem = new ShoppingListModel
-                {
-                    Amount = obj.AmountRM,
-                    ValorUnitario = Convert.ToDouble(obj.CostoRM),
-                    TotalCost = Convert.ToDouble(obj.AmountRM * Convert.ToDouble(obj.CostoRM))
-                };
+            App.Database.UpdateRelationsKardexRM(kardex);
 
-                await App.Database.SaveRawMaterial(rawMaterial);
-                await App.Database.SaveListShop(shoppingItem);
-                
-                shoppingItem.RawMaterial = new RawMaterialModel();
-                shoppingItem.RawMaterial = rawMaterial;
-                shoppingItem.ShoppingModel = new ShoppingModel();
-                shoppingItem.ShoppingModel = shopping;
-
-                await App.Database.UpdateRelationsListShop(shoppingItem);
-            }
-
-            //await Shell.Current.DisplayAlert("Éxito", "se guardo la compra", "ok");
-            LoadNames();
-            UpdateStock();
-            //UpdateWeightedAveragePrice();
-            //var op = App.Database.GetMR().Result;
-            //var ops = App.Database.ListShoppingList().Result;
-            ClearShopping();
         }
 
-        private void UpdateWeightedAveragePrice()
-        {
-            List<ShoppingListModel> shops = App.Database.ListShoppingList().Result;
-            float sumprice = 0;
-            int cc = 0;
-            var RMgroups = (from p in shops
-                      group p by p.RawMaterialModelId).ToList(); ;
-
-            foreach (var rm in RMgroups)
-            {
-                cc = rm.Count();
-
-                foreach (var mm in rm)
-                {
-                    sumprice += (float)mm.ValorUnitario;
-                }
-                var pond = sumprice / cc;
-
-                var rmup = App.Database.GetOneRM(rm.Key).Result;
-                rmup.CostoRM = pond;
-                App.Database.UpdateRawMaterial(rmup);
-            }
-        }
-        private void UpdateStock()
-        {
-            List<RawMaterialModel> rawsUp = new List<RawMaterialModel>();
-            foreach(var rr in ListCompra)
-            {
-                rawsUp.Add(rr);
-            }
-            App.Database.UpdateInvRM(rawsUp);
-            //var fgh = App.Database.GetMR().Result;
-        }*/
-
+        public string IdMOD;
+        
         public void ApplyQueryAttributes(IDictionary<string, string> query)
         {
             try
             {
-                string regreso = HttpUtility.UrlDecode(query["objId"]);
-                string TipoElemento = HttpUtility.UrlDecode(query["TipoElemento"]);
-                cargarLItem(regreso, TipoElemento);
+                string idRM = HttpUtility.UrlDecode(query["IdRM"]);
+                CargarLItem(idRM);
             }
             catch (Exception)
             {
@@ -422,58 +238,19 @@ namespace ReinadelCisne.ViewModels
             }
         }
 
-        private void cargarLItem(string regreso, string tipoElemento)
+        private void CargarLItem(string idRM)
         {
-            switch (tipoElemento)
-            {
-                case "producto":
-                    RecuperarProducto(regreso);
-                    break;
-                case "materiaprima":
-                    RecuperarMateriaPrima(regreso);
-                    break;
-                default:
-                    break;
-            }
-        }
+            var rM = App.Database.GetOneRM(int.Parse(idRM)).Result;
+            var krd = App.Database.GetKardexXRM(rM).Result;
+            var saldo = App.Database.GetSaldosxKardex(krd).Result;
 
-        /*private void CargarListaCompra(Task<ProductModel> prod)
-        {
-            throw new NotImplementedException();
-        }*/
-        
-        private void RecuperarMateriaPrima(string regreso)
-        {
-            RawMaterialModel recup = App.Database.GetOneRM(int.Parse(regreso)).Result;
+            var ultsal = saldo.LastOrDefault();
 
+            rM.CantidadRM = ultsal.Cantidad;
+            rM.CostoRM = (float)ultsal.ValorUnitario;
+            rM.TotalCost = (float)ultsal.SaldoTotal;
 
-            /*PassString pass = new PassString
-            {
-                Data0 = recup.Id.ToString(),
-                Data1 = recup.NameRM,
-                Data2 = recup.AmountRM.ToString(),
-                Data3 = "$" + recup.CostoRM.ToString(),
-                Data4 = "$",
-                Data5 = "materiaprima"
-            };
-            ListPS.Add(pass);*/
-        }
-
-        
-        private void RecuperarProducto(string regreso)
-        {            
-            Product = App.Database.Get1Product(int.Parse(regreso)).Result;
-            /*Product = recup;
-            PassString pass = new PassString
-            {
-                Data0 = recup.Id.ToString(),
-                Data1 = recup.NameProduct,
-                Data2 = recup.CantProduct.ToString(),
-                Data3 = "$"+recup.PrecioVentaProduct.ToString(),
-                Data4 = "$"+recup.CostElaboracionProduct.ToString(),
-                Data5 = "producto"
-            };
-            ListPS.Add(pass);*/
+            RawMat = rM;
         }
 
         private void GuardarProd(ProductModel product)
@@ -515,21 +292,11 @@ namespace ReinadelCisne.ViewModels
                 App.Database.SaveRawMaterial(rawMaterial);
                 App.Database.SaveListShop(shoppingItem);
 
-                /*shoppingItem.RawMaterial = new RawMaterialModel();
-                shoppingItem.RawMaterial = rawMaterial;*/
                 shoppingItem.ShoppingModel = new ShoppingModel();
-                //shoppingItem.ShoppingModel = sh
 
                 App.Database.UpdateRelationsListShop(shoppingItem);
             }
 
-            //await Shell.Current.DisplayAlert("Éxito", "se guardo la compra", "ok");
-            //LoadNames();
-            //UpdateStock();
-            //UpdateWeightedAveragePrice();
-            //var op = App.Database.GetMR().Result;
-            //var ops = App.Database.ListShoppingList().Result;
-            //ClearShopping();
         }
     }
 }

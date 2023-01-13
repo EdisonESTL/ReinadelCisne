@@ -1,0 +1,130 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:ReinadelCisne.ViewModels"
+             x:Class="ReinadelCisne.Views.WorkForceView"
+             Title="Mano de Obra">
+    <ContentPage.BindingContext>
+        <vm:WorkForceVM/>
+    </ContentPage.BindingContext>
+    <ContentPage.Content>
+        <StackLayout Padding="7">
+
+            <Frame Style="{StaticResource Frame1}"
+                   BorderColor="Black"
+                   Padding="0, 7, 0, 7"
+                   Margin="0,17,0,17">
+                <StackLayout>
+                    <Label Text="Tipo de mano de obra"
+                           Style="{StaticResource LabelTittles1}"/>
+                    <StackLayout Orientation="Horizontal"
+                         HorizontalOptions="Center"
+                         Margin="0,20,0,10">
+                        <Button Text="Directo"
+                        Style="{StaticResource Button2}"
+                                BorderColor="Black"
+                                BorderWidth="7"
+                                Command="{Binding PushCommand}"
+                                CommandParameter="directo"/>
+                        <Button Text="Indirecto"
+                        Style="{StaticResource Button2}"
+                                BorderColor="Black"
+                                BorderWidth="7"
+                                Command="{Binding PushCommand}"
+                                CommandParameter="indirecto"/>
+                    </StackLayout>
+                </StackLayout>
+            </Frame>
+            <CollectionView BackgroundColor="BlanchedAlmond"
+                            x:Name="ListWF"
+                            ItemsSource="{Binding WorkForces}"
+                            SelectionMode="Single"
+                            SelectionChangedCommand="{Binding SelectdCommand}" 
+                            SelectionChangedCommandParameter="{Binding SelectedItem , Source={x:Reference ListWF}}" >
+                <CollectionView.ItemsLayout>
+                    <LinearItemsLayout Orientation="Vertical"
+                        ItemSpacing="20"/>
+                </CollectionView.ItemsLayout>
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <SwipeView>
+                            <SwipeView.RightItems>
+                                <SwipeItems>                                    
+                                    <SwipeItem Text="Borrar"
+                                       IconImageSource="deleteL.png"
+                                       BackgroundColor="LightPink"
+                                       Command="{Binding Path=BindingContext.EliminarCommand , Source={x:Reference ListWF}}"
+                                       CommandParameter="{Binding .}"/>
+                                    <SwipeItem Text="Modificar"
+                                       IconImageSource="newa.png"
+                                       BackgroundColor="LightGreen"
+                                       Command="{Binding Path=BindingContext.ModificarCommand , Source={x:Reference ListWF}}"
+                                       CommandParameter="{Binding .}"/>
+                                </SwipeItems>
+                            </SwipeView.RightItems>
+                            <!-- Content -->
+                            <Frame Style="{StaticResource Frame1}"
+                               Padding="11,11,11,11">
+                                <Grid RowDefinitions="Auto, Auto"
+                              ColumnDefinitions="*, Auto"
+                              HorizontalOptions="Center"
+                              >
+                                    <Image Source="manobraL.png"
+                                       Grid.Row="0"
+                                       Grid.Column="0"/>
+                                    <Label TextColor="Black"
+                                   Grid.Row="0"
+                                       Grid.Column="1">
+                                        <Label.FormattedText>
+                                            <FormattedString>
+                                                <Span Text="Puesto: " FontAttributes="Bold"
+                                              />
+                                                <Span Text="{Binding Name}"/>
+                                            </FormattedString>
+                                        </Label.FormattedText>
+                                    </Label>
+                                    <Label TextColor="Black"
+                                   Grid.Row="1"
+                                       Grid.Column="1">
+                                        <Label.FormattedText>
+                                            <FormattedString>
+                                                <Span Text="Tipo: " FontAttributes="Bold"/>
+                                                <Span Text="{Binding Type}"/>
+                                            </FormattedString>
+                                        </Label.FormattedText>
+                                    </Label>
+                                </Grid>
+                            </Frame>
+                        </SwipeView>                                              
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+                <CollectionView.EmptyView>
+                    <StackLayout HorizontalOptions="CenterAndExpand"
+                             VerticalOptions="CenterAndExpand">
+                        <Label Text="Hola, no hay mano de obra registrada para la producción de un producto."
+                                   Margin="10,25,10,10"
+                                   Style="{StaticResource LabelTittlesColLectionView}"
+                                   HorizontalOptions="Fill"
+                                   HorizontalTextAlignment="Center" 
+                                   TextColor="Black"/>
+                    </StackLayout>
+                </CollectionView.EmptyView>
+            </CollectionView>
+            <Grid ColumnDefinitions="Auto, Auto"
+                  RowDefinitions="Auto"
+                  HorizontalOptions="Center">
+                <Button Text="Cancelar"
+                        Grid.Column="0"
+                        Style="{StaticResource ButtonCancel}"
+                        Command="{Binding PushCommand}"
+                        CommandParameter="regresar"/>
+                <Button Text="Nuevo MO"
+                        Grid.Column="1"
+                        TextColor="White"
+                        Style="{StaticResource Button1}"
+                        Command="{Binding PushCommand}"
+                        CommandParameter="nuevoM"/>
+            </Grid>
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

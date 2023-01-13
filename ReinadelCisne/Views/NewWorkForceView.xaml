@@ -1,0 +1,57 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:ReinadelCisne.ViewModels"
+             x:Class="ReinadelCisne.Views.NewWorkForceView"
+             Title="Nuevo puesto de trabajo"
+             BackgroundColor="{StaticResource CuartoColor}">
+    <ContentPage.BindingContext>
+        <vm:NewWorkForceVM/>
+    </ContentPage.BindingContext>
+    <ContentPage.Content>
+        <StackLayout Margin="16"
+                     VerticalOptions="CenterAndExpand">
+            <Label Text="Puesto laboral"
+                   Style="{StaticResource LabelTittlesColLectionView}"
+                   HorizontalOptions="StartAndExpand"/>
+            <Entry Style="{StaticResource Entry1}"
+                   Text="{Binding JobTitle}"></Entry>
+
+            <Label Text="Tareas"
+                   Style="{StaticResource LabelTittlesColLectionView}"
+                   HorizontalOptions="StartAndExpand"
+                   />
+            <Editor Style="{StaticResource Editor1}"
+                    AutoSize="TextChanges"
+                    Text="{Binding Tasks}"/>
+
+            <Label Text="Tipo:" 
+                   Style="{StaticResource LabelTittlesColLectionView}"
+                   HorizontalOptions="StartAndExpand"/>
+
+            <Picker TextColor="Black"
+                    Title="Selecione una opción"
+                    SelectedItem="{Binding SelecctTypeWF}"
+                    BackgroundColor="White">
+                <Picker.ItemsSource>
+                    <x:Array Type="{x:Type x:String}">
+                        <x:String>Directo</x:String>
+                        <x:String>Indirecto</x:String>
+                    </x:Array>
+                </Picker.ItemsSource>
+            </Picker>
+
+            <StackLayout Orientation="Horizontal"
+                         HorizontalOptions="CenterAndExpand">
+                <Button Text="Cancelar"
+                        Style="{StaticResource ButtonCancel}"
+                        Command="{Binding Push}"
+                        CommandParameter="cancelar"/>
+                <Button Text="Guardar"
+                        Style="{StaticResource ButtonAdd}"
+                        Command="{Binding Push}"
+                        CommandParameter="guardar"/>
+            </StackLayout>
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

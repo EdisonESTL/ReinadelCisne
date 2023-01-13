@@ -3,30 +3,109 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:vm="clr-namespace:ReinadelCisne.ViewModels"
              x:Class="ReinadelCisne.Views.ServicesView"
-             Title="Servicios">
+             Title="Productos en proceso">
     <ContentPage.BindingContext>
         <vm:ServicesVM/>
     </ContentPage.BindingContext>
     <ContentPage.Content>
         <StackLayout Padding="10,10,10,15">
-            <Label Text="No hay servicios registrados"
-                VerticalOptions="CenterAndExpand" 
-                HorizontalOptions="CenterAndExpand" TextColor="Black"/>
-            
-            <Grid RowDefinitions="50">
-                <Button Text="Inicio" Command="{Binding Push}"
-                        CommandParameter="inicio"
-                        Style="{StaticResource Button2}"
-                        FontAttributes="Bold"
-                        Grid.Column="0"
-                        ImageSource="arbol1.png"/>
-                <Button Text="Nuevo" Command="{Binding Push}"
-                        CommandParameter="nuevo"
-                        CornerRadius="30"
-                        Style="{StaticResource Button1}"
-                        Grid.Column="1"
-                        ImageSource="newa.png"/>
-            </Grid>
+            <RefreshView IsRefreshing="{Binding IsRefreshing}" Command="{Binding RefreshCommand}"
+                         Margin="10,0,10,0"
+                         VerticalOptions="CenterAndExpand"
+                         HorizontalOptions="CenterAndExpand">
+                <CollectionView x:Name="ListStock"
+                                ItemsSource="{Binding ListProdProce, Mode=TwoWay}" 
+                                SelectionMode="Single"
+                                SelectionChangedCommand="{Binding SelectListPP}"
+                                SelectionChangedCommandParameter="{Binding SelectedItem, Source={x:Reference ListStock}}">
+                    <CollectionView.ItemsLayout>
+                        <LinearItemsLayout Orientation="Vertical" ItemSpacing="7"/>
+                    </CollectionView.ItemsLayout>
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <Frame Style="{StaticResource FrameProductss}" HorizontalOptions="CenterAndExpand">
+                                <SwipeView BackgroundColor="Transparent">
+                                    <SwipeView.RightItems>
+                                        <SwipeItems>
+                                            <SwipeItem Text="Entregado"
+                                                       IconImageSource="shopsld.png"
+                                                   BackgroundColor="{StaticResource PrimerColor}"
+                                                   Command="{Binding Path=BindingContext.EntregaCommand,Source={x:Reference ListStock}}" CommandParameter="{Binding .}"
+                                            />                                           
+                                        </SwipeItems>
+                                    </SwipeView.RightItems>
+                                    <Grid RowDefinitions="*,Auto,Auto"
+                                          RowSpacing="0">
+                                        <Label Grid.Column="1"  Style="{StaticResource LabelTittles1}"
+                                               Grid.Row="0"
+                                               VerticalOptions="Center">
+                                            <Label.FormattedText>
+                                                <FormattedString>
+                                                    <Span Text="Cliente: " />
+                                                    <Span Text="{Binding ClientModel.Name}" />
+                                                </FormattedString>
+                                            </Label.FormattedText>
+                                        </Label>
+                                        <Label Grid.Column="1"  Style="{StaticResource LabelTittles1}"
+                                               Grid.Row="1">
+                                            <Label.FormattedText>
+                                                <FormattedString>
+                                                    <Span Text="Total: $ " />
+                                                    <Span Text="{Binding TotalSale}" />
+                                                </FormattedString>
+                                            </Label.FormattedText>
+                                        </Label>
+                                        
+                                        <Image Source="shipping.png"
+                                               Aspect="AspectFit"
+                                               VerticalOptions="Center"
+                                               Margin="7"
+                                               Grid.Row="1"
+                                               Grid.RowSpan="2"
+                                               Grid.Column="0"
+                                               />
+                                        <Label Grid.Column="0"  Style="{StaticResource LabelTittles1}"
+                                               Grid.Row="0"
+                                               BackgroundColor="White"
+                                               VerticalTextAlignment="Center"
+                                               HorizontalTextAlignment="Center">
+                                            <Label.FormattedText>
+                                                <FormattedString>
+                                                    <Span Text="Fecha entrega: " />
+                                                    <Span Text="{Binding DateDelivery, StringFormat=\{0:dddd d MMM yyyy\}}"/>
+                                                </FormattedString>
+                                            </Label.FormattedText>
+                                        </Label>
+                                        <Label Grid.Column="1"  Style="{StaticResource LabelTittles1}"
+                                               Grid.Row="2"
+                                               BackgroundColor="White"
+                                               >
+                                            <Label.FormattedText>
+                                                <FormattedString>
+                                                    <Span Text="# Prod:" />
+                                                    <Span Text="{Binding Orders.Count}"/>
+                                                </FormattedString>
+                                            </Label.FormattedText>
+                                        </Label>
+                                    </Grid>
+                                </SwipeView>
+                            </Frame>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+
+                    <CollectionView.EmptyView>
+                        <StackLayout HorizontalOptions="CenterAndExpand"
+                             VerticalOptions="CenterAndExpand">
+                            <Label Text="Hola, no hay productos en proceso registrados."
+                                   Margin="10,25,10,10"
+                                   Style="{StaticResource LabelTittlesColLectionView}"
+                                   HorizontalOptions="Fill"
+                                   HorizontalTextAlignment="Center" 
+                                   TextColor="Black"/>
+                        </StackLayout>
+                    </CollectionView.EmptyView>
+                </CollectionView>
+            </RefreshView>
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>

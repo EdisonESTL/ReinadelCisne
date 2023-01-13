@@ -10,8 +10,14 @@ namespace ReinadelCisne.Models
     {
         [PrimaryKey, AutoIncrement]
         public int Id { get; set; }
+        public float Total { get; set; }
+
+        [ForeignKey(typeof(ProductModel))]
+        public int ProducID { get; set; }
+        [OneToOne]
+        public ProductModel Product { get; set; }
 
         [OneToMany("ListWFModelId")]
-        public List<WorkForceModel> WorkForces { get; set; }
+        public List<PersonalModel> PersonalxProduct { get; set; }
     }
 }

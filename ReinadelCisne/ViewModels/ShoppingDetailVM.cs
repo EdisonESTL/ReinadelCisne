@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using ReinadelCisne.Models;
+using ReinadelCisne.Auxiliars;
 using System.Text;
 using System.Windows.Input;
 using Xamarin.Forms;
@@ -47,7 +48,7 @@ namespace ReinadelCisne.ViewModels
                 OnPropertyChanged();
             }
         }
-        public ObservableCollection<object> ShopsRMs { get; set; } = new ObservableCollection<object>();
+        public ObservableCollection<AuxiliarShoppindDetailxRM> ShopsRMs { get; set; } = new ObservableCollection<AuxiliarShoppindDetailxRM>();
         
         public ShoppingDetailVM()
         {
@@ -69,26 +70,27 @@ namespace ReinadelCisne.ViewModels
 
             var listsshoppings = App.Database.ListShoppingList().Result;
 
-            List<ShoppingListModel> ft = (from lis in listsshoppings
+            List<ShoppingListModel> listr = (from lis in listsshoppings
                      where lis.ShoppingModelId == shopping.Id
                      select lis).ToList();
 
-            var rawmaterialsList = App.Database.GetMR().Result;
-            /*
-            var listshp = (from shp in ft
-                           join mat in rawmaterialsList on shp.RawMaterialModelId equals mat.Id
-                           select new
-                           {
-                               Material = mat.NameRM,
-                               UnidMedida = mat.UnitMeasurementRM,
-                               Cantidad = shp.Amount,
-                               CostoU = shp.ValorUnitario.ToString("N2") + "$",
-                               CostoT = shp.TotalCost.ToString("N2") + "$"
-                           }).ToList();*/
-            /*foreach(var obj in listshp)
+            var kardexRMs = App.Database.GetKardexsRM().Result;
+
+            var fli = (from lit in listr
+                      join kardex in kardexRMs on lit.KardexRMModelId equals kardex.Id
+                      select new AuxiliarShoppindDetailxRM()
+                      {
+                          Shopping = lit,
+                          RawMaterial = kardex.RawMaterialModell
+                      }).ToList();
+
+
+            foreach(var obj in fli)
             {
+                var resp = App.Database.GetOneRM(obj.RawMaterial.Id).Result;
+                obj.RawMaterial = resp;
                 ShopsRMs.Add(obj);
-            }*/
+            }
         }
     }
 }

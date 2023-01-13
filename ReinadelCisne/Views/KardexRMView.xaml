@@ -1,0 +1,235 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:ReinadelCisne.ViewModels"
+             x:Class="ReinadelCisne.Views.KardexRMView"
+             Title="Kardex Materia Prima">
+    <ContentPage.BindingContext>
+        <vm:KardexRMVM/>
+    </ContentPage.BindingContext>
+    <ContentPage.Content>
+        <StackLayout Padding="7">
+            <Label Text="Registro"
+                   Style="{StaticResource LabelTittlesColLectionView}"/>
+            <StackLayout BindingContext="{Binding RawMaterial}">
+                <Label Style="{StaticResource LabelTittles1}"
+                HorizontalOptions="StartAndExpand">
+                    <Label.FormattedText>
+                        <FormattedString>
+                            <Span Text="Materia Prima: " FontAttributes="Bold"/>
+                            <Span Text="{Binding NameRM}"/>
+                        </FormattedString>
+                    </Label.FormattedText>
+                </Label>
+                <Label Style="{StaticResource LabelTittles1}"
+                HorizontalOptions="StartAndExpand">
+                    <Label.FormattedText>
+                        <FormattedString>
+                            <Span Text="Descripción: " FontAttributes="Bold"/>
+                            <Span Text="{Binding DescriptionRM}"/>
+                        </FormattedString>
+                    </Label.FormattedText>
+                </Label>                
+            </StackLayout>
+            <!--<Grid ColumnDefinitions="*, *, *" 
+                  RowDefinitions="Auto"
+                  HorizontalOptions="CenterAndExpand"
+                  Padding="0,10,0,6">
+                <Button Text="Entradas" 
+                        Style="{StaticResource Button2}"
+                        FontSize="10"
+                        FontAttributes="Bold"
+                        Grid.Column="0"/>
+                <Button Text="Salidas"
+                        Style="{StaticResource Button2}"
+                        FontSize="10"
+                        FontAttributes="Bold"
+                        Grid.Column="1"/>
+                <Button Text="Saldo"
+                        Style="{StaticResource Button2}"
+                        FontSize="10"
+                        FontAttributes="Bold"
+                        Grid.Column="2"/>
+            </Grid>-->
+            
+            <CollectionView x:Name="MenuCV" SelectionMode="Single" 
+                            SelectionChangedCommand="{Binding SelectedCommand}" 
+                            SelectionChangedCommandParameter="{Binding SelectedItem , Source={x:Reference MenuCV}}" 
+                            ItemsSource="{Binding KardexLayout}"
+                            >
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Frame BackgroundColor="{StaticResource CuartoColor}"
+                               BorderColor="{StaticResource SegundoColor}"
+                               CornerRadius="30"
+                               Margin="0">
+                            <Grid ColumnDefinitions="Auto,Auto,*"
+                                      RowDefinitions="Auto, Auto, Auto"
+                                      HorizontalOptions="CenterAndExpand">
+                                <StackLayout Grid.Column="0"
+                                                 Grid.ColumnSpan="3"
+                                                 Orientation="Horizontal"
+                                                 Spacing="16"
+                                                 VerticalOptions="CenterAndExpand">
+                                    <Label Text="{Binding Date, StringFormat=\{0:dddd d MMMM yyy\}}"
+                                               FontSize="11" 
+                                               TextColor="Black"
+                                               HorizontalOptions="Start"
+                                               />
+                                    <Label Text="{Binding Detail}" 
+                                       FontSize="15" TextColor="Black"
+                                           FontAttributes="Bold"
+                                           HorizontalOptions="CenterAndExpand"/>
+                                    <Label HorizontalOptions="End"
+                                            FontSize="13" TextColor="Black">
+                                        <Label.FormattedText>
+                                            <FormattedString>
+                                                <Span Text="Documento &#10;"/>
+                                                <Span Text=""/>
+                                            </FormattedString>
+                                        </Label.FormattedText>
+                                    </Label>
+                                </StackLayout>
+
+                                <Grid Grid.Row="1"
+                                          Grid.ColumnSpan="3" 
+                                          ColumnDefinitions="*, *">
+                                    <!--Entradas Kardex-->
+                                    <Frame Grid.Column="0"
+                                           Padding="0"
+                                           Margin="0"
+                                           CornerRadius="13">
+                                        <StackLayout Margin="7"
+                                                     Padding="3">
+                                            <Label Text="Entradas"
+                                                   TextColor="White"
+                                                   HorizontalOptions="CenterAndExpand"/>
+                                            <Grid ColumnDefinitions="Auto, Auto, Auto"
+                                                  HorizontalOptions="CenterAndExpand">
+                                                <Label Grid.Column="0"
+                                                    FontSize="13" TextColor="#FFC745">
+                                                    <Label.FormattedText>
+                                                        <FormattedString>
+                                                            <Span Text="Cant. &#10;"/>
+                                                            <Span Text="{Binding EntradaCantidad}"/>
+                                                        </FormattedString>
+                                                    </Label.FormattedText>
+                                                </Label>
+                                                <Label Grid.Column="1"  
+                                                    FontSize="13" TextColor="#FFC745">
+                                                    <Label.FormattedText>
+                                                        <FormattedString>
+                                                            <Span Text="v/u &#10;"/>
+                                                            <Span Text="{Binding EntradaValorUnitario, StringFormat=\{0:C\}}" />
+                                                        </FormattedString>
+                                                    </Label.FormattedText>
+                                                </Label>
+                                                <Label Grid.Column="2"
+                                                    FontSize="13" TextColor="#FFC745">
+                                                    <Label.FormattedText>
+                                                        <FormattedString>
+                                                            <Span Text="v/T &#10;"/>
+                                                            <Span Text="{Binding EntradaValorTotal, StringFormat=\{0:C\}}"  />
+                                                        </FormattedString>
+                                                    </Label.FormattedText>
+                                                </Label>
+                                            </Grid>
+                                        </StackLayout>
+                                    </Frame>
+
+                                    <Frame Grid.Column="1"
+                                           Padding="0"
+                                           Margin="0"
+                                           CornerRadius="13">
+                                        <StackLayout Margin="7">
+                                            <Label Grid.Column="0"
+                                                   Text="Salidas"
+                                                   TextColor="White"
+                                                   HorizontalOptions="CenterAndExpand"/>
+                                            <Grid ColumnDefinitions="Auto, Auto, Auto"
+                                                  HorizontalOptions="CenterAndExpand">
+                                                <Label Grid.Column="0"
+                                                    FontSize="13" TextColor="#FFC745">
+                                                    <Label.FormattedText>
+                                                        <FormattedString>
+                                                            <Span Text="Cant. &#10;"/>
+                                                            <Span Text="{Binding SalidaCantidad}"  />
+                                                        </FormattedString>
+                                                    </Label.FormattedText>
+                                                </Label>
+                                                <Label Grid.Column="1"
+                                                    FontSize="13" TextColor="#FFC745">
+                                                    <Label.FormattedText>
+                                                        <FormattedString>
+                                                            <Span Text="v/u &#10;"/>
+                                                            <Span Text="{Binding SalidaValorUnitario, StringFormat=\{0:C\}}"  />
+                                                        </FormattedString>
+                                                    </Label.FormattedText>
+                                                </Label>
+                                                <Label Grid.Column="2"
+                                                    FontSize="13" TextColor="#FFC745">
+                                                    <Label.FormattedText>
+                                                        <FormattedString>
+                                                            <Span Text="v/T &#10;"/>
+                                                            <Span Text="{Binding SalidaValorTotal, StringFormat=\{0:C\}}"  />
+                                                        </FormattedString>
+                                                    </Label.FormattedText>
+                                                </Label>
+                                            </Grid>
+                                        </StackLayout>
+                                    </Frame>                                    
+                                </Grid>
+
+                                <Frame Grid.Row="2"
+                                       Grid.ColumnSpan="3"
+                                       BackgroundColor="{StaticResource PrimerColor}"
+                                       Margin="0"
+                                       Padding="0"
+                                       CornerRadius="10">
+                                    <StackLayout HorizontalOptions="CenterAndExpand"
+                                                 Margin="7">
+                                        <Label Text="Saldos"
+                                               FontAttributes="Bold"
+                                               TextColor="Black"
+                                           HorizontalOptions="Center"/>
+                                        <Grid ColumnDefinitions="Auto, Auto, Auto"
+                                                  HorizontalOptions="CenterAndExpand">
+                                            <Label Grid.Column="0"
+                                           FontSize="13" TextColor="DarkBlue">
+                                                <Label.FormattedText>
+                                                    <FormattedString>
+                                                        <Span Text="Cant. &#10;"/>
+                                                        <Span Text="{Binding SaldoCantidad}"  />
+                                                    </FormattedString>
+                                                </Label.FormattedText>
+                                            </Label>
+                                            <Label Grid.Column="1"
+                                           FontSize="13" TextColor="DarkBlue">
+                                                <Label.FormattedText>
+                                                    <FormattedString>
+                                                        <Span Text="v/u &#10;"/>
+                                                        <Span Text="{Binding SaldoValorUnitario, StringFormat=\{0:C\}}"  />
+                                                    </FormattedString>
+                                                </Label.FormattedText>
+                                            </Label>
+                                            <Label Grid.Column="2"
+                                           FontSize="13" TextColor="DarkBlue">
+                                                <Label.FormattedText>
+                                                    <FormattedString>
+                                                        <Span Text="v/T &#10;"/>
+                                                        <Span Text="{Binding SaldoTotal, StringFormat=\{0:C\}}"  />
+                                                    </FormattedString>
+                                                </Label.FormattedText>
+                                            </Label>
+                                        </Grid>
+                                    </StackLayout>
+                                </Frame>
+                                                                
+                            </Grid>
+                        </Frame>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

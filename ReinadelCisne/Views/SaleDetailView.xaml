@@ -1,0 +1,87 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:ReinadelCisne.ViewModels"
+             x:Class="ReinadelCisne.Views.SaleDetailView"
+             Title="Detalle">
+    <ContentPage.BindingContext>
+        <vm:SaleDetailVM/>
+    </ContentPage.BindingContext>
+    <ContentPage.Content>
+        <StackLayout Padding="7" >
+            <StackLayout x:Name="DetalleV"
+            BindingContext="{Binding Sale}">
+                <Label Style="{StaticResource LabelTittles1}"
+                   HorizontalOptions="StartAndExpand">
+                    <Label.FormattedText>
+                        <FormattedString>
+                            <Span Text="Fecha de Entrega: " FontAttributes="Bold"/>
+                            <Span Text="{Binding DateDelivery, StringFormat=\{0:dddd d MMMM yyy\}}"/>
+                        </FormattedString>
+                    </Label.FormattedText>
+                </Label>
+
+                <Label Style="{StaticResource LabelTittles1}"
+                   HorizontalOptions="StartAndExpand">
+                    <Label.FormattedText>
+                        <FormattedString>
+                            <Span Text="Cliente: " FontAttributes="Bold"/>
+                            <Span Text="{Binding ClientModel.Name}"/>
+                        </FormattedString>
+                    </Label.FormattedText>
+                </Label>
+
+                <Label Style="{StaticResource LabelTittles1}"
+                   HorizontalOptions="StartAndExpand">
+                    <Label.FormattedText>
+                        <FormattedString>
+                            <Span Text="Total: " FontAttributes="Bold"/>
+                            <Span Text="{Binding TotalSale}"/>
+                        </FormattedString>
+                    </Label.FormattedText>
+                </Label>
+            </StackLayout>
+            <Label Text="Productos pedidos"
+                   Style="{StaticResource LabelTittles1}"/>
+            <CollectionView ItemsSource="{Binding Orders}">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Frame Style="{StaticResource Frame1}">
+                            <Grid RowDefinitions="Auto,Auto, Auto"
+                                          RowSpacing="0">
+                                <Image Source="product2.png"
+                                               Grid.Row="0"
+                                               Grid.Column="0"
+                                               />
+                                <Label Grid.Column="1" Text="{Binding ProductModel.NameProduct}" Style="{StaticResource LabelTittles1}"
+                                               Grid.Row="0"/>
+
+                                <Label Grid.Column="2" Style="{StaticResource LabelTittles1}"
+                                               Grid.Row="0">
+                                    <Label.FormattedText>
+                                        <FormattedString>
+                                            <Span Text="Cant. "/>
+                                            <Span Text="{Binding AmountProduct}"/>
+                                        </FormattedString>
+                                    </Label.FormattedText>
+                                </Label>
+                            </Grid>
+                        </Frame>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+
+            <StackLayout Orientation="Horizontal"
+                         HorizontalOptions="Center">
+                <Button Text="regresar"
+                        Style="{StaticResource ButtonCancel}"
+                        Command="{Binding PushCommand}"
+                        CommandParameter="regresar"/>
+                <Button Text="Entregar"
+                        Style="{StaticResource Button1}"
+                        Command="{Binding PushCommand}"
+                        CommandParameter="entregar"/>
+            </StackLayout>
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

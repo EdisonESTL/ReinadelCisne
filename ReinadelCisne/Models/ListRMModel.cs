@@ -13,8 +13,13 @@ namespace ReinadelCisne.Models
         [PrimaryKey, AutoIncrement]
         public int Id { get; set; }
         public float Total { get; set; }
-        
+
+        [ForeignKey(typeof(ProductModel))]
+        public int ProducID { get; set; }
+        [OneToOne]
+        public ProductModel Product { get; set; }
+
         [OneToMany("ListRMModelId")]
-        public List<ItemsListRMModel> itemsListRMModels { get; set; }
+        public List<ItemsListRMModel> ListMaterialxProduct { get; set; }
     }
 }

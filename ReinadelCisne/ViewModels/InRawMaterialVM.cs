@@ -22,7 +22,17 @@ namespace ReinadelCisne.ViewModels
                 OnPropertyChanged();
             }
         }
-        
+
+        private DateTime _date = DateTime.Now;
+        public DateTime Date
+        {
+            get => _date;
+            set
+            {
+                _date = value;
+                OnPropertyChanged();
+            }
+        }
         private string _nameRM;
         public string NameRM
         {
@@ -147,7 +157,6 @@ namespace ReinadelCisne.ViewModels
 
         public ICommand goback => new Command(() =>
                {
-                   //Shell.Current.GoToAsync($"..?IdlistRM=0");
                    Shell.Current.GoToAsync("//Rini/RMateriaPrima");
                });
         public ICommand RefreshCommand => new Command(() =>
@@ -212,59 +221,11 @@ namespace ReinadelCisne.ViewModels
             }
             
         });
-        /*public ICommand AddRM => new Command(() =>
-        {
-            if(!string.IsNullOrEmpty(NameRM) & AmountRm != 0 & CostRM != null)
-            {
-                RawMaterialModel rawMaterial = new RawMaterialModel()
-                {
-                    Id = int.Parse(Id),
-                    NameRM = NameRM,
-                    UnitMeasurementRM = UnitMeasurementRM,
-                    CostoRM = float.Parse(CostRM),
-                    AmountRM = AmountRm,
-                    TypeRM = TypeRM
-                };
-
-                if (IdMOD != null)
-                {
-                    ListRawMl.RemoveAt(int.Parse(IdMOD));
-                    ListRawMl.Insert(int.Parse(IdMOD), rawMaterial);
-                    Shell.Current.DisplayAlert("Éxito", rawMaterial.NameRM + " Ha sido modificado", "Ok");
-                    Count = 0;
-                    foreach (var a in ListRawMl)
-                    {
-                        Count += (float)(a.CostoRM * a.AmountRM);
-                    }
-
-                    IdMOD = null;
-                }
-                else
-                {
-                    ListRawMl.Add(rawMaterial);
-                    Shell.Current.DisplayAlert("Éxito", rawMaterial.NameRM + " Ha sido añadido", "Ok");
-                    Count += (float)(rawMaterial.CostoRM * rawMaterial.AmountRM);
-                }
-
-                LongList = ListRawMl.Count;
-
-                NameRM = string.Empty;
-                UnitMeasurementRM = string.Empty;
-                CostRM = string.Empty;
-                AmountRm = 0;
-            }
-            else
-            {
-                Shell.Current.DisplayAlert("Error", "Ingrese la cantidad, nombre de materia prima y el precio unitario", "ok");
-            }
-            
-        });*/
         public ICommand CancelRM => new Command(() =>
         {
             Limpiar();
             
         });        
-
         public ICommand FinishRM => new Command(() =>
         {
             string resp = ValidarCampos();
@@ -277,100 +238,133 @@ namespace ReinadelCisne.ViewModels
                     break;
                 default:
                     break;
-            }
-            /*var ghj = ListRawMl.Count;
-            if (ghj != 0)
-            {
-                ListRMModel b = new ListRMModel
-                {
-                    Id = IdList,
-                    Total = Count
-                };
-                App.Database.SaveListRM(b);
-
-                foreach (var f in ListRawMl)
-                {
-                    ItemsListRMModel itemsList = new ItemsListRMModel
-                    {
-                        Amount = f.AmountRM,
-                        UnitCost = f.CostoRM,
-                        TotalCost = f.CostoRM * f.AmountRM
-                    };
-
-                    App.Database.SaveItemListRM(itemsList);
-
-                    itemsList.ListRMModel = new ListRMModel();
-                    itemsList.ListRMModel = b;
-
-                    itemsList.RawMaterial = new RawMaterialModel();
-                    itemsList.RawMaterial = f
-
-                    App.Database.UpdateRelationItemRM(itemsList);
-                }               
-
-                var gy = App.Database.GetAllRMList();
-                gy.Wait();
-                var fgh = gy.Result;
-                List<ItemsListRMModel> itms = App.Database.GetAllItems().Result;
-                var fd = b.Id;
-                Shell.Current.GoToAsync($"..?IdListOC=0&IdlistRM={b.Id}&IdlistWF=0&idProduct=0");
-            }
-            else
-            {
-                Shell.Current.GoToAsync($"..?IdListOC=0&IdlistRM=0&IdlistWF=0&idProduct=0");
-            }*/
+            }            
 
         });
 
         private void GuardarMP()
-        {
-            RawMaterialModel rawMateriall = new RawMaterialModel()
-            {
-                Id = int.Parse(Id),
-                DateTime = DateTime.Now,
-                NameRM = NameRM,
-                CantidadRM = AmountRm,
-                DescriptionRM = DescriptionRM,
-                TypeRM = TypeRM,
-                CostoRM = float.Parse(CostRM),
-                TotalCost = (float)(AmountRm * float.Parse(CostRM))
-            };
-            rawMateriall.CantidadRM = AmountRm;
-            var resp = App.Database.SaveRawMaterial(rawMateriall);
-
+        {            
             if (GroupRM != null && UMedidaRM != null)
             {
-                rawMateriall.GroupRM = GroupRM;
-                rawMateriall.UMedidaRM = UMedidaRM;
+                if (int.Parse(Id) > 0)
+                {
+                    RawMaterialModel rawMateriall = new RawMaterialModel()
+                    {
+                        Id = int.Parse(Id),
+                        DateTime = Date, //Fecha creación rm
+                        NameRM = NameRM,
+                        DescriptionRM = DescriptionRM,
+                        TypeRM = TypeRM
+                    };
+                    var resp = App.Database.SaveRawMaterial(rawMateriall);
+                    resp.Wait();
 
-                App.Database.UpdateRealtionRawMat(rawMateriall);
+                    rawMateriall.GroupRM = GroupRM;
+                    rawMateriall.UMedidaRM = UMedidaRM;
+
+                    App.Database.UpdateRealtionRawMat(rawMateriall);
+
+                    /*UMedidaRM.rawMaterialModels = new List<RawMaterialModel>() { rawMateriall };
+                    App.Database.UpdateRelationUMedidasRM(UMedidaRM);
+
+                    GroupRM.rawMaterialModels = new List<RawMaterialModel>() { rawMateriall };
+                    App.Database.UpdateRelationGroupRM(GroupRM);*/
+
+                    ActualizarSaldos(rawMateriall);
+                }
+                else
+                {
+                    RawMaterialModel rawMateriall = new RawMaterialModel()
+                    {
+                        Id = int.Parse(Id),
+                        DateTime = Date, //Fecha creación rm
+                        NameRM = NameRM,
+                        DescriptionRM = DescriptionRM,
+                        TypeRM = TypeRM
+                    };
+                    var resp = App.Database.SaveRawMaterial(rawMateriall);
+                    resp.Wait();
+
+                    rawMateriall.GroupRM = GroupRM;
+                    rawMateriall.UMedidaRM = UMedidaRM;
+
+                    App.Database.UpdateRealtionRawMat(rawMateriall);
+
+                   /* UMedidaRM.rawMaterialModels = new List<RawMaterialModel>() { rawMateriall };
+                    App.Database.UpdateRelationUMedidasRM(UMedidaRM);
+
+                    GroupRM.rawMaterialModels = new List<RawMaterialModel>() { rawMateriall };
+                    App.Database.UpdateRelationGroupRM(GroupRM);*/
+
+                    CrearKardexRM(rawMateriall);
+                }                
             }
-
-            if (resp != null)
+            else
             {
-                CrearKardexRM(rawMateriall);
-                Shell.Current.DisplayAlert("Éxito", "Se guardo " + rawMateriall.NameRM, "ok");
-                Limpiar();
-                //Shell.Current.GoToAsync($"//Rini/Productos?Regreso=true");
+                Shell.Current.DisplayAlert("Error, Campos vacios", "Asigne a un grupo o cree uno nuevo, y asigne", "ok");
             }
+        }
+
+        private void ActualizarSaldos(RawMaterialModel rawMateriall)
+        {
+            var kardx = App.Database.GetKardexXRM(rawMateriall).Result;
+            var sald = App.Database.GetSaldosxKardex(kardx).Result;
+
+            var kaardxResp = (from s in sald
+                              where s.Date.Date == rawMateriall.DateTime.Date
+                              select s).FirstOrDefault();
+
+            kaardxResp.Cantidad = AmountRm;
+            kaardxResp.ValorUnitario = Convert.ToDouble(CostRM);
+            kaardxResp.SaldoTotal = AmountRm * Convert.ToDouble(CostRM);
+
+            App.Database.SaveSaldoRM(kaardxResp);
+
+            Limpiar();
+            Shell.Current.DisplayAlert("Éxito", "Se guardo " + rawMateriall.NameRM + " correctamente", "ok");
+            Shell.Current.GoToAsync("//Rini/RMateriaPrima");
         }
 
         private void CrearKardexRM(RawMaterialModel rawMaterial)
         {
             KardexRMModel kardexRM = new KardexRMModel()
             {
-                Date = DateTime.Now,
-                ValorUnitario = rawMaterial.CostoRM,
-                Cantidad = rawMaterial.CantidadRM,
-                Valor = rawMaterial.CostoRM * rawMaterial.CantidadRM
+                Date = DateTime.Now, //Fecha reación k                
             };
 
             App.Database.SaveKardesxRM(kardexRM);
 
             kardexRM.RawMaterialModell = rawMaterial;
+            kardexRM.ShoppingModell = new List<ShoppingListModel>();
 
             App.Database.UpdateRelationsKardexRM(kardexRM);
-            Shell.Current.DisplayAlert("Exito", "Se creo kardex", "ok");
+
+            GuardarSaldoInicial(kardexRM);
+        }
+
+        private void GuardarSaldoInicial(KardexRMModel kardexRM)
+        {
+            SaldosRMModel saldosRMi = new SaldosRMModel()
+            {
+                Date = DateTime.Now, //Fecha primer saldo
+                Cantidad = AmountRm,
+                ValorUnitario = float.Parse(CostRM),
+                SaldoTotal = (float)(AmountRm * float.Parse(CostRM)),
+                NombreReconocimiento = "Estado inicial"
+            };
+
+            App.Database.SaveSaldoRM(saldosRMi);
+
+            saldosRMi.KardexRMModel = kardexRM;
+
+            App.Database.UpdateRelationsSaldosRM(saldosRMi);
+
+            kardexRM.SaldosRMs = new List<SaldosRMModel> { saldosRMi };
+            App.Database.UpdateRelationsKardexRM(kardexRM);
+            
+            Shell.Current.DisplayAlert("Éxito", "Se guardo " + kardexRM.RawMaterialModell.NameRM + " correctamente", "ok");
+            Limpiar();
+            Shell.Current.GoToAsync("//Rini/RMateriaPrima");
         }
 
         private string ValidarCampos()
@@ -393,12 +387,9 @@ namespace ReinadelCisne.ViewModels
         
         public InRawMaterialVM()
         {
-            //DeleteCommand = new Command<RawMaterialModel>(DeleteRM);
-           //ModifyCommand = new Command<RawMaterialModel>(ModifyRM);
             LoadGU();
             LoadUMedidas();
         }
-
 
         private void CrearNuevaMedida(string result)
         {
@@ -444,43 +435,8 @@ namespace ReinadelCisne.ViewModels
 
             }
 
-
-            /*GroupsRMs.Add(new GroupsRMModel()
-            {
-                Description = "nuevo"
-            });*/
         }
-
-        private void LoadNames()
-        {
-            RawsExist.Clear();
-            var a = App.Database.GetMR().Result;
-
-            foreach (var b in a)
-            {
-                RawsExist.Add(b);
-            }
-        }
-        /*private void ModifyRM(RawMaterialModel obj)
-        {
-            IdMOD = Convert.ToString(ListRawMl.IndexOf(obj));
-
-            Id = obj.Id.ToString();
-            NameRM = obj.NameRM;
-            UnitMeasurementRM = obj.UnitMeasurementRM;
-            CostRM = obj.CostoRM.ToString("N2");
-            AmountRm = obj.AmountRM;
-        }*/
-        /*private void DeleteRM(RawMaterialModel obj)
-        {
-            ListRawMl.Remove(obj);
-            Count -= (float)(obj.CostoRM * obj.AmountRM);
-            LongList = ListRawMl.Count;
-            if (Convert.ToString(IdList) != null)
-            {
-                App.Database.DeleteRawMaterial(obj);
-            }            
-        }*/
+                
         private void Limpiar()
         {
             Id = string.Empty;
@@ -494,15 +450,14 @@ namespace ReinadelCisne.ViewModels
             ListRawMl.Clear();
             Count = 0;
             LongList = 0;
+            TypeRM = string.Empty;
         }
         public void ApplyQueryAttributes(IDictionary<string, string> query)
         {
             try
             {
-                string idListRM = HttpUtility.UrlDecode(query["IdlistRM"]);
-
-                //LoadLS(idListRM);
-
+                string idRMmodificar = HttpUtility.UrlDecode(query["modificarRM"]);
+                CargarRMmodificar(idRMmodificar);
             }
             catch (Exception)
             {
@@ -510,34 +465,26 @@ namespace ReinadelCisne.ViewModels
             }
         }
 
-        /*private void LoadLS(string idListRM)
+        private void CargarRMmodificar(string idRMmodificar)
         {
-            Count = 0;
-            List<RawMaterialModel> rm = App.Database.GetMR().Result;
-            List<ItemsListRMModel> itms = App.Database.GetAllItems().Result;
-            var t = App.Database.GetListRM(int.Parse(idListRM)).Result;
+            RawMaterialModel rmMod = App.Database.GetOneRM(int.Parse(idRMmodificar)).Result;
+            KardexRMModel kardexRM = App.Database.GetKardexXRM(rmMod).Result;
+            List<SaldosRMModel> saldosRM = App.Database.GetSaldosxKardex(kardexRM).Result;
+            
+            var rwsp = (from a in saldosRM
+                        where a.Date.Date == rmMod.DateTime.Date
+                        select a).FirstOrDefault();
 
-            var its = (from i in itms
-                      where i.ListRMModelId == int.Parse(idListRM)
-                      select i).ToList();
+            Id = rmMod.Id.ToString();
+            Date = rmMod.DateTime;
+            NameRM = rmMod.NameRM;
+            DescriptionRM = rmMod.DescriptionRM;
+            TypeRM = rmMod.TypeRM;
+            GroupRM = rmMod.GroupRM;
+            UMedidaRM = rmMod.UMedidaRM;
+            AmountRm = rwsp.Cantidad;
+            CostRM = rwsp.ValorUnitario.ToString(); ;
 
-            var tsr = (from it in its
-                       join r in rm on it.RawMaterialModelId equals r.Id
-                       select new RawMaterialModel
-                       {
-                           AmountRM = it.Amount,
-                           NameRM = r.NameRM,
-                           UnitMeasurementRM = r.UnitMeasurementRM,
-                           CostoRM = (float)it.UnitCost
-                       }).ToList();
-            foreach(var d in tsr)
-            {
-                ListRawMl.Add(d);
-                Count += (float)(d.CostoRM * d.AmountRM);
-            }
-
-            IdList = int.Parse(idListRM);
-            LongList = t.itemsListRMModels.Count;
-        }*/
+        }
     }
 }

@@ -11,7 +11,7 @@ namespace ReinadelCisne.Models
         [PrimaryKey, AutoIncrement]
         public int Id { get; set; }
         public string Name { get; set; }
-        public int CelphoneNumber { get; set; }
+        public int CellphoneNumber { get; set; }
 
         [OneToMany("ClientModelId")]
         public List<SaleModel> Sales { get; set; }

@@ -145,11 +145,11 @@ namespace ReinadelCisne.ViewModels
                 };
                 App.Database.SaveListOC(listOC);
 
-                listOC.OtherCosts = new List<OtherCostModel>();
+                listOC.OtherCostsxProduct = new List<OtherCostModel>();
                 foreach (var f in OtherCosts)
                 {
                     App.Database.SaveOtherCost(f);
-                    listOC.OtherCosts.Add(f);
+                    listOC.OtherCostsxProduct.Add(f);
 
                     App.Database.UpdateListOC(listOC);
                 }
@@ -226,14 +226,14 @@ namespace ReinadelCisne.ViewModels
             Count = 0;
             var t = App.Database.GetListOC(int.Parse(idListOC)).Result;
 
-            foreach (var d in t.OtherCosts)
+            foreach (var d in t.OtherCostsxProduct)
             {
                 OtherCosts.Add(d);
                 Count += d.CostOC;
             }
 
             IdList = int.Parse(idListOC);
-            LongList = t.OtherCosts.Count;
+            LongList = t.OtherCostsxProduct.Count;
         }
     }
 }

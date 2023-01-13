@@ -44,9 +44,9 @@ namespace ReinadelCisne.ViewModels
             switch (textbtn)
             {
                 case "productos":
-                    Shell.Current.GoToAsync("//Rini/Productos"); break;
+                    Shell.Current.GoToAsync("//Rini/Productos"); break;                    
                 case "servicios":
-                    Shell.Current.GoToAsync("//Rini/RServicios"); break;
+                    Shell.Current.GoToAsync("//Rini/RProductosEnProceso"); break;
                 case "ventas":
                     Shell.Current.GoToAsync("//Rini/RVentas"); break;
                 case "compras":
@@ -62,7 +62,7 @@ namespace ReinadelCisne.ViewModels
                 case "ajustes":
                     Shell.Current.GoToAsync("//Rini/RAjustes"); break;
                 case "manoobra":
-                    Shell.Current.GoToAsync("//Rini/ManoObra"); break;
+                    Shell.Current.GoToAsync($"//Rini/ManoObra?save=false"); break;
                 case "costosindirectos":
                     Shell.Current.GoToAsync("//Rini/OtherCost"); break;
                 case "mas":
@@ -74,9 +74,30 @@ namespace ReinadelCisne.ViewModels
             }
         }
 
-        private void YintuNuevo()
+        private async void YintuNuevo()
         {
-            Shell.Current.DisplayActionSheet("Nuevo", "Cancelar", null, "Producto", "Servicio", "Compra", "Venta", "Materia prima", "Ingreso-Egreso extra");
+            string action = await Shell.Current.DisplayActionSheet("Nuevo", "Cancelar", null, "Producto", "Pedido", "Materia prima", "Mano de obra", "Costo indirecto");
+
+            switch (action)
+            {
+                case "Producto":
+                    await Shell.Current.GoToAsync("//Rini/Productos/NewStock");
+                    break;
+                case "Pedido":
+                    await Shell.Current.GoToAsync("//Rini/RVentanilla");
+                    break;
+                case "Materia prima":
+                    await Shell.Current.GoToAsync("//Rini/RMateriaPrima/NewMP");
+                    break;
+                case "Mano de obra":
+                    await Shell.Current.GoToAsync("//Rini/ManoObra");
+                    break;
+                case "Costo indirecto":
+                    await Shell.Current.GoToAsync("//Rini/OtherCost");
+                    break;
+                default:
+                    break;
+            }
         }
     }
 }

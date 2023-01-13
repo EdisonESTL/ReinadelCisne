@@ -17,8 +17,7 @@ namespace ReinadelCisne.Models
         public string LocationProduct { get; set; }
         public string ProductSupplier { get; set; }
         public int MinimalExistence { get; set; }
-        public int MaximumExistence { get; set; }    
-        public int CantProduct { get; set; }
+        public int MaximumExistence { get; set; }
         public string UnidadMedida { get; set; }
         public double PrecioVentaProduct { get; set; }
         public double CostElaboracionProduct { get; set; }
@@ -33,8 +32,9 @@ namespace ReinadelCisne.Models
         public List<OrderModel> Orders { get; set; }
 
         //Relacion con ProductShoppingList (Compras)
-        [OneToMany("ProductModelId")]
+        /*[OneToMany("ProductModelId")]
         public List<ProductShoppingList> productShoppingLists { get; set; }
+        */
 
         //Relacion con Kardex
         [OneToMany("IdProduct")]
@@ -57,5 +57,15 @@ namespace ReinadelCisne.Models
         public int ListOCModelId { get; set; }
         [OneToOne]
         public ListOCModel ListOCModel { get; set; }
+
+        //Relación con los grupos de productos
+        [ForeignKey(typeof(GroupsProductModel))]
+        public int GroupProductId { get; set; }
+        [ManyToOne]
+        public GroupsProductModel Groups { get; set; }
+
+        //Relacion con la mano de obra
+        /*[OneToMany]
+        public List<PersonalModel> Personals { get; set; }*/
     }
 }

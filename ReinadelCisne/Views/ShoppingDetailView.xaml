@@ -8,7 +8,9 @@
         <vm:ShoppingDetailVM/>
     </ContentPage.BindingContext>
     <ContentPage.Content>
-        <Grid RowDefinitions="Auto, Auto, Auto, 0.8, 2*, Auto" ColumnDefinitions="Auto, 2*" Margin="3, 11, 3, 7">
+        <Grid RowDefinitions="Auto, Auto, Auto, 0.8, 2*, Auto" 
+              ColumnDefinitions="Auto, 2*"
+              Margin="10, 11, 10, 7">
             <Label Text="Fecha:" Grid.Row="0" Grid.Column="0" FontAttributes="Bold" FontSize="17" TextColor="Black"/>
             <Label Text="{Binding Date, Mode=TwoWay}" Grid.Row="0" Grid.Column="1" VerticalTextAlignment="Center" FontAttributes="Italic" FontSize="17" TextColor="Black"/>
 
@@ -26,23 +28,72 @@
                     <LinearItemsLayout Orientation="Vertical" ItemSpacing="7"/>
                 </CollectionView.ItemsLayout>
                 <CollectionView.Header>
-                    <Grid>
-                        <Label Text="Cant." FontSize="15" FontAttributes="Bold" TextColor="Black" Grid.Column="0" HorizontalTextAlignment="Center"/>
-                        <Label Text="Medida" FontSize="15" FontAttributes="Bold" TextColor="Black" Grid.Column="1" HorizontalTextAlignment="Center"/>
-                        <Label Text="Descrip." FontSize="15" FontAttributes="Bold" TextColor="Black" Grid.Column="2" HorizontalTextAlignment="Center"/>
-                        <Label Text="C/U" FontSize="15" FontAttributes="Bold" TextColor="Black" Grid.Column="3" HorizontalTextAlignment="Center"/>
-                        <Label Text="C/T" FontSize="15" FontAttributes="Bold" TextColor="Black" Grid.Column="4" HorizontalTextAlignment="Center"/>
-                    </Grid>
+                    <StackLayout>
+                        <Label Text="Lista de compras"
+                               Style="{StaticResource LabelTittlesColLectionView}"/>
+                    </StackLayout>
                 </CollectionView.Header>
                 <CollectionView.ItemTemplate>
                     <DataTemplate>
-                        <Grid Padding="0">
-                            <Label Grid.Column="0" Text="{Binding Cantidad}" HorizontalTextAlignment="Center"/>
-                            <Label Grid.Column="1" Text="{Binding UnidMedida}" HorizontalTextAlignment="Center"/>
-                            <Label Grid.Column="2" Text="{Binding Material}" HorizontalTextAlignment="Center"/>
-                            <Label Grid.Column="3" Text="{Binding CostoU}" HorizontalTextAlignment="Center"/>
-                            <Label Grid.Column="4" Text="{Binding CostoT}" HorizontalTextAlignment="Center"/>
-                        </Grid>
+                        <Frame Style="{StaticResource Frame3}">
+                            <Grid Padding="0"
+                              ColumnDefinitions="Auto, Auto, *, Auto, Auto"
+                              RowDefinitions="Auto, Auto"
+                                  ColumnSpacing="10">
+                                <Label Grid.Column="0"
+                                   Grid.RowSpan="2"
+                                   HorizontalTextAlignment="Center"
+                                   VerticalOptions="Center"
+                                   Style="{StaticResource LabelTittles1}">
+                                    <Label.FormattedText>
+                                        <FormattedString>
+                                            <Span Text="Cant. "/>
+                                            <Span Text="{Binding Shopping.Amount}" />
+                                        </FormattedString>
+                                    </Label.FormattedText>
+                                </Label>
+                                <Label Grid.Column="1" 
+                                   Grid.RowSpan="2"
+                                   VerticalOptions="Center"
+                                   Text="{Binding RawMaterial.UMedidaRM.Description}" 
+                                   HorizontalTextAlignment="Center"
+                                   Style="{StaticResource LabelTittles1}"/>
+
+                                <Label Grid.Row="0"
+                                Grid.Column="2" 
+                                   Text="{Binding RawMaterial.NameRM}" 
+                                   HorizontalTextAlignment="Center"
+                                   Style="{StaticResource LabelTittles1}"/>
+
+                                <Label Grid.Row="1"
+                                Grid.Column="2" 
+                                Text="{Binding RawMaterial.DescriptionRM}" 
+                                   HorizontalTextAlignment="Center"
+                                   Style="{StaticResource LabelTittles1}"/>
+
+                                <Label Grid.Column="3"                                     
+                                   HorizontalTextAlignment="Center"
+                                   Style="{StaticResource LabelTittles1}">
+                                    <Label.FormattedText>
+                                        <FormattedString>
+                                            <Span Text="v/u.&#10; "/>
+                                            <Span Text="{Binding Shopping.ValorUnitario, StringFormat=\{0:c\}}" />
+                                        </FormattedString>
+                                    </Label.FormattedText>
+                                </Label>
+                                <Label Grid.Column="4"  
+                                   HorizontalTextAlignment="Center"
+                                   Style="{StaticResource LabelTittles1}">
+                                    <Label.FormattedText>
+                                        <FormattedString>
+                                            <Span Text="Total.&#10; "/>
+                                            <Span Text="{Binding Shopping.TotalCost, StringFormat=\{0:c\}}" />
+                                        </FormattedString>
+                                    </Label.FormattedText>
+                                </Label>
+                            </Grid>
+                        </Frame>
+                        
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
             </CollectionView>

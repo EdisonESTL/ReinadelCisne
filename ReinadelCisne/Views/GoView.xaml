@@ -9,16 +9,93 @@
         <vm:GoVM/>
     </ContentPage.BindingContext>
     <ContentPage.Content>
-        <Grid RowDefinitions="60, 0.8, 2*, 0.8, Auto" Padding="3,0,3,7">
-            <Label x:Name="LabelPapas" Text="{Binding Cuenta}"
-                   Margin="10" Style="{StaticResource LabelCuentaVenta}"
-                   FontSize="23"
-                   HorizontalOptions="CenterAndExpand" 
-                   Grid.Row="0" Grid.Column="1"/>
-            <ImageButton Source="descuentoicon.png" Aspect="AspectFit" BackgroundColor="Transparent" Command="{Binding DiscountCommand}" Grid.Row="0" Grid.Column="2" VerticalOptions="Center" HorizontalOptions="Center"/>
-            <Button Text="x Cobrar" Command="{Binding WaytoPayCommand}" Grid.Row="0" Grid.Column="0" VerticalOptions="Center" HorizontalOptions="Center" FontSize="11"/>
-            <BoxView Color="#096BAF" Grid.Row="1" Grid.ColumnSpan="3"
-             HorizontalOptions="Fill" />
+        <Grid RowDefinitions="Auto, *,5*, Auto"
+              Padding="7">
+            <Frame BorderColor="{StaticResource TercerColor}"                   
+                   BackgroundColor="DarkGray"
+                   Grid.Row="0"
+                   Grid.ColumnSpan="3">
+                <Grid RowDefinitions="Auto, Auto" RowSpacing="18"
+                      VerticalOptions="Center">
+                    <Label x:Name="LabelPapas" 
+                           Style="{StaticResource LabelCuentaVenta}"
+                           HorizontalOptions="Center"
+                           VerticalOptions="CenterAndExpand"
+                           FontSize="30"
+                           Grid.Row="0" 
+                           Grid.Column="0">
+                        <Label.FormattedText>
+                            <FormattedString>
+                                <Span Text="{Binding Cuenta}" />
+                                <Span Text=" $" />
+                            </FormattedString>
+                        </Label.FormattedText>
+                    </Label>
+                    <StackLayout Grid.Row="0"
+                                 Grid.Column="1"
+                                 HorizontalOptions="CenterAndExpand"
+                                 VerticalOptions="Center">
+                        <Label Text="¿Pedido?"
+                           Style="{StaticResource LabelTittles1}"
+                           />
+                        <Switch OnColor="{StaticResource SegundoColor}"
+                                ThumbColor="Green"
+                                IsToggled="{Binding EsPedido}"/>
+                    </StackLayout>
+                    
+                    <Button Text="x Cobrar" 
+                            Style="{StaticResource ButtonRegistration}"
+                            Command="{Binding WaytoPayCommand}" 
+                            Grid.Row="1" 
+                            Grid.Column="0" 
+                            CornerRadius="35"
+                            VerticalOptions="CenterAndExpand"/>
+                    
+                    <Button ImageSource="descuento.png"
+                            Text="Descuento"
+                            Style="{StaticResource ButtonSave}"
+                            ContentLayout="left, 2"
+                            Command="{Binding DiscountCommand}" 
+                            Grid.Row="1" 
+                            Grid.Column="1" 
+                            BorderColor="Black"
+                            BorderWidth="1"
+                            CornerRadius="35"
+                            VerticalOptions="CenterAndExpand"
+                            BackgroundColor="{StaticResource TercerColor}"/>
+                    
+                    
+                </Grid>
+            </Frame>
+            
+
+            <CollectionView x:Name="Gruposs"
+                ItemsSource="{Binding GruposProductos}"
+                            Grid.Row="1"
+                            Grid.ColumnSpan="3" 
+                            Margin="10,16,10,6"
+                            VerticalOptions="Center"
+                           HorizontalOptions="CenterAndExpand"
+                            EmptyView="No hay grupos creados">
+                <CollectionView.ItemsLayout>
+                    <LinearItemsLayout Orientation="Horizontal" 
+                                       ItemSpacing="10"/>
+                </CollectionView.ItemsLayout>
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Button Text="{Binding Description}"
+                                Style="{StaticResource Button2}"
+                                FontSize="12"
+                                FontAttributes="Bold"
+                                Command="{Binding Path=BindingContext.FilterCommand, Source={x:Reference Gruposs}}"
+                                CommandParameter="{Binding .}"
+                                BorderWidth="11"
+                                TextColor="DarkGreen"
+                                BorderColor="{StaticResource PrimerColor}"/>                       
+                        
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
             
             <RefreshView IsRefreshing="{Binding IsRefreshing}" Command="{Binding RefreshCommand}" 
                          Grid.Row="2" Grid.ColumnSpan="3" BackgroundColor="#00FF9E">
@@ -32,26 +109,71 @@
                     </CollectionView.ItemsLayout>
                     <CollectionView.ItemTemplate>
                         <DataTemplate>
-                            <Frame Style="{StaticResource FrameGoViewProducts}">
-                                <Grid RowDefinitions="Auto, 20">
-                                    <Label Grid.Row="0" Text="{Binding NameProduct}" 
-                                           FontSize="Default" TextColor="#0EFFF9"/>
-                                    <Label Grid.Row="1" Text="{Binding PriceProduct}" 
-                                           FontSize="13" TextColor="#FFC745"/>
+                            <Frame Style="{StaticResource Frame4}" BorderColor="DarkBlue"
+                                   HasShadow="True"
+                                   Margin="0"
+                                   Padding="0">
+                                <Grid RowDefinitions="Auto, Auto, Auto"
+                                      VerticalOptions="Center"
+                                      HorizontalOptions="Center"
+                                      Margin="7,7,7,7">
+                                    <Label Grid.Row="1"
+                                           Text="{Binding NameProduct}" 
+                                           FontSize="Default" 
+                                           TextColor="DarkBlue"
+                                           HorizontalOptions="CenterAndExpand"
+                                           VerticalOptions="Center"
+                                           LineBreakMode="CharacterWrap"
+                                           MaxLines="3"/>
+                                    <Label Grid.Row="2" 
+                                           Style="{StaticResource LabelTittles1}"
+                                           FontSize="13"
+                                           HorizontalOptions="Center"
+                                           VerticalOptions="Center">
+                                        <Label.FormattedText>
+                                            <FormattedString>
+                                                <Span Text="{Binding PrecioVentaProduct}" />
+                                                <Span Text=" $" />
+                                            </FormattedString>
+                                        </Label.FormattedText>
+                                    </Label>
+                                    <Image Source="product2.png"
+                                           Aspect="AspectFit"
+                                           Grid.Row="0"
+                                           Margin="0"
+                                           />
                                 </Grid>
                             </Frame>
                         </DataTemplate>
                     </CollectionView.ItemTemplate>
+                    <CollectionView.EmptyView>
+                        <StackLayout HorizontalOptions="CenterAndExpand"
+                             VerticalOptions="CenterAndExpand">
+                            <Label Text="Hola, no hay productos registrados"
+                                   Margin="10,25,10,10"
+                                   Style="{StaticResource LabelTittlesColLectionView}"
+                                   HorizontalOptions="Fill"
+                                   HorizontalTextAlignment="Center" 
+                                   TextColor="Black"
+                                   FontAttributes="None,Italic"/>
+                        </StackLayout>
+                    </CollectionView.EmptyView>
                 </CollectionView>
             </RefreshView>
-            <BoxView Color="#096BAF" Grid.Row="3" Grid.ColumnSpan="3"
-             HorizontalOptions="Fill" />
-            <Button Text="Borrar" Style="{StaticResource ButtonCancel}"
-                    Command="{Binding ClearCommand}" Grid.Row="4" Grid.Column="0"/>
+            
+            <Button Text="Borrar" Style="{StaticResource Button1}"
+                    FontSize="13"
+                    FontAttributes="Bold"
+                    CornerRadius="35"
+                    Command="{Binding ClearCommand}" Grid.Row="3" Grid.Column="2"/>
             <Button Text="Guardar" Style="{StaticResource ButtonSave}"
-                    Command="{Binding NewCommand}" Grid.Row="4" Grid.Column="1"/>
-            <Button Text="Ventas" Style="{StaticResource ButtonRegistration}"
-                    Command="{Binding RegisterSale}" Grid.Row="4" Grid.Column="2"/>
+                    CornerRadius="35"
+                    Command="{Binding NewCommand}" Grid.Row="3" Grid.Column="1"/>
+            <Button Text="Cancelar" Style="{StaticResource ButtonCancel}"
+                    CornerRadius="35"
+                    Command="{Binding CancelCommand}" Grid.Row="3" Grid.Column="0"/>
+            <!--<Button Text="Ventas" Style="{StaticResource ButtonRegistration}"
+                    Command="{Binding RegisterSale}" Grid.Row="3" Grid.Column="2"/>-->
         </Grid>
     </ContentPage.Content>
 </ContentPage>
