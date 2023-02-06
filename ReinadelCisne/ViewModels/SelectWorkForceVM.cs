@@ -13,7 +13,6 @@ namespace ReinadelCisne.ViewModels
     public class SelectWorkForceVM : BaseVM, IQueryAttributable
     {
         private WorkForceModel _perfilWF;
-
         public WorkForceModel PerfilWF
         {
             get => _perfilWF;
@@ -28,9 +27,51 @@ namespace ReinadelCisne.ViewModels
         private string _name;
         private string _cI;
         private string _cellNumber;
-        private string _pay;
+        private double _pay;
         private string _state;
+        private int _numElementos;
+        private double _valorTotalElementos;
+        double _totalMeses;
 
+        public int NumElementos
+        {
+            get => _numElementos;
+            set
+            {
+                if(value != _numElementos)
+                {
+                    _numElementos = value;
+                    OnPropertyChanged();
+                }
+                
+            }
+        }
+        public double ValorTotalElementos
+        {
+            get => _valorTotalElementos;
+            set
+            {
+                if (value != _valorTotalElementos)
+                {
+                    _valorTotalElementos = value;
+                    OnPropertyChanged();
+                }
+
+            }
+        }
+        public double TotalMeses
+        {
+            get => _totalMeses;
+            set
+            {
+                if (value != _totalMeses)
+                {
+                    _totalMeses = value;
+                    OnPropertyChanged();
+                }
+
+            }
+        }
         public int ID
         {
             get => _iD;
@@ -40,7 +81,6 @@ namespace ReinadelCisne.ViewModels
                 OnPropertyChanged();
             }
         }
-
         public string Name
         {
             get => _name;
@@ -50,7 +90,6 @@ namespace ReinadelCisne.ViewModels
                 OnPropertyChanged();
             }
         }
-
         public string CI
         {
             get => _cI;
@@ -60,7 +99,6 @@ namespace ReinadelCisne.ViewModels
                 OnPropertyChanged();
             }
         }
-
         public string Cellnumber
         {
             get => _cellNumber;
@@ -70,8 +108,7 @@ namespace ReinadelCisne.ViewModels
                 OnPropertyChanged();
             }
         }
-
-        public string Pay
+        public double Pay
         {
             get => _pay;
             set
@@ -80,7 +117,6 @@ namespace ReinadelCisne.ViewModels
                 OnPropertyChanged();
             }
         }
-
         public string States
         {
             get => _state;
@@ -95,8 +131,12 @@ namespace ReinadelCisne.ViewModels
             get => _cantDiaHora;
             set
             {
-                _cantDiaHora = value;
-                OnPropertyChanged();
+                if(_cantDiaHora != value)
+                {
+                    _cantDiaHora = value;
+                    OnPropertyChanged();
+                    EstimarPago();
+                }                
             }
         }
         public string DescripcionObra
@@ -115,7 +155,7 @@ namespace ReinadelCisne.ViewModels
         private bool _isObra = false;
         private DateTime _minDate = new DateTime(2018, 1, 1);
         private DateTime _maxDate = new DateTime(2050, 1, 1);
-        private DateTime _selectedDate;
+        private TimeSpan _selectedDate;
         private string _cantDiaHora;
         private string _descripcionObra;
 
@@ -189,6 +229,7 @@ namespace ReinadelCisne.ViewModels
             {
                 _minDate = value;
                 OnPropertyChanged();
+                EstimarPago();
             }
         }
         public DateTime MaxDate
@@ -198,9 +239,10 @@ namespace ReinadelCisne.ViewModels
             {
                 _maxDate = value;
                 OnPropertyChanged();
+                EstimarPago();
             }
         }
-        public DateTime SelectedDate
+        public TimeSpan SelectedDate
         {
             get => _selectedDate;
             set
@@ -210,10 +252,11 @@ namespace ReinadelCisne.ViewModels
             }
         }
         public ObservableCollection<WorkForceModel> PerfilesLaborales { get; set; } = new ObservableCollection<WorkForceModel>();
+        public ObservableCollection<PersonalModel> ListPersonal { get; set; } = new ObservableCollection<PersonalModel>();
 
         public ICommand BackCommand => new Command(() =>
         {
-            Shell.Current.GoToAsync($"//Rini/Productos/NewStock/CostoProduccion?IdRM=0&IdWF=0");
+            Shell.Current.GoToAsync($"//Rini/Productos/NewStock/CostoProduccion?ListMaterialId=0&IdWF=0&IdListaMaquinaria=0&CantProd=&NameProd=");
         });
 
         public ICommand PushCommand => new Command((obj) =>
@@ -227,39 +270,142 @@ namespace ReinadelCisne.ViewModels
             switch (btn)
             {
                 case "cancelar":
-                    Shell.Current.GoToAsync($"//Rini/Productos/NewStock/CostoProduccion?IdRM=0&IdWF=0");
+                    Shell.Current.GoToAsync($"//Rini/Productos/NewStock/CostoProduccion?IdRM=0&IdWF=0&IdListaMaquinaria=0&CantProd=&NameProd=");
                     break;
                 case "guardar":
                     SaveWF();
+                    break;
+                case "addmanoobra":
+                    AddWorkForce();
+                    ClearAll();
+                    NumElementos = ListPersonal.Count();
+                    ValorTotalElementos = ListPersonal.Sum(x => x.Pay);
                     break;
                 default:
                     break;
             }
         }
 
+        private void AddWorkForce()
+        {
+            if (!string.IsNullOrEmpty(Name) && Pay >= 0)
+            {
+                //EstimarPago();
+                PersonalModel personal = new PersonalModel
+                {
+                    Id = ID,
+                    Name = Name,
+                    CI = CI,
+                    Telephone = Cellnumber,
+                    Pay = (float)Pay,
+                    Date = DateTime.Now,
+                    TypeContract = TypeContrato,
+                    WorkForce = PerfilWF
+                };
+
+                ListPersonal.Add(personal);
+                NumElementos = ListPersonal.Count();
+                ValorTotalElementos = ListPersonal.Sum(x => x.Pay);
+                
+            }
+            else
+            {
+                Shell.Current.DisplayAlert("Sin nombre", "Por favor, ingrese un nombre", "ok");
+            }
+            
+        }
+
+        private void ClearAll()
+        {
+            ID = 0;
+            PerfilWF = null;
+            Name = string.Empty;
+            CI = string.Empty;
+            Cellnumber = string.Empty;
+            Pay = 0;
+            CantDiasHoras = string.Empty;
+            TotalMeses = 0;
+        }
+
+        private void EstimarPago()
+        {
+            if(PerfilWF!= null)
+            {
+                var PagoDiario = PerfilWF.PayMonth / 30;
+
+                switch (TypeContrato)
+                {
+                    case "Por horas":
+                        var pagohora = PagoDiario / 8;
+
+                        var pagoPersonal = pagohora * int.Parse(CantDiasHoras);
+                        Pay = pagoPersonal;
+
+                        break;
+                    case "Mensual":
+                        SelectedDate = MaxDate.Subtract(MinDate);
+                        var numeromeses = SelectedDate.Days / 30;
+                        Pay = PerfilWF.PayMonth * numeromeses;
+                        TotalMeses = numeromeses;
+                        break;
+                    case "Por obra":
+
+                        break;
+                    case "Por dias":
+                        var pagodia = PagoDiario;
+                        Pay = pagodia * int.Parse(CantDiasHoras);
+                        break;
+                    default:
+                        break;
+                }
+            }
+            /*else
+            {
+                if(PerfilWF.Id >= 0)
+                {
+                    Shell.Current.DisplayAlert("Seleccione puesto laboral", "El personal no tiene asignado un puesto laboral", "ok");
+                }
+            }*/
+            
+        }
+
         private void SaveWF()
         {
-            PersonalModel personal = new PersonalModel
+            if (ListPersonal.Count > 0)
             {
-                Id = ID,
-                Name = Name,
-                CI = CI,
-                Telephone = Cellnumber,
-                Pay = float.Parse(Pay),
-                Date = DateTime.Now,
-                TypeContract = TypeContrato
-            };
+                ListWFModel listTrabajadores = new ListWFModel
+                {
+                    Total = ListPersonal.Sum(x => x.Pay)
+                };
 
-            App.Database.SavePersonal(personal);
+                var listaCreada = App.Database.SaveListWF(listTrabajadores);
+                listaCreada.Wait();
 
-            personal.WorkForce = PerfilWF;
+                listTrabajadores.PersonalxProduct = new List<PersonalModel>();
 
-            var rr = App.Database.UpdateRelationsPersonal(personal);
-            rr.Wait();
+                foreach (var personal in ListPersonal)
+                {
+                    var saveresp = App.Database.SavePersonal(personal);
+                    saveresp.Wait();
 
-            CrearRolPagos(personal);
-            
-            Shell.Current.GoToAsync($"//Rini/Productos/NewStock/CostoProduccion?IdRM=0&IdWF={personal.Id}");
+                    //personal.WorkForce = PerfilWF;
+                    //personal.ListWF = listTrabajadores;
+                    var rr = App.Database.UpdateRelationsPersonal(personal);
+                    rr.Wait();
+
+                    listTrabajadores.PersonalxProduct.Add(personal);
+                    App.Database.UpdateListWF(listTrabajadores);
+
+                    //CrearRolPagos(personal);
+
+                    //Shell.Current.GoToAsync($"//Rini/Productos/NewStock/CostoProduccion?IdRM=0&IdWF={personal.Id}");
+                }
+
+
+                Shell.Current.GoToAsync($"//Rini/Productos/NewStock/CostoProduccion?ListMaterialId=0&IdWF={listTrabajadores.Id}&IdListaMaquinaria=0&CantProd=&NameProd=");
+
+            }
+
         }
 
         private void CrearRolPagos(PersonalModel personal)
@@ -376,7 +522,7 @@ namespace ReinadelCisne.ViewModels
                     Name = wff.Name;
                     CI = wff.CI;
                     Cellnumber = wff.Telephone;
-                    Pay = wff.Pay.ToString();
+                    Pay = wff.Pay;
                     PerfilWF = wff.WorkForce;
                     TypeContrato = wff.TypeContract;
                 }

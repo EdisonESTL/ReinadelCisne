@@ -43,6 +43,17 @@ namespace ReinadelCisne.ViewModels
             }
         }
 
+        private double _pagoMes;
+        public double PagoMes
+        {
+            get => _pagoMes;
+            set
+            {
+                _pagoMes = value;
+                OnPropertyChanged();
+            }
+        }
+
         private string _tasks;
         public string Tasks
         {
@@ -119,6 +130,7 @@ namespace ReinadelCisne.ViewModels
                 {
                     Id = ID,
                     Name = JobTitle,
+                    PayMonth = PagoMes,
                     Tasks = Tasks,
                     Type = Typewf
                 };

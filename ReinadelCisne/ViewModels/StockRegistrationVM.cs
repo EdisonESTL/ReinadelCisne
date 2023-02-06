@@ -14,8 +14,8 @@ namespace ReinadelCisne.ViewModels
 {
     public class StockRegistrationVM : BaseVM, IQueryAttributable
     {
-        private string _productos;
-        public string Productos
+        private int _productos;
+        public int Productos
         {
             get => _productos;
             set
@@ -25,8 +25,8 @@ namespace ReinadelCisne.ViewModels
             }
         }
         
-        private string _costo;
-        public string Costo
+        private double _costo;
+        public double Costo
         {
             get => _costo;
             set
@@ -58,7 +58,7 @@ namespace ReinadelCisne.ViewModels
             }
         }
         
-        public ObservableCollection<PassString> ListPS { get; private set; } = new ObservableCollection<PassString>();
+        public ObservableCollection<ProductModel> ListPS { get; private set; } = new ObservableCollection<ProductModel>();
         public ObservableCollection<GroupsProductModel> GroupsProducts { get; private set; } = new ObservableCollection<GroupsProductModel>();
 
         public ICommand RefreshCommand
@@ -70,8 +70,8 @@ namespace ReinadelCisne.ViewModels
                     IsRefreshing = true;
 
                     ListProductStock();
-                    NumProducts();
-                    CostProduct();
+                    //NumProducts();
+                    //CostProduct();
 
                     IsRefreshing = false;
                 });
@@ -79,7 +79,7 @@ namespace ReinadelCisne.ViewModels
         }
         public ICommand NewStockCommand => new Command(() =>
         {
-            Shell.Current.GoToAsync($"//Rini/Productos/NewStock?IdListWF=0&IdListCI=0&IdListRM=0&IdProduct=0");
+            Shell.Current.GoToAsync($"//Rini/Productos/NewStock?IdObjetoconPrecio=0");
         });
         public ICommand SelectedCommnad => new Command((obj) =>
         {
@@ -103,18 +103,18 @@ namespace ReinadelCisne.ViewModels
         {
             Shell.Current.GoToAsync("//Rini/Productos/Ventas");
         });
-        public Command<PassString> Delete { get; }
-        public Command<PassString> Modify { get; }
+        public Command<object> Delete { get; }
+        public Command<object> Modify { get; }
         
         //Constructor
         public StockRegistrationVM()
         {
             ListProductStock();
-            NumProducts();
-            CostProduct();
+            //NumProducts();
+            //CostProduct();
             GroupProds();
-            Delete = new Command<PassString>(DeletePS);
-            Modify = new Command<PassString>(ModifyPS);
+            Delete = new Command<object>(DeletePS);
+            Modify = new Command<object>(ModifyPS);
         }
 
         private void FiltrarGrupo()
@@ -131,14 +131,7 @@ namespace ReinadelCisne.ViewModels
                 {
                     foreach (var tp in filtro.OrderByDescending(x => x.Id))
                     {
-                        PassString pass = new PassString
-                        {
-                            Data0 = tp.NameProduct,
-                            Data1 = "$" + tp.PrecioVentaProduct.ToString(),
-                            //Data2 = tp.CantProduct.ToString(),
-                            Data3 = tp.Id.ToString()
-                        };
-                        ListPS.Add(pass);
+                        ListPS.Add(tp);
                     }
                 }
             }
@@ -169,48 +162,48 @@ namespace ReinadelCisne.ViewModels
             }
             else
             {
-                Costo = "No hay productos registrados";
+                Costo = 0;
             }
         }
-        private async void NumProducts()
+        private void NumProducts()
         {
-            var resp = await App.Database.GetTotalProducts();
-            Productos = resp.ToString();
+            var resp = App.Database.GetTotalProducts().Result;
+            Productos = resp;
         }
         private async void ListProductStock()
         {
             ListPS.Clear();
             GroupsSelected = null;
-            List<string> products = new List<string>();
+
             List<ProductModel> lps = await App.Database.ListProduct();
             if (lps != null)
             {
                 foreach (var tp in lps.OrderByDescending(x => x.Id))
-                {
-                    PassString pass = new PassString{
-                        Data0 = tp.NameProduct,
-                        Data1 = "$" + tp.PrecioVentaProduct.ToString(),
-                        //Data2 = tp.CantProduct.ToString(),
-                        Data3 = tp.Id.ToString()
-                    };
-                    ListPS.Add(pass);
+                {                    
+                    ListPS.Add(tp);
                 }
+
+                Productos = ListPS.Count;
+                Costo = ListPS.Sum(x => x.PrecioVentaProduct * x.AmountProduct);
             }
 
         }
-        private async void DeletePS(PassString obj)
+        private async void DeletePS(object obj)
         {
-            var Id = obj.Data3;
-            var resu = App.Database.Get1Product(int.Parse(Id)).Result;
-            await App.Database.DeleteProduct(resu);
-            await Shell.Current.DisplayAlert("Hola", resu.NameProduct + " con precio: " + resu.PrecioVentaProduct + " Ha sido eliminado", "Ok");
+            //string Id = obj.Data3;
+            var obja = obj as ProductModel; 
+
+            //var resu = App.Database.Get1Product(int.Parse(Id)).Result;
+            await App.Database.DeleteProduct(obja);
+            await Shell.Current.DisplayAlert("Hola", obja.NameProduct + " con precio: " + obja.PrecioVentaProduct + " Ha sido eliminado", "Ok");
             ListProductStock();
-            NumProducts();
-            CostProduct();
+            //NumProducts();
+            //CostProduct();
         }
-        private async void ModifyPS(PassString obj)
+        private async void ModifyPS(object obj)
         {
-            await Shell.Current.GoToAsync($"//Rini/Productos/NewStock?IdListOC=0&IdlistRM=0&IdlistWF=0&idProduct={obj.Data3}");
+            var obja = obj as ProductModel;
+            await Shell.Current.GoToAsync($"//Rini/Productos/NewStock?IdListOC=0&IdlistRM=0&IdlistWF=0&idProduct={obja.Id}");
         }
 
         public void ApplyQueryAttributes(IDictionary<string, string> query)
@@ -221,8 +214,8 @@ namespace ReinadelCisne.ViewModels
                 if(regreso == "true")
                 {
                     ListProductStock();
-                    NumProducts();
-                    CostProduct();
+                    //NumProducts();
+                    //CostProduct();
                 }
             }
             catch(Exception)

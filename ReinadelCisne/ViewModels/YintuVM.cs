@@ -66,7 +66,9 @@ namespace ReinadelCisne.ViewModels
                 case "costosindirectos":
                     Shell.Current.GoToAsync("//Rini/OtherCost"); break;
                 case "mas":
-                    break;
+                    Shell.Current.GoToAsync("//Rini/CostosConstitucion"); break;
+                case "assets":
+                    Shell.Current.GoToAsync("//Rini/Assets"); break;
                 case "nuevo":
                     YintuNuevo(); break;
                 default:

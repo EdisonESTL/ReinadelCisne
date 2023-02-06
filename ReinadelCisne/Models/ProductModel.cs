@@ -16,6 +16,7 @@ namespace ReinadelCisne.Models
         public string DescriptionProduct { get; set; }
         public string LocationProduct { get; set; }
         public string ProductSupplier { get; set; }
+        public int AmountProduct { get; set; }
         public int MinimalExistence { get; set; }
         public int MaximumExistence { get; set; }
         public string UnidadMedida { get; set; }

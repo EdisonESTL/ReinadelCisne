@@ -11,11 +11,26 @@
     <ContentPage.Content>
         <StackLayout Margin="16"
                      VerticalOptions="CenterAndExpand">
+            <Label Style="{StaticResource LabelTittles1}">
+                <Label.FormattedText>
+                    <FormattedString>
+                        <Span Text="Hola, Aqui crearemos los puestos laborales"/>
+                        <Span Text="El puesto y el pago mensual, adicionalmente"/>
+                        <Span Text="puede añadir una descripción de las tareas del puesto laboral."/>
+                    </FormattedString>
+                </Label.FormattedText>
+            </Label>
             <Label Text="Puesto laboral"
                    Style="{StaticResource LabelTittlesColLectionView}"
                    HorizontalOptions="StartAndExpand"/>
             <Entry Style="{StaticResource Entry1}"
                    Text="{Binding JobTitle}"></Entry>
+            
+            <Label Text="Pago mensual"
+                   Style="{StaticResource LabelTittlesColLectionView}"
+                   HorizontalOptions="StartAndExpand"/>
+            <Entry Style="{StaticResource Entry1}"
+                   Text="{Binding PagoMes}"></Entry>
 
             <Label Text="Tareas"
                    Style="{StaticResource LabelTittlesColLectionView}"
@@ -23,12 +38,12 @@
                    />
             <Editor Style="{StaticResource Editor1}"
                     AutoSize="TextChanges"
-                    Text="{Binding Tasks}"/>
+                    Text="{Binding Tasks}"/>            
 
             <Label Text="Tipo:" 
                    Style="{StaticResource LabelTittlesColLectionView}"
-                   HorizontalOptions="StartAndExpand"/>
-
+                   HorizontalOptions="StartAndExpand"/>         
+                        
             <Picker TextColor="Black"
                     Title="Selecione una opción"
                     SelectedItem="{Binding SelecctTypeWF}"

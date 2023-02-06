@@ -13,6 +13,34 @@ namespace ReinadelCisne.ViewModels
 {
     public class RawMaterialVm : BaseVM
     {
+        int _totalElementos;
+        public int TotalElementos
+        {
+            get => _totalElementos;
+            set
+            {
+                if(value != _totalElementos)
+                {
+                    _totalElementos = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        double _totalValores;
+        public double TotalValores
+        {
+            get => _totalValores;
+            set
+            {
+                if (value != _totalValores)
+                {
+                    _totalValores = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
         private bool _isRefreshing = false;
         public bool IsRefreshing
         {
@@ -122,7 +150,7 @@ namespace ReinadelCisne.ViewModels
         {
             if(groupSelected != null)
             {
-                var resp = App.Database.GetESpecificGroup(groupSelected).Result;
+                GroupsRMModel resp = App.Database.GetESpecificGroup(groupSelected).Result;
                 var resp2 = App.Database.GetMR().Result;
 
                 var g = (from a in resp2
@@ -179,6 +207,9 @@ namespace ReinadelCisne.ViewModels
                         RawMaterials.Add(rrm);
                     }                    
                 }
+
+                TotalElementos = RawMaterials.Count();
+                TotalValores = RawMaterials.Sum(x => x.CostoRM * x.CantidadRM);
             }
 
         }

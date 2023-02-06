@@ -7,400 +7,215 @@
     <ContentPage.BindingContext>
         <vm:CostosIndirectosVM/>
     </ContentPage.BindingContext>
+    <Shell.BackButtonBehavior>
+        <BackButtonBehavior Command="{Binding BackCommand}"/>
+    </Shell.BackButtonBehavior>
     <ContentPage.Content>
-        <StackLayout Padding="7"
+        <StackLayout Margin="3"
                      VerticalOptions="CenterAndExpand">
-            <Grid x:Name="AreaResultados"
-                  RowDefinitions="Auto, Auto, Auto"
-                  BackgroundColor="Linen"
-                  Padding="0,7,0,16">
-                
-                <Label Text="MPD"
-                       Style="{StaticResource LabelTittlesColLectionView}"
-                       Grid.Row="0"
-                       Grid.Column="0"/>
-                <Label Style="{StaticResource LabelTittles1}"
-                       Grid.Row="1"
-                       Text="{Binding TotalRM, StringFormat=\{0:c\}}"
-                       Grid.Column="0">
-                </Label>
-                
-                <Label Text="MOD"
-                   Style="{StaticResource LabelTittlesColLectionView}"
-                       Grid.Row="0"
-                       Grid.Column="1"/>
-                <Label Style="{StaticResource LabelTittles1}"
-                       Grid.Row="1"
-                       Grid.Column="1"
-                       Text="{Binding TotalWF, StringFormat=\{0:c\}}">
-                </Label>
-                <Label Text="CIF"
-                   Style="{StaticResource LabelTittlesColLectionView}"
-                       Grid.Row="0"
-                       Grid.Column="2"/>
-                <Label Text="{Binding TotalCI, StringFormat=\{0:c\}}"
-                    Style="{StaticResource LabelTittles1}"
-                       Grid.Row="1"
-                       Grid.Column="2">
-                </Label>
-
-                <StackLayout Grid.Row="2"
-                             Grid.ColumnSpan="3"
-                             Orientation="Horizontal"
-                             HorizontalOptions="Center"
-                             Margin="0,7,0,0">
-                    <Button Text="Cancelar"
-                            Style="{StaticResource ButtonCancel}"
-                            Command="{Binding PushCommand}"
-                            CommandParameter="Cancel"/>
-                    <Button Text="Guardar"
-                            Style="{StaticResource Button1}"
-                            TextColor="White"
-                            Command="{Binding PushCommand}"
-                            CommandParameter="GuardarTodo"/>
+            <Grid x:Name="Cabecera"
+                ColumnDefinitions="2*,*">
+                <StackLayout x:Name="TitulosProducto"
+                             Grid.Column="0">
+                    <Label Style="{StaticResource LabelTittles1}">
+                        <Label.FormattedText>
+                            <FormattedString>
+                                <Span Text="Nombre producto: &#10;"
+                                      FontAttributes="None"/>
+                                <Span Text="{Binding NameProd}"
+                                  CharacterSpacing="1"
+                                  FontSize="22"
+                                      FontAttributes="Bold"/>
+                            </FormattedString>
+                        </Label.FormattedText>
+                    </Label>
+                    <Label Style="{StaticResource LabelTittles1}"
+                           >
+                        <Label.FormattedText>
+                            <FormattedString>
+                                <Span Text="# Unidades:    "/>
+                                <Span Text="{Binding CantProd}"
+                                  CharacterSpacing="1"
+                                  FontSize="22"
+                                      FontAttributes="Bold"/>
+                            </FormattedString>
+                        </Label.FormattedText>
+                    </Label>
                 </StackLayout>
+                <Label Grid.Column="1"
+                       HorizontalTextAlignment="Center"
+                       Style="{StaticResource LabelTittles1}">
+                    <Label.FormattedText>
+                        <FormattedString>
+                            <Span Text="Precio fabricación: &#10;"
+                                  TextColor="Black"
+                                  FontSize="16"/>
+                            <Span Text="{Binding PrecioProduct, StringFormat=\{0:C\}}"
+                                  TextColor="Black"
+                                  FontSize="22"
+                                  FontAttributes="Bold"/>
+                        </FormattedString>
+                    </Label.FormattedText>
+                </Label>
             </Grid>
-
-            <StackLayout x:Name="ElementoMateriaPrima"
-                IsVisible="{Binding VerMateriaPrima}"
-                Margin="0,20,0,0"
-                         Padding="6"
-                         BackgroundColor="#E4E4E4">
-                <Label Text="Materia Prima"
-                       Style="{StaticResource LabelTittlesColLectionView}"
-                       HorizontalOptions="CenterAndExpand"/>
-                <Grid ColumnDefinitions="*, Auto"
-                      RowDefinitions="Auto"
-                      Padding="12">
-                    <Label Text="Añada la materia prima para producir el producto e ingresa la cantidad a usar."
-                           Grid.Column="0"
-                           Style="{StaticResource LabelTittles1}"
-                       HorizontalOptions="CenterAndExpand"
-                       Margin="0,0,0,20"/>
-                    <ImageButton Source="plus.png"
-                                 Aspect="AspectFit"
-                                 Grid.Column="1"
-                                 BackgroundColor="Transparent"
-                                 WidthRequest="60"
-                                 Command="{Binding AddRM}"/>
-                </Grid>
-                
-                <CollectionView ItemsSource="{Binding MaterialProduccion, Mode=OneWay}" 
-                                SelectionMode="Single" 
-                                x:Name="listaMateriaPrima">
-                    <CollectionView.ItemsLayout>
-                        <GridItemsLayout Orientation="Vertical" VerticalItemSpacing="3"/>
-                    </CollectionView.ItemsLayout>
-                    <CollectionView.ItemTemplate>
-                        <DataTemplate>
-                            <Frame Style="{StaticResource Frame4}"
-                                   Padding="16,6,16,6">
-                                <Grid RowDefinitions="*,Auto"
-                                      ColumnDefinitions="Auto, *, Auto">
-
-                                    <Label Grid.Column="0"
-                                           Grid.Row="0"                                            
-                                           Style="{StaticResource LabelRegistroVenta}" 
-                                           FontSize="15">
-                                        <Label.FormattedText>
-                                            <FormattedString>
-                                                <Span Text="{Binding RawMaterial.NameRM}"/>
-                                            </FormattedString>
-                                        </Label.FormattedText>
-                                    </Label>
-                                    <Label Grid.Column="0" 
-                                           Grid.Row="1"
-                                           Text="{Binding RawMaterial.DescriptionRM}" 
-                                           Style="{StaticResource LabelTittles1}" 
-                                           FontSize="15"/>
-
-                                    <Label Grid.Column="1"
-                                           Grid.Row="0"                                           
-                                           Style="{StaticResource LabelTittles1}" 
-                                           FontSize="15">
-                                        <Label.FormattedText>
-                                            <FormattedString>
-                                                <Span Text="Cant. usar&#10;"/>
-                                                <Span Text="{Binding CantUsar}"
-                                                      FontSize="18"
-                                                      FontAttributes="Bold"/>
-                                            </FormattedString>
-                                        </Label.FormattedText>
-                                    </Label>
-
-                                    <Label Grid.Column="1"
-                                           Grid.Row="1"                                            
-                                           Style="{StaticResource LabelTittles1}" >
-                                        <Label.FormattedText>
-                                            <FormattedString>
-                                                <Span Text="{Binding RawMaterial.UMedidaRM.Description}"
-                                                      TextColor="Black"/>
-                                            </FormattedString>
-                                        </Label.FormattedText>
-                                    </Label>
-
-                                    <Label Grid.Column="3"
-                                           Grid.Row="0" 
-                                           Grid.RowSpan="2"
-                                           Style="{StaticResource LabelTittles1}" >
-                                        <Label.FormattedText>
-                                            <FormattedString>
-                                                <Span Text="v/u&#10;"
-                                                      TextColor="Black"/>
-                                                <Span Text="{Binding RawMaterial.CostoRM , StringFormat=\{0:c\}}"
-                                                      TextColor="Black"/>
-                                            </FormattedString>
-                                        </Label.FormattedText>
-                                    </Label>
-                                </Grid>
-                            </Frame>
-                        </DataTemplate>
-                    </CollectionView.ItemTemplate>
-                    <CollectionView.EmptyView>
-                        <StackLayout HorizontalOptions="CenterAndExpand"
-                             VerticalOptions="CenterAndExpand">
-                            <Label Text="Hola, no hay materia prima"
-                                   Margin="10,25,10,10"
-                                   Style="{StaticResource LabelTittlesColLectionView}"
-                                   HorizontalOptions="Fill"
-                                   HorizontalTextAlignment="Center" 
-                                   TextColor="Black"/>
-                        </StackLayout>
-                    </CollectionView.EmptyView>
-                </CollectionView>
-            </StackLayout>
             
-            <StackLayout x:Name="ElementoManoObra"
-                  Margin="0,20,0,0"
-                  IsVisible="{Binding VerManoObra}"
-                  BackgroundColor="#E4E4E4"
-                  Padding="6">
-                <Label Text="Mano de obra"
-                       Style="{StaticResource LabelTittlesColLectionView}"
-                       HorizontalOptions="CenterAndExpand"/>
-                <Grid ColumnDefinitions="*, Auto"
-                      RowDefinitions="Auto"
-                      Padding="12">
-                    <Label Text="Añada la mano de obra para producir el producto"
-                           Grid.Column="0"
-                           Style="{StaticResource LabelTittles1}"
-                       HorizontalOptions="CenterAndExpand"
-                       Margin="0,0,0,20"/>
-                    <ImageButton Source="plus.png"
-                                 Aspect="AspectFit"
-                                 Grid.Column="1"
-                                 BackgroundColor="Transparent"
-                                 WidthRequest="60"
-                                 Command="{Binding AddWF}"/>
-                </Grid>
-                
-                <CollectionView x:Name="listaManoObra"
-                                ItemsSource="{Binding WorkForces, Mode=OneWay}" 
-                                SelectionMode="None" 
-                                >
-                    <CollectionView.ItemsLayout>
-                        <GridItemsLayout Orientation="Vertical" VerticalItemSpacing="10"/>
-                    </CollectionView.ItemsLayout>
-                    <CollectionView.ItemTemplate>
-                        <DataTemplate>
-                            <Frame Style="{StaticResource FrameProductss}"
-                                   Padding="0">
-                                <SwipeView BackgroundColor="Transparent">
-                                    <SwipeView.RightItems>
-                                        <SwipeItems>
-                                            <SwipeItem Text="Eliminar"
-                                                   BackgroundColor="LightPink" 
-                                                   Command="{Binding Path=BindingContext.DeleteWFCommand,Source={x:Reference listaManoObra}}" CommandParameter="{Binding .}"
-                                                   />
-                                            <SwipeItem Text="Modificar"
-                                                   BackgroundColor="LightGreen"
-                                                   Command="{Binding Path=BindingContext.ModifyWFCommand,Source={x:Reference listaManoObra}}" CommandParameter="{Binding .}"
-                                                   />
-                                        </SwipeItems>
-                                    </SwipeView.RightItems>
-                                    <Grid Margin="2" 
-                                          Padding="0" 
-                                          HorizontalOptions="CenterAndExpand" 
-                                          RowDefinitions="Auto, Auto" 
-                                          ColumnDefinitions="*, Auto, *, *"
-                                          ColumnSpacing="20">
-                                        <Label Grid.Column="1" 
-                                               Grid.Row="0" 
-                                               Text="{Binding WorkForce.Name}" 
-                                               TextColor="#102949" 
-                                               FontSize="16"
-                                               Style="{StaticResource LabelTittlesColLectionView}"
-                                               VerticalOptions="Center"/>
-                                        
-                                        <Label Grid.Column="2" 
-                                               Grid.Row="0"                                                 
-                                               TextColor="#102949" 
-                                               FontSize="16">
-                                            <Label.FormattedText>
-                                                <FormattedString>
-                                                    <Span Text="costo&#10; " FontSize="13"/>
-                                                    <Span Text="{Binding Pay}" FontSize="13"/>
-                                                </FormattedString>
-                                            </Label.FormattedText>
-                                        </Label>
-                                    </Grid>
-                                </SwipeView>
-                            </Frame>
-                        </DataTemplate>
-                    </CollectionView.ItemTemplate>
-                </CollectionView>
-            </StackLayout>
-
-            <StackLayout x:Name="ElementoCostosInd"
-                Margin="7" 
-                  IsVisible="{Binding VerCostosIndirectos}"
-                  BackgroundColor="#E4E4E4"
-                  Padding="6">
-                <Label Text="Costos indirectos de fabricación"
-                       HorizontalOptions="Center" 
-                       Style="{StaticResource LabelTittlesColLectionView}"/>
-                <Grid ColumnDefinitions="*, *"
-                      RowDefinitions="Auto"
-                      HorizontalOptions="CenterAndExpand"
-                      Margin="0,0,0,10">
-                    <Button Text="{Binding TotalMOI, StringFormat='MPI: {0:C}'}"
-                            Grid.Column="0"/>
-                    <Button Text="{Binding TotalWFI, StringFormat='MOI: {0:C}'}"
-                            Grid.Column="1"/>
-                </Grid>
-                
-                <Label Text="Añadir otros valores"
-                       Style="{StaticResource LabelTittlesColLectionView}"/>
-                <Grid ColumnDefinitions="*,*"
-                      RowDefinitions="Auto, Auto">
-                    <Entry Placeholder="Descripción"
-                           ClearButtonVisibility="WhileEditing"
-                           Grid.Row="0" 
-                           Grid.ColumnSpan="2"
-                           FontSize="Small" 
-                           Text="{Binding CostIndirect.DescriptionOC, Mode=TwoWay}"
-                           Style="{StaticResource Entry1}"/>
-
-                    <Entry Placeholder="Valor" 
-                        ClearButtonVisibility="WhileEditing"
-                       Keyboard="Numeric"
-                       Text="{Binding CostIndirect.CostOC, Mode=TwoWay}" 
-                       Grid.Row="1" 
+            <Grid x:Name="Tiempo"
+                ColumnDefinitions="*,*,*">
+                <Label Text="Tiempo estimado &#10; de fabricación"
                        Grid.Column="0"
-                       Style="{StaticResource Entry1}"/>
-                    <ImageButton Source="plus.png"
-                                 Aspect="AspectFit"
-                                 Grid.Row="1"
-                                 Grid.Column="1"
-                                 BackgroundColor="Transparent"
-                                 WidthRequest="60"
-                                 Command="{Binding AddCI}"/>
-                </Grid>
+                       Style="{StaticResource LabelTittlesColLectionView}"/>
+                <Picker x:Name="grupos"
+                        Title="Tiempo"
+                        BackgroundColor="White"                    
+                        SelectedItem="{Binding SeleccionarGroupFA}"
+                        Grid.Column="1">
+                    <Picker.ItemsSource>
+                        <x:Array Type="{x:Type x:String}">
+                            <x:String>Hora</x:String>
+                            <x:String>Día</x:String>
+                            <x:String>Semana</x:String>
+                            <x:String>Mes</x:String>
+                            <x:String>Año</x:String>
+                        </x:Array>
+                    </Picker.ItemsSource>
+                </Picker>
+                <Entry Placeholder="Cantidad" 
+                    Style="{StaticResource Entry1}"
+                       Grid.Column="2"/>
+            </Grid>
+            <Grid x:Name="AreaResultados"
+                  RowDefinitions="Auto, Auto"
+                  BackgroundColor="Linen"
+                  Margin="20"
+                  Padding="20"
+                  RowSpacing="30">                
+                <Label Grid.Row="0"                       
+                       Grid.Column="0"
+                       Style="{StaticResource LabelTittlesColLectionView}">
+                    <Label.FormattedText>
+                        <FormattedString>
+                            <Span Text="Materia prima directa &#10;"/>
+                            <Span Text="{Binding TotalRM, StringFormat=\{0:c\}}"
+                                  FontSize="22"/>
+                        </FormattedString>
+                    </Label.FormattedText>
+                </Label>
 
-
-                <RefreshView IsRefreshing="{Binding IsRefreshing}"
-                             Command="{Binding Path=RefreshCommand}" Grid.Row="8" Grid.ColumnSpan="2">
-                    <CollectionView ItemsSource="{Binding OtherCosts, Mode=OneWay}" 
-                                    SelectionMode="None" x:Name="listaOtrosCostos">
-                        <CollectionView.ItemsLayout>
-                            <GridItemsLayout Orientation="Vertical" VerticalItemSpacing="7"/>
-                        </CollectionView.ItemsLayout>
-                        <CollectionView.ItemTemplate>
-                            <DataTemplate>
-                                <Frame Style="{StaticResource FrameLogin}"
-                                       CornerRadius="20"
-                                       Padding="0">
-                                    <SwipeView BackgroundColor="Transparent">
-                                        <SwipeView.RightItems>
-                                            <SwipeItems>
-                                                <SwipeItem Text="Eliminar"
-                                                   BackgroundColor="Red"
-                                                   Command="{Binding Path=BindingContext.DeleteCICommand,Source={x:Reference listaOtrosCostos}}" CommandParameter="{Binding .}"
-                                                   />
-                                                <SwipeItem Text="Modificar"
-                                                   BackgroundColor="Blue"
-                                                   Command="{Binding Path=BindingContext.ModifyCICommand,Source={x:Reference listaOtrosCostos}}" CommandParameter="{Binding .}"
-                                                   />
-                                            </SwipeItems>
-                                        </SwipeView.RightItems>
-                                        <Grid Padding="10" 
-                                              HorizontalOptions="Center" 
-                                              RowDefinitions="Auto" 
-                                              ColumnDefinitions="Auto, *"
-                                              ColumnSpacing="10">
-                                            <Label Grid.Column="0" Grid.Row="0"                                                    
-                                                   Style="{StaticResource LabelTittles1}"
-                                                   TextColor="White" >
-                                                <Label.FormattedText>
-                                                    <FormattedString>
-                                                        <Span Text="Descripción:&#10;" 
-                                                              />
-                                                        <Span Text="{Binding DescriptionOC}" 
-                                                              FontSize="18"/>
-                                                    </FormattedString>
-                                                </Label.FormattedText>
-                                            </Label>
-                                            <Label Grid.Column="1" Grid.Row="0"                                                     
-                                                    Style="{StaticResource LabelTittles1}"
-                                                   TextColor="White">
-                                                <Label.FormattedText>
-                                                    <FormattedString>
-                                                        <Span Text="Valor:&#10;"/>
-                                                        <Span Text="{Binding CostOC, StringFormat=\{0:c\}}" 
-                                                              FontSize="16"/>
-                                                    </FormattedString>
-                                                </Label.FormattedText>
-                                            </Label>
-                                        </Grid>
-                                    </SwipeView>
-                                </Frame>
-                            </DataTemplate>
-                        </CollectionView.ItemTemplate>
-                    </CollectionView>
-                </RefreshView>
-            </StackLayout>
-
+                <Label Grid.Row="0"                       
+                       Grid.Column="1"
+                       Style="{StaticResource LabelTittlesColLectionView}">
+                    <Label.FormattedText>
+                        <FormattedString>
+                            <Span Text="Mano de obra directa &#10;"/>
+                            <Span Text="{Binding TotalWF, StringFormat=\{0:c\}}"
+                                  FontSize="22"/>
+                        </FormattedString>
+                    </Label.FormattedText>
+                </Label>
+                <Label Grid.Row="1"                       
+                       Grid.Column="0"
+                       Style="{StaticResource LabelTittlesColLectionView}">
+                    <Label.FormattedText>
+                        <FormattedString>
+                            <Span Text="Costos indirectos de fabricación &#10;"/>
+                            <Span Text="{Binding TotalCI, StringFormat=\{0:c\}}"
+                                  FontSize="22"/>
+                        </FormattedString>
+                    </Label.FormattedText>
+                </Label>
+                <Label Grid.Row="1"                       
+                       Grid.Column="1"
+                       Style="{StaticResource LabelTittlesColLectionView}">
+                    <Label.FormattedText>
+                        <FormattedString>
+                            <Span Text="Maquinaria &#10;"/>
+                            <Span Text="{Binding TotalMaquinaria, StringFormat=\{0:c\}}"
+                                  FontSize="22"/>
+                        </FormattedString>
+                    </Label.FormattedText>
+                </Label>                
+            </Grid>
+            
             <Grid x:Name="AreaButtons" 
-                RowDefinitions="Auto"
-                  ColumnDefinitions="*, *, *">
+                RowDefinitions="Auto, Auto"
+                  ColumnDefinitions="*,*"
+                  RowSpacing="17"
+                  Padding="7,15,7,15"
+                  BackgroundColor="LightGray"
+                  >
                 <Button Text="Materia Prima"
-                        ImageSource="rawmaterial1.png"
-                        ContentLayout="left, 0"
-                        Style="{StaticResource Button2}"
                         Grid.Row="0"
                         Grid.Column="0"
-                        Margin="0"
+                        ImageSource="rawmaterial.png"
+                        ContentLayout="left, 0"
+                        Style="{StaticResource Button2}"
+                        HorizontalOptions="CenterAndExpand"
+                        CornerRadius="35"
+                        FontAttributes="Bold"
+                        FontSize="13"
                         Padding="0"
-                        CornerRadius="0"
-                        FontSize="11"
                         Command="{Binding PushCommand}"
-                        CommandParameter="VerMT"/>
+                        CommandParameter="VerMT"
+                        BackgroundColor="LightSkyBlue"
+                        TextColor="Black"/>
                 <Button Text="Mano de Obra"
-                        ImageSource="manobraL.png"
+                        ImageSource="manoobra.png"
                         ContentLayout="left,0"
                         Style="{StaticResource Button2}"
                         Grid.Row="0"
                         Grid.Column="1"
-                        Margin="0"
-                        Padding="0"
-                        CornerRadius="0"
-                        FontSize="11"
+                        CornerRadius="35"
+                        FontSize="13"
+                        FontAttributes="Bold"
                         Command="{Binding PushCommand}"
-                        CommandParameter="VerWF"/>
-                <Button Text="Otros Costos"
-                        ImageSource="costindiL.png"
+                        CommandParameter="VerWF"
+                        BackgroundColor="LightGreen"
+                        TextColor="Black"/>
+                <Button Text="Costos Indirectos"
+                        ImageSource="costind.png"
                         ContentLayout="left,0"
                         Style="{StaticResource Button2}"
-                        Grid.Row="0"
-                       Grid.Column="2"
-                        Margin="0"
-                        Padding="0"
-                        CornerRadius="0"
+                        Grid.Row="1"
+                        Grid.Column="0"
+                        CornerRadius="35"
+                        FontAttributes="Bold"
                         Command="{Binding PushCommand}"
                         CommandParameter="VerCI"
-                        FontSize="11"/>
+                        FontSize="13"
+                        Margin="0"
+                        Padding="0"
+                        BackgroundColor="LightYellow"
+                        TextColor="Black"/>
+                <Button Text="Maquinaria"
+                        ImageSource="ActivoFijoM.png"
+                        ContentLayout="left,9"
+                        Style="{StaticResource Button2}"
+                        Grid.Row="1"
+                        Grid.Column="1"
+                        CornerRadius="35"
+                        FontAttributes="Bold"
+                        Command="{Binding PushCommand}"
+                        CommandParameter="VerMaqui"
+                        FontSize="13"
+                        Padding="0"
+                        Margin="0"
+                        BackgroundColor="LightSalmon"
+                        TextColor="Black"/>
             </Grid>
-            
+            <StackLayout Orientation="Horizontal"
+                         HorizontalOptions="Center"
+                         Margin="0,15,0,15"
+                         Spacing="30">
+                <Button Text="Cancelar"
+                            Style="{StaticResource ButtonCancel}"
+                            Command="{Binding PushCommand}"
+                            CommandParameter="Cancel"/>
+                <Button Text="Guardar"
+                            Style="{StaticResource Button1}"
+                            TextColor="White"
+                            Command="{Binding PushCommand}"
+                            CommandParameter="GuardarTodo"/>
+            </StackLayout>
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>

@@ -9,12 +9,48 @@
     </ContentPage.BindingContext>
     <ContentPage.Content>
         <StackLayout Padding="10">
-            <Label Text="Filtrar por grupo"
+            <StackLayout Orientation="Horizontal"
+                         HorizontalOptions="Center"
+                         Spacing="30">
+                <StackLayout>
+                    <Label x:Name="TotalElementos"
+                           Style="{StaticResource LabelTittlesColLectionView}">
+                        <Label.FormattedText>
+                            <FormattedString>
+                                <Span Text="Total elementos&#10;"></Span>
+                                <Span Text="{Binding TotalElementos}"
+                                      FontSize="19"></Span>
+                            </FormattedString>
+                        </Label.FormattedText>
+                    </Label>
+                </StackLayout>
+                <StackLayout>
+                    <Label x:Name="TotalValor"
+                           Style="{StaticResource LabelTittlesColLectionView}">
+                        <Label.FormattedText>
+                            <FormattedString>
+                                <Span Text="Total valor&#10;"></Span>
+                                <Span Text="{Binding TotalValores, StringFormat=\{0:c\}}"
+                                      FontSize="19"></Span>
+                            </FormattedString>
+                        </Label.FormattedText>
+                    </Label>
+                </StackLayout>
+            </StackLayout>
+            <Label x:Name="FiltroTitle"
+                Text="Filtrar por grupo"
                    TextColor="Black"/>
-            <Grid ColumnDefinitions="*, Auto, Auto"
+            <Frame BackgroundColor="Indigo"
+                   BorderColor="CornflowerBlue"
+                   CornerRadius="30"
+                   Padding="20"
+                   Margin="0"
+                   VerticalOptions="Center">
+                <Grid x:Name="Cuerpofiltro"
+                ColumnDefinitions="2*, Auto, Auto"
                   RowDefinitions="Auto"
-                  Margin="60,0,40,20">
-                <Picker x:Name="picker"
+                  >
+                    <Picker x:Name="picker"
                         Grid.Column="0"
                     Title="Grupo"
                     TitleColor="Black"
@@ -22,7 +58,7 @@
                     ItemsSource="{Binding GroupsRMs}"
                     ItemDisplayBinding="{Binding Description}"
                     SelectedItem="{Binding GroupSelected}"/>
-                <ImageButton Source="searchhd.png"
+                    <ImageButton Source="searchhd.png"
                              BackgroundColor="{StaticResource PrimerColor}"
                              CornerRadius="35"
                              Grid.Column="1"
@@ -30,7 +66,7 @@
                              Command="{Binding PerformSearch}"
                              Aspect="AspectFit"
                              Padding="10,0,10,0"/>
-                <ImageButton Source="arbol1.png"                             
+                    <ImageButton Source="arbol1.png"                             
                              BackgroundColor="{StaticResource SegundoColor}"
                              CornerRadius="35"
                              Grid.Column="2"
@@ -39,7 +75,9 @@
                              CommandParameter="todo"
                              Aspect="AspectFit"
                              Padding="15,0,15,0"/>
-            </Grid>
+                </Grid>
+            </Frame>
+            
             <RefreshView IsRefreshing="{Binding IsRefreshing}" Command="{Binding RefreshCommand}">
                 <CollectionView ItemsSource="{Binding RawMaterials, Mode=OneWay}" 
                                 SelectionMode="Single" 
@@ -70,9 +108,12 @@
                                                    CommandParameter="{Binding .}"/>
                                     </SwipeItems>
                                 </SwipeView.RightItems>
-                                <Frame Style="{StaticResource Frame2}">
-                                    <Grid RowDefinitions="*, *, *"
-                                      ColumnDefinitions="*, Auto, *, *">
+                                <Frame Style="{StaticResource Frame2}"
+                                       Margin="0"
+                                       Padding="0">
+                                    <Grid RowDefinitions="Auto, Auto, Auto"
+                                      ColumnDefinitions="*, 2*, Auto, Auto"
+                                          Padding="11">
 
                                         <Image Source="rawmaterial.png"
                                            Grid.Column="0"
@@ -83,7 +124,7 @@
                                            Grid.ColumnSpan="3"
                                            Grid.Row="0"                                            
                                            Style="{StaticResource LabelRegistroVenta}" 
-                                           FontSize="15">
+                                           FontSize="20">
                                             <Label.FormattedText>
                                                 <FormattedString>
                                                     <Span Text="{Binding NameRM}"/>
@@ -96,8 +137,12 @@
                                            Text="{Binding DescriptionRM}" Style="{StaticResource LabelTittles1}" FontSize="15"/>
                                         <Label Grid.Column="3" 
                                            Grid.Row="1"
-                                           Text="{Binding TypeRM}" Style="{StaticResource LabelTittles1}" FontSize="15"/>
-                                        <Label Grid.Column="1"
+                                           Text="{Binding TypeRM}" 
+                                               Style="{StaticResource LabelTittles1}" 
+                                               FontAttributes="Italic"
+                                               FontSize="15"
+                                               HorizontalOptions="CenterAndExpand"/>
+                                        <Label Grid.Column="0"
                                            Grid.Row="2"                                           
                                            Style="{StaticResource LabelRegistroVenta}" 
                                            FontSize="15">
@@ -109,7 +154,7 @@
                                             </Label.FormattedText>
                                         </Label>
 
-                                        <Label Grid.Column="2"
+                                        <Label Grid.Column="1"
                                            Grid.Row="2"                                            
                                            Style="{StaticResource LabelRegistroVenta}" 
                                            FontSize="15">
@@ -121,7 +166,6 @@
                                             </Label.FormattedText>
                                         </Label>
                                         <Label Grid.Column="3"
-                                           Grid.ColumnSpan="2"
                                            Grid.Row="2"                                           
                                            Style="{StaticResource LabelRegistroVenta}" 
                                            FontSize="15">

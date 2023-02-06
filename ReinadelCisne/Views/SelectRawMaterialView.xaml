@@ -5,83 +5,171 @@
              x:Class="ReinadelCisne.Views.SelectRawMaterialView"
              Title="Seleccionar materia prima">
     <ContentPage.BindingContext>
-        <vm:SelectRawMaterialVM/>
+        <vm:SelectRawMaterialVM/>  
     </ContentPage.BindingContext>
     <Shell.BackButtonBehavior>
         <BackButtonBehavior Command="{Binding BackCommand}"/>
     </Shell.BackButtonBehavior>
     <ContentPage.Content>
         <StackLayout Padding="10">
-            <Frame Style="{StaticResource Frame1}">                
-                <Grid ColumnDefinitions="*, Auto, Auto"
-                  RowDefinitions="Auto, Auto"
-                  Margin="0,0,0,0">
-                    <Label Text="Filtrar por grupo"
+            <Frame x:Name="Cuadrobusqueda" IsVisible="true"
+                Style="{StaticResource Frame1}">                
+                <Grid ColumnDefinitions="*, *"
+                  RowDefinitions="Auto, Auto, Auto, Auto, Auto, Auto"
+                      RowSpacing="11">                    
+                    <Label x:Name="TituloSeleccionarRM" 
+                        Text="Grupo"
                            Grid.Row="0"
-                           Grid.ColumnSpan="3"
+                           Grid.Column="0"
                    Style="{StaticResource LabelTittlesColLectionView}"/>
-                    <Picker x:Name="picker"
+                    <Picker x:Name="pickerSeleccionarRM"
                             Grid.Row="1"
-                        Grid.Column="0"
-                    Title="Grupo"
-                    TitleColor="Black"
-                    BackgroundColor="White"
-                    ItemsSource="{Binding GroupsRMs}"
-                    ItemDisplayBinding="{Binding Description}"
-                    SelectedItem="{Binding GroupSelected}"/>
-                    <ImageButton Source="searchhd.png"
-                             BackgroundColor="{StaticResource PrimerColor}"
+                            Grid.Column="0"
+                            Title="Grupo"
+                            TitleColor="Black"
+                            BackgroundColor="White"
+                            ItemsSource="{Binding GrupofromRawMaterial}"
+                            ItemDisplayBinding="{Binding Description}"
+                            SelectedItem="{Binding GrupoSeleccionado}"
+                            TextColor="Black"
+                            />
+                    
+                    <Label x:Name="TituloMaterial" 
+                           Text="Material"
+                           Grid.Row="2"
+                           Grid.Column="0"
+                           Style="{StaticResource LabelTittlesColLectionView}"/>
+                    <Picker x:Name="pickerMaterial"
+                            Grid.Row="3"
+                            Grid.Column="0"
+                            Title="Material"
+                            TitleColor="Black"
+                            BackgroundColor="White"
+                            ItemsSource="{Binding ListRawMaterial}"
+                            ItemDisplayBinding="{Binding NameRM}"
+                            SelectedItem="{Binding RawMaterialSelected}"
+                            TextColor="Black"
+                    />
+                    
+                    <ImageButton Source="buscar.png"
+                                 BackgroundColor="Chocolate"
+                                 BorderColor="Black"
+                                 BorderWidth="3"
+                                 CornerRadius="35"
+                                 Grid.Column="1"
+                                 Grid.Row="0"
+                                 Grid.RowSpan="2"
+                                 VerticalOptions="CenterAndExpand"
+                                 HorizontalOptions="CenterAndExpand"
+                                 Command="{Binding PushCommand}"
+                                 CommandParameter="nuevo"
+                                 Aspect="AspectFit"
+                                 WidthRequest="60"
+                                 Padding="10"/>
+                    
+                    <Label Style="{StaticResource LabelTittles1}"
+                           Grid.Column="1"
+                           Grid.Row="2"
+                           Grid.RowSpan="2"
+                           VerticalOptions="CenterAndExpand">
+                        <Label.FormattedText>
+                            <FormattedString>
+                                <Span Text="Descripción&#10;"/>
+                                <Span Text="{Binding RawMaterialSelected.DescriptionRM}"
+                                      FontAttributes="Bold"/>
+                            </FormattedString>
+                        </Label.FormattedText>
+                    </Label>
+                    <StackLayout Orientation="Horizontal"
+                                 Grid.ColumnSpan="2"
+                                 Grid.Row="4"
+                                 HorizontalOptions="CenterAndExpand"
+                                 Spacing="22">
+                        <Label Style="{StaticResource LabelTittles1}"
+                               VerticalOptions="Center">
+                            <Label.FormattedText>
+                                <FormattedString>
+                                    <Span Text="Disponible&#10;"/>
+                                    <Span Text="{Binding RawMaterialSelected.CantidadRM}"
+                                          FontAttributes="Bold"
+                                          FontSize="19"/>
+                                    <Span Text=" "/>
+                                    <Span Text="{Binding RawMaterialSelected.UMedidaRM.Description}"
+                                          FontAttributes="Bold"
+                                          FontSize="19"/>
+                                </FormattedString>
+                            </Label.FormattedText>
+                        </Label>
+                        <StackLayout WidthRequest="110">
+                            <Label Text="Cant. a usar"
+                               Style="{StaticResource LabelTittlesColLectionView}"/>
+                            <Entry Text="{Binding CantUsarMaterial}" 
+                            Style="{StaticResource Entry1}"/>
+                        </StackLayout>
+                        <ImageButton Source="arbol.png"                             
+                             BackgroundColor="DarkRed"
                              CornerRadius="35"
-                             Grid.Column="1"
-                                 Grid.Row="1"
-                             HorizontalOptions="CenterAndExpand"
-                             Command="{Binding PerformSearch}"
-                             Aspect="AspectFit"
-                             Padding="10,0,10,0"/>
-                    <ImageButton Source="arbol1.png"                             
-                             BackgroundColor="{StaticResource SegundoColor}"
-                             CornerRadius="35"
-                             Grid.Column="2"
-                                 Grid.Row="1"
-                             HorizontalOptions="CenterAndExpand"
                              Command="{Binding PushCommand}"
-                             CommandParameter="todo"
-                             Aspect="AspectFit"
-                             Padding="15,0,15,0"
+                             CommandParameter="nuevo"
+                             Aspect="AspectFill"
+                                     Padding="16"
                                  BorderColor="White"
                                  BorderWidth="1"
+                                     WidthRequest="70"
+                                     HeightRequest="10"
                                  />
+                    </StackLayout>
+                    
                 </Grid>
             </Frame>
+            <StackLayout Orientation="Horizontal"
+                         HorizontalOptions="CenterAndExpand"
+                         Spacing="30">
+                <Label Style="{StaticResource LabelTittlesColLectionView}">
+                    <Label.FormattedText>
+                        <FormattedString>
+                            <Span Text="Total elementos&#10;"/>
+                            <Span Text="{Binding TotalElements}"/>
+                        </FormattedString>
+                    </Label.FormattedText>
+                </Label>
+                <Label Style="{StaticResource LabelTittlesColLectionView}">
+                    <Label.FormattedText>
+                        <FormattedString>
+                            <Span Text="Valor total&#10;"/>
+                            <Span Text="{Binding TotalValue, StringFormat=\{0:C\}}"/>
+                        </FormattedString>
+                    </Label.FormattedText>
+                </Label>
+            </StackLayout>
             
-            <RefreshView IsRefreshing="{Binding IsRefreshing}" Command="{Binding RefreshCommand}">
-                <CollectionView ItemsSource="{Binding RawMaterials, Mode=OneWay}" 
-                                SelectionMode="Single" 
-                                x:Name="listaMateriaPrima" 
+            <RefreshView x:Name="ListaMateriaPrima" 
+                IsRefreshing="{Binding IsRefreshing}" Command="{Binding RefreshCommand}">
+                <CollectionView x:Name="listaMateriaPrima" 
+                                ItemsSource="{Binding ListRawMaterialsSelected, Mode=OneWay}" 
+                                SelectionMode="Single"                                  
                                 SelectionChangedCommand="{Binding SelectdCommand}" 
                                 SelectionChangedCommandParameter="{Binding SelectedItem , Source={x:Reference listaMateriaPrima}}" 
-                                Grid.ColumnSpan="3" 
-                                Grid.Row="2" 
-                                HorizontalOptions="Center"
-                                >
+                                HorizontalOptions="Center">
                     <CollectionView.ItemsLayout>
                         <LinearItemsLayout Orientation="Vertical" ItemSpacing="10"/>
                     </CollectionView.ItemsLayout>
                     <CollectionView.ItemTemplate>
                         <DataTemplate>
                             <Frame Style="{StaticResource Frame2}">
-                                <Grid RowDefinitions="*, *, *"
-                                      ColumnDefinitions="*, Auto, *, *"
-                                      HorizontalOptions="CenterAndExpand">
+                                <Grid RowDefinitions="Auto, Auto"
+                                      ColumnDefinitions="*, 2*,*"
+                                      HorizontalOptions="CenterAndExpand"
+                                      ColumnSpacing="30"
+                                      Margin="0"
+                                      Padding="0">
 
                                     <Image Source="rawmaterial.png"
                                            Grid.Column="0"
-                                           Grid.Row="0"
-                                           Grid.RowSpan="2"/>
+                                           Grid.Row="0"/>
 
                                     <Label Grid.Column="1"
-                                           Grid.ColumnSpan="3"
-                                           Grid.Row="0"                                            
+                                           Grid.Row="0"
                                            Style="{StaticResource LabelRegistroVenta}" 
                                            FontSize="15">
                                         <Label.FormattedText>
@@ -90,27 +178,8 @@
                                             </FormattedString>
                                         </Label.FormattedText>
                                     </Label>
-                                    <Label Grid.Column="1" 
-                                           Grid.ColumnSpan="3"
-                                           Grid.Row="1"
-                                           Text="{Binding DescriptionRM}" Style="{StaticResource LabelTittles1}" FontSize="15"/>
-                                    <Label Grid.Column="0" 
-                                           Grid.Row="2"
-                                           Text="{Binding TypeRM}" Style="{StaticResource LabelTittles1}" FontSize="15"/>
-                                    <Label Grid.Column="1"
-                                           Grid.Row="2"                                           
-                                           Style="{StaticResource LabelRegistroVenta}" 
-                                           FontSize="15">
-                                        <Label.FormattedText>
-                                            <FormattedString>
-                                                <Span Text="Cant. "/>
-                                                <Span Text="{Binding CantidadRM}" />
-                                            </FormattedString>
-                                        </Label.FormattedText>
-                                    </Label>
-
                                     <Label Grid.Column="2"
-                                           Grid.Row="2"                                            
+                                           Grid.Row="1"                                            
                                            Style="{StaticResource LabelRegistroVenta}" 
                                            FontSize="15">
                                         <Label.FormattedText>
@@ -120,15 +189,23 @@
                                             </FormattedString>
                                         </Label.FormattedText>
                                     </Label>
-                                    <Label Grid.Column="3"
-                                           Grid.ColumnSpan="2"
-                                           Grid.Row="2"                                           
+                                    <Label Grid.Column="0" 
+                                           Grid.Row="1"
+                                           Text="{Binding TypeRM}" 
+                                           Style="{StaticResource LabelTittles1}" 
+                                           FontSize="15"/>
+                                    <Label Grid.Column="1" 
+                                           Grid.Row="1"
+                                           Text="{Binding DescriptionRM}" Style="{StaticResource LabelTittles1}" FontSize="15"/>
+
+                                    <Label Grid.Column="2"
+                                           Grid.Row="0"                                           
                                            Style="{StaticResource LabelRegistroVenta}" 
                                            FontSize="15">
                                         <Label.FormattedText>
                                             <FormattedString>
-                                                <Span Text="V/U "/>
-                                                <Span Text="{Binding CostoRM, StringFormat=\{0:C\}}"  />
+                                                <Span Text="Cant.&#10; "/>
+                                                <Span Text="{Binding CantidadRM}" />
                                             </FormattedString>
                                         </Label.FormattedText>
                                     </Label>
@@ -149,22 +226,28 @@
                     </CollectionView.EmptyView>
                 </CollectionView>
             </RefreshView>
-            <!--<Grid RowDefinitions="Auto" Margin="10">
-                <Button Text="Compras" Command="{Binding PushCommand}" 
+            
+            <Grid x:Name="Botones"
+                ColumnDefinitions="*"
+                  RowDefinitions="Auto"
+                  Margin="10">
+                <!--<Button Text="Selecciones" 
+                        Command="{Binding PushCommand}" 
                         Style="{StaticResource Button2}"
-                        CommandParameter=""
+                        CommandParameter="selecciones"
                         Grid.Column="0"
                         FontAttributes="Bold"
-                        ImageSource="shopsld.png"
-                        ContentLayout="top, 3"/>
-                <Button Text="Nuevo" Command="{Binding PushCommand}" 
+                        ImageSource="inventory1.png"
+                        ContentLayout="top, 3"
+                        Padding="0"
+                        Margin="0"/>-->
+                <Button Text="Finalizar" Command="{Binding AddRawMaterialSelected}" 
                         Style="{StaticResource Button1}"
-                        CommandParameter="nuevo"
                         CornerRadius="30"
-                        Grid.Column="1"
+                        Grid.Column="0"
                         ImageSource="newa.png"
                         ContentLayout="top, 3"/>
-            </Grid>-->
+            </Grid>
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>

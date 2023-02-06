@@ -14,6 +14,59 @@ namespace ReinadelCisne.ViewModels
 {
     public class CostosIndirectosVM : BaseVM, IQueryAttributable
     {
+        private OtherCostModel _costIndirect;
+        private double _totalMOI;
+        private double _totalWFI;
+        private double _precioProduct;
+        private string _nameProdj;
+        private int _cantProdj;
+
+        ListRMModel _listaMaterialxProducto;
+        public ListRMModel ListaMaterialxProducto
+        {
+            get => _listaMaterialxProducto;
+            set
+            {
+                if(value != _listaMaterialxProducto)
+                {
+                    _listaMaterialxProducto = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        ListWFModel _listaPersonalxProducto;
+        public ListWFModel ListaPersonalxProducto
+        {
+            get => _listaPersonalxProducto;
+            set
+            {
+                if (value != _listaPersonalxProducto)
+                {
+                    _listaPersonalxProducto = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        public string NameProd
+        {
+            get => _nameProdj;
+            set
+            {
+                _nameProdj = value;
+                OnPropertyChanged();
+            }
+        }
+        public int CantProd
+        {
+            get => _cantProdj;
+            set
+            {
+                _cantProdj = value;
+                OnPropertyChanged();
+            }
+        }
         private bool _verMateriaPrima = true;
         public bool VerMateriaPrima
         {
@@ -57,7 +110,7 @@ namespace ReinadelCisne.ViewModels
                 OnPropertyChanged();
             }
         }
-        
+
         private float _totalRM;
         public float TotalRM
         {
@@ -68,7 +121,17 @@ namespace ReinadelCisne.ViewModels
                 OnPropertyChanged();
             }
         }
-        
+
+        private float _totalRMI;
+        public float TotalRMI
+        {
+            get => _totalRMI;
+            set
+            {
+                _totalRMI = value;
+                OnPropertyChanged();
+            }
+        }
         private double _totalCI;
         public double TotalCI
         {
@@ -98,10 +161,26 @@ namespace ReinadelCisne.ViewModels
             }
         }
 
+        public double TotalMaquinaria
+        {
+            get => _totalMaquinaria;
+            set
+            {
+                if(value != _totalMaquinaria)
+                {
+                    _totalMaquinaria = value;
+                    OnPropertyChanged();
+                }
+                
+            }
+        }
+
         private int IdListRM { get; set; }
         private int IdListWF { get; set; }
         private int IdListCI { get; set; }
         private WorkForceModel _workForce;
+        private double _totalMaquinaria;
+
         public WorkForceModel WorkForce
         {
             get => _workForce;
@@ -112,10 +191,6 @@ namespace ReinadelCisne.ViewModels
             }
         }
 
-        private OtherCostModel _costIndirect;
-        private double _totalMOI;
-        private double _totalWFI;
-
         public OtherCostModel CostIndirect
         {
             get => _costIndirect;
@@ -125,7 +200,21 @@ namespace ReinadelCisne.ViewModels
                 OnPropertyChanged();
             }
         }
-        
+
+        public double PrecioProduct
+        {
+            get => _precioProduct;
+            set
+            {
+                if (value != _precioProduct)
+                {
+                    _precioProduct = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+
         public ObservableCollection<RawMaterialModel> RawMaterials { get; set; } = new ObservableCollection<RawMaterialModel>();
         public ObservableCollection<OtherCostModel> OtherCosts { get; set; } = new ObservableCollection<OtherCostModel>();
 
@@ -135,7 +224,6 @@ namespace ReinadelCisne.ViewModels
         public ObservableCollection<PersonalModel> WorkForces { get; set; } = new ObservableCollection<PersonalModel>();
         public ObservableCollection<PersonalModel> WorkForcesIndiecto { get; set; } = new ObservableCollection<PersonalModel>();
 
-
         public ICommand PushCommand => new Command((obj) =>
         {
             var push = obj as string;
@@ -143,7 +231,7 @@ namespace ReinadelCisne.ViewModels
         });
         public ICommand AddRM => new Command(() =>
         {
-            Shell.Current.GoToAsync("//Rini/Productos/NewStock/CostoProduccion/SelectRM");         
+            Shell.Current.GoToAsync("//Rini/Productos/NewStock/CostoProduccion/SelectRM");
         });
         public ICommand AddWF => new Command(() =>
         {
@@ -187,7 +275,10 @@ namespace ReinadelCisne.ViewModels
             CostIndirect = rec;
             OtherCosts.Remove(rec);
         });
-        
+        public ICommand BackCommand => new Command(async () =>
+        {
+            await Shell.Current.GoToAsync($"//Rini/Productos/NewStock?IdObjetoconPrecio=0");
+        });
         private void ReducirMaterial(RawMaterialModel rmRecibo, string cantUso)
         {
             double total = rmRecibo.CantidadRM - Convert.ToDouble(cantUso);
@@ -215,7 +306,7 @@ namespace ReinadelCisne.ViewModels
             CostIndirect = new OtherCostModel();
         }
         private void SumarWF()
-        {            
+        {
             var totalWF = WorkForces.Sum(x => x.Pay);
             TotalWF = totalWF;
             LimpiarWF();
@@ -225,21 +316,17 @@ namespace ReinadelCisne.ViewModels
             switch (push)
             {
                 case "VerMT":
-                    VerMateriaPrima = true;
-                    VerCostosIndirectos = false;
-                    VerManoObra = false;
-                    ListarRM();
+                    Shell.Current.GoToAsync("SelectRM");
                     break;
                 case "VerWF":
-                    VerMateriaPrima = false;
-                    VerCostosIndirectos = false;
-                    VerManoObra = true;
+                    Shell.Current.GoToAsync($"SelectWF?ModWfId=0");
                     break;
                 case "VerCI":
-                    VerMateriaPrima = false;
-                    VerCostosIndirectos = true;
-                    VerManoObra = false;
-                    break;                
+                    Shell.Current.GoToAsync("SelectCIFView");
+                    break;
+                case "VerMaqui":
+                    Shell.Current.GoToAsync($"SelectMaquinariaView?CantProduc={CantProd}");
+                    break;
                 case "Borrar":
                     LimpiarWF();
                     break;
@@ -259,13 +346,45 @@ namespace ReinadelCisne.ViewModels
                     break;
             }
         }
+
+        ProductModel _productoconPrecio;
+        public ProductModel ProductoconPrecio
+        {
+            get => _productoconPrecio;
+            set
+            {
+                if(value != _productoconPrecio)
+                {
+                    _productoconPrecio = value;
+                    OnPropertyChanged();
+                }
+            }
+        } 
         private void GuardarT()
         {
-            GuardarRawMaterial();
+            /*GuardarRawMaterial();
             GuardarWorkForce();
-            GuardarCostosInd();
-            Shell.Current.DisplayAlert("Costos Guardados", "Valores guardados correctamente", "ok");
-            Shell.Current.GoToAsync($"//Rini/Productos/NewStock?IdListWF={IdListWF}&IdListCI={IdListCI}&IdListRM={IdListRM}&IdProduct={0}");
+            GuardarCostosInd();*/
+            if (PrecioProduct > 0)
+            {
+                //Lleno un producto con los datos y lo guardo
+                ProductoconPrecio = new ProductModel()
+                {
+                    NameProduct = NameProd,
+                    AmountProduct = CantProd,                    
+                    CostElaboracionProduct = PrecioProduct
+                };
+                var guardado = App.Database.SaveProduct(ProductoconPrecio);
+                guardado.Wait();
+
+                ProductoconPrecio.ListRMModel = ListaMaterialxProducto;
+                ProductoconPrecio.ListWFModel = ListaPersonalxProducto;
+                App.Database.UpdateRelationsRM(ProductoconPrecio);
+
+                Shell.Current.DisplayAlert("Costos Guardados", "Valores guardados correctamente", "ok");
+                Shell.Current.GoToAsync($"//Rini/Productos/NewStock?IdObjetoconPrecio={ProductoconPrecio.Id}");
+            }          
+
         }
         private void GuardarCostosInd()
         {
@@ -275,7 +394,7 @@ namespace ReinadelCisne.ViewModels
             };
             var re = App.Database.SaveListOC(listOCModel);
             re.Wait();
-            foreach(var c in OtherCosts)
+            foreach (var c in OtherCosts)
             {
                 App.Database.SaveOtherCost(c);
                 c.ListOCModel = listOCModel;
@@ -318,7 +437,7 @@ namespace ReinadelCisne.ViewModels
             var rmm = App.Database.SaveListRM(ListRM);
             rmm.Wait();
 
-            foreach(var a in MaterialProduccion)
+            foreach (var a in MaterialProduccion)
             {
                 var kr = App.Database.GetKardexXRM(a.RawMaterial).Result;
 
@@ -371,20 +490,99 @@ namespace ReinadelCisne.ViewModels
 
         public void ApplyQueryAttributes(IDictionary<string, string> query)
         {
-            string idRM = HttpUtility.UrlDecode(query["IdRM"]);
+            string idRM = HttpUtility.UrlDecode(query["ListMaterialId"]);
             string idWF = HttpUtility.UrlDecode(query["IdWF"]);
+            string idMaquinaria = HttpUtility.UrlDecode(query["IdListaMaquinaria"]);
+            string CantidadProd = HttpUtility.UrlDecode(query["CantProd"]);
+            string NameProd = HttpUtility.UrlDecode(query["NameProd"]);
             AddRawMaterial(idRM);
             AddWorkForce(idWF);
+            AddMaquinaria(idMaquinaria);
+            AddCostosIndirectos();
+            FillDate(NameProd, CantidadProd);
+        }
+
+        private void AddCostosIndirectos()
+        {
+            try
+            {
+                var Costosindirectos = App.Database.GetAllOtherCost().Result;
+                var totalcostosInd = Costosindirectos.Sum(x => x.CostOC);
+                TotalCI = totalcostosInd + TotalWFI + TotalRMI;
+                CalculoPrecioProducto();
+
+            }
+            catch
+            {
+                Console.WriteLine("Fallo en llenado de datos");
+            }
+        }
+
+        private void AddMaquinaria(string idMaquinaria)
+        {
+            try
+            {
+                var IdListaMaquinaria = int.Parse(idMaquinaria);
+                if(IdListaMaquinaria > 0)
+                {
+                    var maqui = App.Database.Get1ListFA(IdListaMaquinaria).Result;
+                    TotalMaquinaria = maqui.ValorTotalMaquinas + maqui.ValorTotalDepreciaciones;
+                    CalculoPrecioProducto();
+                }
+            }
+            catch
+            {
+                Console.WriteLine("Fallo en llenado de datos");
+            }
+        }
+
+        private void FillDate(string nameProd, string cantidadProd)
+        {
+            try
+            {
+                if(!string.IsNullOrEmpty(nameProd) && !string.IsNullOrEmpty(cantidadProd))
+                {
+                    NameProd = nameProd;
+                    CantProd = int.Parse(cantidadProd);
+                    CalculoPrecioProducto();
+                }                
+            }
+            catch
+            {
+                Console.WriteLine("Fallo en llenado de datos");
+            }
         }
 
         private void AddWorkForce(string idWF)
         {
             try
             {
-                if (idWF != "0")
+                var IdListPersonalProducto = int.Parse(idWF);
+                if (IdListPersonalProducto > 0)
                 {
-                    PersonalModel rm = App.Database.GetPersonal(int.Parse(idWF)).Result;
-                    if(rm.WorkForce.Type == "Directo")
+
+                    ListaPersonalxProducto = App.Database.GetListWF(IdListPersonalProducto).Result;
+                    var ManoObra = ListaPersonalxProducto.PersonalxProduct;
+
+                    foreach(var mo in ManoObra)
+                    {
+                        var mm = App.Database.GetPersonal(mo.Id).Result;
+
+                        if(mm.WorkForce.Type == "Directo")
+                        {
+                            TotalWF = TotalWF + mm.Pay;
+                            CalculoPrecioProducto();
+                        }
+                        if (mm.WorkForce.Type == "Indirecto")
+                        {
+                            TotalWFI = TotalWFI + mm.Pay;
+                            CalculoPrecioProducto();
+                        }
+                    }                    
+
+                    //foreach()
+
+                    /*if(rm.WorkForce.Type == "Directo")
                     {
                         WorkForces.Add(rm);
                         SumarWF();
@@ -393,69 +591,67 @@ namespace ReinadelCisne.ViewModels
                     {
                         WorkForcesIndiecto.Add(rm);
                         SumarCI();
-                    }                    
+                    } */
                 }
             }
             catch (Exception)
             {
-                Console.WriteLine("Failed to load idproduct.");
+                Console.WriteLine("Failed to AddWorkForce");
             }
         }
 
         private async void AddRawMaterial(string idRM)
-        {            
+        {
             try
             {
-                if(idRM != "0")
+                if (idRM != "0")
                 {
-                    var ident = int.Parse(idRM);
-                    RawMaterialModel rm = App.Database.GetOneRM(ident).Result;
-
-                    string resp = await Shell.Current.DisplayPromptAsync(rm.NameRM, "¿Cuanto "+ rm.UMedidaRM.Description +" va a usar?");
-                    
-                    if (!string.IsNullOrEmpty(resp))
+                    double matDir = 0;
+                    double matIndir = 0;
+                    ListRMModel ListaMaterialProducto = await App.Database.GetListRM(int.Parse(idRM));
+                    List<ItemsListRMModel> Material = await App.Database.GetItemsListRMxListRm(ListaMaterialProducto);
+                                        
+                    foreach(ItemsListRMModel material in Material)
                     {
-                        var krd = App.Database.GetKardexXRM(rm).Result;
-                        var respi = App.Database.GetSaldosxKardex(krd).Result;
-                        var ord = respi.OrderByDescending(x => x.Date).FirstOrDefault();
+                        //var Mate = material.KardexRMModel.RawMaterialModell;
+                        var Mate = App.Database.GetMaterialxKardex(material.KardexRMModel).Result;
+                        var tipoMaterial = Mate.TypeRM;
 
-                        rm.CantidadRM = ord.Cantidad;
-                        rm.CostoRM = (float)Math.Round(ord.ValorUnitario, 2);
-                        rm.TotalCost = (float)ord.SaldoTotal;
-
-                        AuxiliarRMxCP auxiliarRs = new AuxiliarRMxCP()
+                        if (tipoMaterial == "Directo")
                         {
-                            RawMaterial = rm,
-                            CantUsar = float.Parse(resp),
-                            Total = rm.CostoRM * float.Parse(resp)
-                        };
-
-                        if(rm.TypeRM == "Directo")
-                        {
-                            MaterialProduccion.Add(auxiliarRs);
-                            SumarRM();
+                            matDir = material.TotalCost + matDir;
                         }
-                        else
+                        if (tipoMaterial == "Indirecto")
                         {
-                            MaterialProduccionIndirecto.Add(auxiliarRs);
-                            SumarCI();
+                            matIndir = material.TotalCost + matIndir;
                         }
-                        ReducirMaterial(rm, resp);
-                        
                     }
-                }                
+                    TotalRM = (float)matDir;
+                    TotalRMI = (float)matIndir;
+                    CalculoPrecioProducto();
+                }
             }
             catch (Exception)
             {
-                Console.WriteLine("Failed to load idproduct.");
+                Console.WriteLine("Failed to add raw material");
             }
         }
 
-        public CostosIndirectosVM()
+        private void CalculoPrecioProducto()
         {
-            
+            var CostosProductos = TotalWF + TotalRM + TotalCI + TotalMaquinaria;
+            var imprevistos = CostosProductos * 0.10;
+            var totalproducto = CostosProductos + imprevistos;
+
+            PrecioProduct = totalproducto / CantProd;
+        }
+
+        public CostosIndirectosVM()
+        {            
             WorkForce = new WorkForceModel();
             CostIndirect = new OtherCostModel();
+            ProductoconPrecio = new ProductModel();
+            CalculoPrecioProducto();
         }
     }
 }

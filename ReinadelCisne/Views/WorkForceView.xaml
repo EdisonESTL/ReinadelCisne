@@ -9,7 +9,34 @@
     </ContentPage.BindingContext>
     <ContentPage.Content>
         <StackLayout Padding="7">
-
+            <StackLayout Orientation="Horizontal"
+                         HorizontalOptions="CenterAndExpand"
+                         Spacing="30">
+                <StackLayout>
+                    <Label x:Name="TotalElementos"
+                           Style="{StaticResource LabelTittlesColLectionView}">
+                        <Label.FormattedText>
+                            <FormattedString>
+                                <Span Text="Total elementos&#10;"></Span>
+                                <Span Text="{Binding TotalElementos}"
+                                      FontSize="20"></Span>
+                            </FormattedString>
+                        </Label.FormattedText>
+                    </Label>
+                </StackLayout>
+                <StackLayout>
+                    <Label x:Name="TotalValor"
+                           Style="{StaticResource LabelTittlesColLectionView}">
+                        <Label.FormattedText>
+                            <FormattedString>
+                                <Span Text="Total elementos&#10;"></Span>
+                                <Span Text="{Binding TotalValores, StringFormat=\{0:c\}}"
+                                      FontSize="20"></Span>
+                            </FormattedString>
+                        </Label.FormattedText>
+                    </Label>
+                </StackLayout>
+            </StackLayout>
             <Frame Style="{StaticResource Frame1}"
                    BorderColor="Black"
                    Padding="0, 7, 0, 7"
@@ -63,12 +90,13 @@
                                 </SwipeItems>
                             </SwipeView.RightItems>
                             <!-- Content -->
-                            <Frame Style="{StaticResource Frame1}"
-                               Padding="11,11,11,11">
+                            <Frame Padding="11,11,11,11"
+                                   CornerRadius="30"
+                                   BackgroundColor="BlanchedAlmond"
+                                   BorderColor="Black">
                                 <Grid RowDefinitions="Auto, Auto"
                               ColumnDefinitions="*, Auto"
-                              HorizontalOptions="Center"
-                              >
+                              HorizontalOptions="Center">
                                     <Image Source="manobraL.png"
                                        Grid.Row="0"
                                        Grid.Column="0"/>
@@ -85,11 +113,21 @@
                                     </Label>
                                     <Label TextColor="Black"
                                    Grid.Row="1"
-                                       Grid.Column="1">
+                                       Grid.Column="0">
                                         <Label.FormattedText>
                                             <FormattedString>
                                                 <Span Text="Tipo: " FontAttributes="Bold"/>
                                                 <Span Text="{Binding Type}"/>
+                                            </FormattedString>
+                                        </Label.FormattedText>
+                                    </Label>
+                                    <Label TextColor="Black"
+                                   Grid.Row="1"
+                                       Grid.Column="1">
+                                        <Label.FormattedText>
+                                            <FormattedString>
+                                                <Span Text="Pago mensual: " FontAttributes="Bold"/>
+                                                <Span Text="{Binding PayMonth, StringFormat=\{0:c\}}"/>
                                             </FormattedString>
                                         </Label.FormattedText>
                                     </Label>
@@ -117,13 +155,15 @@
                         Grid.Column="0"
                         Style="{StaticResource ButtonCancel}"
                         Command="{Binding PushCommand}"
-                        CommandParameter="regresar"/>
+                        CommandParameter="regresar"
+                        CornerRadius="30"/>
                 <Button Text="Nuevo MO"
                         Grid.Column="1"
                         TextColor="White"
                         Style="{StaticResource Button1}"
                         Command="{Binding PushCommand}"
-                        CommandParameter="nuevoM"/>
+                        CommandParameter="nuevoM"
+                        CornerRadius="30"/>
             </Grid>
         </StackLayout>
     </ContentPage.Content>

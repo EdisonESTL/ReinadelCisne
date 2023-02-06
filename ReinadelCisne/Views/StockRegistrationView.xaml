@@ -87,14 +87,14 @@
                       HorizontalOptions="Center"
                       VerticalOptions="Center">
                     
-                    <Label Text="Productos" Grid.Row="0"
+                    <Label Text="# Productos" Grid.Row="0"
                            Grid.Column="0" Style="{StaticResource LabelTittles1}"/>
-                    <Label Text="Costo" Grid.Row="0"
+                    <Label Text="Valor total" Grid.Row="0"
                            Grid.Column="1" Style="{StaticResource LabelTittles1}"/>
 
                     <Label Text="{Binding Productos}" Grid.Row="1"
                            Grid.Column="0" Style="{StaticResource LabelValorsTittles}"/>
-                    <Label Text="{Binding Costo}" 
+                    <Label Text="{Binding Costo, StringFormat=\{0:c\}}" 
                            Style="{StaticResource LabelValorsTittles}"
                            Grid.Row="1"
                            Grid.Column="1"/>
@@ -130,20 +130,34 @@
                                                    />
                                         </SwipeItems>
                                     </SwipeView.RightItems>
-                                    <Grid RowDefinitions="Auto,Auto"
+                                    <Grid RowDefinitions="Auto, Auto"
+                                          ColumnDefinitions="Auto,3*,Auto"
                                           RowSpacing="0">
                                         <Image Source="product.png"
                                                Grid.Row="0"
                                                Grid.RowSpan="2"
                                                Grid.Column="0"
-                                               />
-                                        <Label Grid.Column="1" Text="{Binding Data0}" Style="{StaticResource LabelValorsTittles}"
-                                               Grid.Row="0"/>
-
-                                        <Label Grid.Column="1" Text="{Binding Data1}" Style="{StaticResource LabelTittles1}"
-                                               Grid.Row="1"/>
-                                        <Label Grid.Column="2" Text="{Binding Data2}" Style="{StaticResource LabelTittles1}"
-                                               Grid.Row="0"/>
+                                               Aspect="AspectFit"/>
+                                        <Label Grid.Column="1" Text="{Binding NameProduct}" Style="{StaticResource LabelValorsTittles}"
+                                               Grid.Row="0"
+                                               VerticalOptions="Center"/>
+                                        <Label Grid.Column="2" Text="{Binding PrecioVentaProduct, StringFormat=\{0:c\}}" Style="{StaticResource LabelTittles1}"
+                                               Grid.Row="0"
+                                               Grid.RowSpan="2"
+                                               VerticalOptions="Center"
+                                               FontSize="19"/>
+                                        <Label Grid.Row="1"
+                                               Grid.Column="1"
+                                               Style="{StaticResource LabelTittlesColLectionView}"
+                                               VerticalOptions="Center">
+                                            <Label.FormattedText>
+                                                <FormattedString>
+                                                    <Span Text="Cant. disponible:&#10; "/>
+                                                    <Span Text="{Binding AmountProduct}"
+                                                          FontSize="19"/>
+                                                </FormattedString>
+                                            </Label.FormattedText>
+                                        </Label>
                                     </Grid>
                                 </SwipeView>
                             </Frame>

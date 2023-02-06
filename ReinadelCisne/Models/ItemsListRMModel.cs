@@ -10,10 +10,12 @@ namespace ReinadelCisne.Models
     {
         [PrimaryKey, AutoIncrement]
         public int Id { get; set; }
+        public DateTime Date { get; set; }
         public double Amount { get; set; }    //Cantidad necesaria 
         public double UnitCost { get; set; }     //Unidades necesarias
         public double TotalCost { get; set; }
 
+        //public List<RawMaterialModel> MaterialModels { get; set; }
         [ForeignKey(typeof(ListRMModel))]
         public int ListRMModelId { get; set; }
         [ManyToOne]

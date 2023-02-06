@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:vm="clr-namespace:ReinadelCisne.ViewModels"
              x:Class="ReinadelCisne.Views.SelectWorkForceView"
-             Title="Añadir mano de obra">
+             Title="Mano de obra">
     <ContentPage.BindingContext>
         <vm:SelectWorkForceVM/>
     </ContentPage.BindingContext>
@@ -11,94 +11,210 @@
         <BackButtonBehavior Command="{Binding BackCommand}"/>
     </Shell.BackButtonBehavior>
     <ContentPage.Content>
-        <ScrollView VerticalOptions="CenterAndExpand">
-            <StackLayout 
-                     Margin="10">
-                <Label Text="Elija perfil del puesto"
-                   Style="{StaticResource LabelTittlesColLectionView}"/>
-                <Picker x:Name="grupos"
+        <ScrollView BackgroundColor="LightGray"
+                    Padding="11">
+            <StackLayout>
+                <Grid RowDefinitions="Auto, Auto"
+                      ColumnDefinitions="*,*">
+                    <Label Text="Elija perfil del puesto"
+                   Style="{StaticResource LabelTittlesColLectionView}"
+                           Grid.Row="0"
+                           Grid.Column="0"/>
+                    <Picker x:Name="grupos"
                         Title="Puesto"
                         BackgroundColor="White"
-                        Grid.Row="0"
-                        Grid.Column="1"
+                        Grid.Row="1"
+                        Grid.Column="0"
                         ItemsSource="{Binding PerfilesLaborales}"
                         ItemDisplayBinding="{Binding Name}"
                         SelectedItem="{Binding PerfilWF}">
-                </Picker>
-                <Label Text="Tipo de contrato"
-                   Style="{StaticResource LabelTittlesColLectionView}"/>
-                <Picker x:Name="picker"
+                    </Picker>
+                    <Label Text="Tipo de contrato"
+                   Style="{StaticResource LabelTittlesColLectionView}"
+                           Grid.Row="0"
+                           Grid.Column="1"/>
+                    <Picker x:Name="picker2"
                     BackgroundColor="White"
                     WidthRequest="150"
                     HeightRequest="50"
                     FontSize="16"
-                    SelectedItem="{Binding TypeContrato}">
-                    <Picker.ItemsSource>
-                        <x:Array Type="{x:Type x:String}">
-                            <x:String>Por horas</x:String>
-                            <x:String>Mensual</x:String>
-                            <x:String>Por obra</x:String>
-                            <x:String>Por dias</x:String>
-                        </x:Array>
-                    </Picker.ItemsSource>
-                </Picker>
+                    SelectedItem="{Binding TypeContrato}"
+                            Grid.Row="1"
+                           Grid.Column="1">
+                        <Picker.ItemsSource>
+                            <x:Array Type="{x:Type x:String}">
+                                <x:String>Por horas</x:String>
+                                <x:String>Mensual</x:String>
+                                <x:String>Por obra</x:String>
+                                <x:String>Por dias</x:String>
+                            </x:Array>
+                        </Picker.ItemsSource>
+                    </Picker>
+                </Grid>
+                
                 <Label Text="Nombres completos"
-                   Style="{StaticResource LabelTittlesColLectionView}"/>
+                   Style="{StaticResource LabelTittlesColLectionView}"/>                
                 <Entry Style="{StaticResource Entry1}"
                    Text="{Binding Name}"/>
-                <Label Text="Numero de contacto"
+                
+                <Grid RowDefinitions="Auto, Auto"
+                      ColumnDefinitions="*,*">
+                    <Label Text="Teléfono"
+                           Grid.Row="0"
+                           Grid.Column="0"
                    Style="{StaticResource LabelTittlesColLectionView}"/>
-                <Entry Style="{StaticResource Entry1}"
+                    <Entry Style="{StaticResource Entry1}"
+                           Grid.Row="1"
+                           Grid.Column="0"
                    Text="{Binding Cellnumber}"/>
-                <!--<Label Text="Pagado"
-                   Style="{StaticResource LabelTittlesColLectionView}"/>
-            <Entry Style="{StaticResource Entry1}"
-                   Text="{Binding States}"/>-->
-                <Label Text="Paga"
-                   Style="{StaticResource LabelTittlesColLectionView}"/>
-                <Entry Style="{StaticResource Entry1}"
-                   Text="{Binding Pay}"/>
-                <StackLayout IsVisible="{Binding IsMonth}">
-                    <Label Text="Fecha inicio:"
-                       Style="{StaticResource LabelTittlesColLectionView}"/>
-                    <DatePicker x:Name="startDatePicker"
-                    Format="D"
-                    Margin="30, 0, 0, 30"
-                    Date="{Binding MinDate}"
+                    <Label Text="Cédula"
+                   Style="{StaticResource LabelTittlesColLectionView}"
+                           Grid.Row="0"
+                           Grid.Column="1"/>
+                    <Entry Style="{StaticResource Entry1}"
+                   Text="{Binding CI}"
+                           Grid.Row="1"
+                           Grid.Column="1"/>
+                </Grid>
+                <Grid ColumnDefinitions="200,*"
+                      RowDefinitions="Auto">
+                    <StackLayout IsVisible="{Binding IsMonth}"
+                                 Grid.Row="0"
+                                 Grid.Column="0"
+                                 Margin="0"
+                                 Padding="0">
+                        <Label Text="Fecha inicio:"
+                            Style="{StaticResource LabelTittlesColLectionView}"/>
+                        <DatePicker x:Name="startDatePicker"
+                            Format="D"
+                                    FontSize="16"
+                            Margin="0, 0, 0, 0"
+                            Date="{Binding MinDate}"
+                            BackgroundColor="White"
+                                    />
+                        <Label Text="Fecha fin:"
+                            Style="{StaticResource LabelTittlesColLectionView}"/>
+                        <DatePicker x:Name="endDatePicker"
+                            Format="D"
+                                    FontSize="16"
+                            Margin="0, 0, 0, 0"
+                            Date="{Binding MaxDate}"
                             BackgroundColor="White"/>
-                    <Label Text="Fecha fin:"
-                       Style="{StaticResource LabelTittlesColLectionView}"/>
-                    <DatePicker x:Name="endDatePicker"
-                    Format="D"
-                    Margin="30, 0, 0, 30"
-                    Date="{Binding MaxDate}"
-                            BackgroundColor="White"/>
-                </StackLayout>
-                <StackLayout IsVisible="{Binding IsHoursDays}">
-                    <Label Text="Ingrese la cantidad de días o horas"
-                       Style="{StaticResource LabelTittlesColLectionView}"/>
-                    <Entry Text="{Binding CantDiasHoras}"
-                       Style="{StaticResource Entry1}"/>
-                </StackLayout>
-                <StackLayout IsVisible="{Binding IsObra}">
-                    <Label Text="Ingrese una descripción de la obra"
-                       Style="{StaticResource LabelTittlesColLectionView}"/>
-                    <Editor Text="{Binding DescripcionObra}"
-                        AutoSize="TextChanges"
-                        Style="{StaticResource Editor1}"/>
-                </StackLayout>
+                    </StackLayout>
+                    <StackLayout IsVisible="{Binding IsHoursDays}"
+                                 Grid.Row="0"
+                                 Grid.Column="0">
+                        <Label Text="Ingrese la cantidad de días o horas"
+                            Style="{StaticResource LabelTittlesColLectionView}"/>
+                        <Entry Text="{Binding CantDiasHoras}"
+                            Style="{StaticResource Entry1}"/>
+                    </StackLayout>
+                    <StackLayout IsVisible="{Binding IsObra}"
+                                 Grid.Row="0"
+                                 Grid.Column="0">
+                        <Label Text="Ingrese una descripción de la obra"
+                            Style="{StaticResource LabelTittlesColLectionView}"/>
+                        <Editor Text="{Binding DescripcionObra}"
+                                AutoSize="TextChanges"
+                                Style="{StaticResource Editor1}"/>
+                    </StackLayout>
+                    <StackLayout Grid.Row="0"
+                                 Grid.Column="1"
+                                 VerticalOptions="CenterAndExpand">
+                        <Label Text="Pago"
+                            Style="{StaticResource LabelTittlesColLectionView}"/>
+                        <Entry Style="{StaticResource Entry1}"
+                            Text="{Binding Pay, StringFormat=\{0:C\}}"/>
+                        <Label Style="{StaticResource LabelValorsTittles}">
+                            <Label.FormattedText>
+                                <FormattedString>                                    
+                                    <Span Text="{Binding TotalMeses}"
+                                          TextColor="Black"/>
+                                    <Span Text=" meses"
+                                          TextColor="Black"/>
+                                </FormattedString>
+                            </Label.FormattedText>
+                        </Label>
+                    </StackLayout>
+                </Grid>              
+                                
                 <StackLayout Orientation="Horizontal"
                          HorizontalOptions="CenterAndExpand"
-                         Padding="0,16,0,10">
+                         Margin="0,16,10,16">
                     <Button Text="Cancelar"
                         Style="{StaticResource ButtonCancel}"
                         Command="{Binding PushCommand}"
-                        CommandParameter="cancelar"/>
-                    <Button Text="Guardar"
-                        Style="{StaticResource Button1}"
+                        CommandParameter="cancelar"
+                            CornerRadius="30"/>
+                    <Button Text="Añadir MO"
+                        Style="{StaticResource Button2}"
                         Command="{Binding PushCommand}"
-                        CommandParameter="guardar"/>
+                        CommandParameter="addmanoobra"
+                            BorderColor="DarkOrange"
+                            BorderWidth="10"/> 
+                    
                 </StackLayout>
+                <Button Text="Guardar"
+                        Style="{StaticResource ButtonAdd}"
+                        Command="{Binding PushCommand}"
+                        CommandParameter="guardar"
+                        CornerRadius="30"
+                        Margin="10"
+                        Padding="10"/>
+                <StackLayout Orientation="Horizontal"
+                             HorizontalOptions="CenterAndExpand">
+                    <Label Style="{StaticResource LabelTittlesColLectionView}"
+                       FontSize="20">
+                        <Label.FormattedText>
+                            <FormattedString>
+                                <Span Text="# Personas&#10;" TextColor="Black"/>
+                                <Span Text="{Binding NumElementos}" TextColor="Black"/>
+                            </FormattedString>
+                        </Label.FormattedText>
+                    </Label>
+                    <Label Style="{StaticResource LabelTittlesColLectionView}"
+                       FontSize="20">
+                        <Label.FormattedText>
+                            <FormattedString>
+                                <Span Text="Total&#10;" TextColor="Black"/>
+                                <Span Text="{Binding ValorTotalElementos, StringFormat=\{0:C\}}" TextColor="Black"/>
+                            </FormattedString>
+                        </Label.FormattedText>
+                    </Label>
+                </StackLayout>
+                
+                <CollectionView ItemsSource="{Binding ListPersonal}"
+                                >
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <Grid ColumnDefinitions="*,*">
+                                <Label Grid.Row="0"
+                                       Grid.Column="0"
+                                       Text="{Binding Name}"
+                                       Style="{StaticResource LabelValorsTittles}"></Label>
+                                <Label Grid.Row="0"
+                                       Grid.Column="1"
+                                       Text="{Binding TypeContract}"
+                                       Style="{StaticResource LabelTittlesColLectionView}"></Label>
+                                <Label Grid.Row="0"
+                                       Grid.Column="2"
+                                       Text="{Binding Pay, StringFormat=\{0:C\}}"
+                                       Style="{StaticResource LabelValorsTittles}"></Label>
+                            </Grid>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                    <CollectionView.EmptyView>
+                        <StackLayout HorizontalOptions="CenterAndExpand"
+                             VerticalOptions="CenterAndExpand">
+                            <Label Text="Hola, no hay fuerza de trabajo"
+                                   Margin="10,25,10,10"
+                                   Style="{StaticResource LabelTittlesColLectionView}"
+                                   HorizontalOptions="Fill"
+                                   HorizontalTextAlignment="Center" 
+                                   TextColor="Black"/>
+                        </StackLayout>
+                    </CollectionView.EmptyView>
+                </CollectionView>
             </StackLayout>
         </ScrollView>
         

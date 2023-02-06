@@ -12,6 +12,33 @@ namespace ReinadelCisne.ViewModels
 {
     public class WorkForceVM: BaseVM, IQueryAttributable
     {
+        int _totalElementos;
+        public int TotalElementos
+        {
+            get => _totalElementos;
+            set
+            {
+                if (value != _totalElementos)
+                {
+                    _totalElementos = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        double _totalValores;
+        public double TotalValores
+        {
+            get => _totalValores;
+            set
+            {
+                if (value != _totalValores)
+                {
+                    _totalValores = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
         public ObservableCollection<WorkForceModel> WorkForces { get; set; } = new ObservableCollection<WorkForceModel>();
 
         public ICommand PushCommand => new Command((obj) =>
@@ -89,6 +116,9 @@ namespace ReinadelCisne.ViewModels
                 {
                     WorkForces.Add(w);
                 }
+
+                TotalElementos = WorkForces.Count();
+                TotalValores = WorkForces.Sum(x => x.PayMonth);
             }
             
         }

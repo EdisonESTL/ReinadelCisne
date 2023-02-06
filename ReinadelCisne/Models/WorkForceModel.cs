@@ -11,6 +11,7 @@ namespace ReinadelCisne.Models
         [PrimaryKey, AutoIncrement]
         public int Id { get; set; }
         public string Name { get; set; }
+        public double PayMonth { get; set; }
         public string Tasks { get; set; }
         public string Type { get; set; }
 

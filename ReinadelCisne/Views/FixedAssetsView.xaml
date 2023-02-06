@@ -1,0 +1,202 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:ReinadelCisne.ViewModels"
+             x:Class="ReinadelCisne.Views.FixedAssetsView"
+             Title="Activos fijos">
+    <ContentPage.BindingContext>
+        <vm:FixedAssetsVM/>
+    </ContentPage.BindingContext>
+    <ContentPage.Content>
+        <StackLayout Padding="10">
+            <StackLayout Orientation="Horizontal"
+                         HorizontalOptions="Center"
+                         Spacing="30">
+                <StackLayout>
+                    <Label x:Name="TotalElementos"
+                           Style="{StaticResource LabelTittlesColLectionView}">
+                        <Label.FormattedText>
+                            <FormattedString>
+                                <Span Text="Total elementos&#10;"></Span>
+                                <Span Text="{Binding TotalElementos}"
+                                      FontSize="20"></Span>
+                            </FormattedString>
+                        </Label.FormattedText>
+                    </Label>
+                </StackLayout>
+                <StackLayout>
+                    <Label x:Name="TotalValor"
+                           Style="{StaticResource LabelTittlesColLectionView}">
+                        <Label.FormattedText>
+                            <FormattedString>
+                                <Span Text="Total valor&#10;"></Span>
+                                <Span Text="{Binding TotalValores, StringFormat=\{0:c\}}"
+                                      FontSize="20"></Span>
+                            </FormattedString>
+                        </Label.FormattedText>
+                    </Label>
+                </StackLayout>
+            </StackLayout>
+            <Label Text="Filtrar por grupo"
+                   TextColor="Black"/>
+            <Frame BackgroundColor="DarkRed">
+                <Grid ColumnDefinitions="*, Auto, Auto"
+                  RowDefinitions="Auto"
+                      >
+                    <Picker x:Name="grupos"
+                        Title="Grupo"
+                        BackgroundColor="White"
+                        Grid.Column="0"                        
+                        SelectedItem="{Binding SeleccionarGroupFA}">
+                        <Picker.ItemsSource>
+                            <x:Array Type="{x:Type x:String}">
+                                <x:String>Muebles y enseres</x:String>
+                                <x:String>Maquinaria</x:String>
+                                <x:String>Equipos</x:String>
+                                <x:String>Vehiculos</x:String>
+                                <x:String>Edificios</x:String>
+                            </x:Array>
+                        </Picker.ItemsSource>
+                    </Picker>
+                    <ImageButton Source="searchhd.png"
+                             BackgroundColor="{StaticResource PrimerColor}"
+                             CornerRadius="35"
+                             Grid.Column="1"
+                             HorizontalOptions="CenterAndExpand"
+                             Command="{Binding PerformSearch}"
+                             Aspect="AspectFit"
+                             Padding="10,0,10,0"/>
+                    <ImageButton Source="arbol1.png"                             
+                             BackgroundColor="{StaticResource SegundoColor}"
+                             CornerRadius="35"
+                             Grid.Column="2"
+                             HorizontalOptions="CenterAndExpand"
+                             Command="{Binding PushCommand}"
+                             CommandParameter="todo"
+                             Aspect="AspectFit"
+                             Padding="15,0,15,0"/>
+                </Grid>
+            </Frame>
+            
+            <RefreshView IsRefreshing="{Binding IsRefreshing}" Command="{Binding RefreshCommand}">
+                <CollectionView ItemsSource="{Binding FixedAssets, Mode=TwoWay}" 
+                                SelectionMode="Single" 
+                                x:Name="listaFA" 
+                                SelectionChangedCommand="{Binding SelectdCommand}" 
+                                SelectionChangedCommandParameter="{Binding SelectedItem , Source={x:Reference listaFA}}" 
+                                Grid.ColumnSpan="3" 
+                                Grid.Row="2" 
+                                HorizontalOptions="Center"
+                                >
+                    <CollectionView.ItemsLayout>
+                        <LinearItemsLayout Orientation="Vertical" ItemSpacing="10"/>
+                    </CollectionView.ItemsLayout>
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <SwipeView>
+                                <SwipeView.RightItems>
+                                    <SwipeItems>
+                                        <SwipeItem Text="Eliminar"                                                   
+                                                   IconImageSource="deleteL.png"
+                                                   BackgroundColor="LightPink"
+                                                   Command="{Binding Path=BindingContext.EliminarCommand , Source={x:Reference listaFA}}"
+                                                   CommandParameter="{Binding .}"/>
+                                        <SwipeItem Text="Modificar"
+                                                   IconImageSource="newa.png"
+                                                   BackgroundColor="LightGreen"
+                                                   Command="{Binding Path=BindingContext.ModificarCommand , Source={x:Reference listaFA}}"
+                                                   CommandParameter="{Binding .}"/>
+                                    </SwipeItems>
+                                </SwipeView.RightItems>
+                                <Frame Style="{StaticResource Frame3}"
+                                       CornerRadius="45"
+                                       Margin="0"
+                                       Padding="10">
+                                    <Grid RowDefinitions="*, *, *"
+                                      ColumnDefinitions="*, 3*">
+
+                                        <Image Source="rawmaterial.png"
+                                           Grid.Column="0"
+                                           Grid.Row="0"
+                                           Grid.RowSpan="2"/>
+
+                                        <Label Grid.Column="1"
+                                           Grid.Row="0"                                            
+                                           Style="{StaticResource LabelRegistroVenta}" 
+                                           FontSize="15">
+                                            <Label.FormattedText>
+                                                <FormattedString>
+                                                    <Span Text="{Binding Name}"/>
+                                                </FormattedString>
+                                            </Label.FormattedText>
+                                        </Label>
+                                        <Label Grid.Column="1" 
+                                           Grid.Row="1"
+                                           Text="{Binding Description}" Style="{StaticResource LabelTittles1}" FontSize="15"/>
+                                        
+                                        <Label Grid.Column="0"
+                                           Grid.Row="2"                                           
+                                           Style="{StaticResource LabelRegistroVenta}" 
+                                           FontSize="15">
+                                            <Label.FormattedText>
+                                                <FormattedString>
+                                                    <Span Text="Cant. "/>
+                                                    <Span Text="{Binding Amount}" />
+                                                </FormattedString>
+                                            </Label.FormattedText>
+                                        </Label>
+
+                                        <Label Grid.Column="1"
+                                           Grid.Row="2"                                           
+                                           Style="{StaticResource LabelRegistroVenta}" 
+                                           FontSize="15">
+                                            <Label.FormattedText>
+                                                <FormattedString>
+                                                    <Span Text="V/U "/>
+                                                    <Span Text="{Binding ValorUnit, StringFormat=\{0:C\}}"  />
+                                                </FormattedString>
+                                            </Label.FormattedText>
+                                        </Label>
+                                    </Grid>
+                                </Frame>
+                            </SwipeView>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                    <CollectionView.EmptyView>
+                        <StackLayout HorizontalOptions="CenterAndExpand"
+                             VerticalOptions="CenterAndExpand">
+                            <Label Text="Hola, no hay activos registrados."
+                                   Margin="10,25,10,10"
+                                   Style="{StaticResource LabelTittlesColLectionView}"
+                                   HorizontalOptions="Fill"
+                                   HorizontalTextAlignment="Center" 
+                                   TextColor="Black"/>
+                        </StackLayout>
+                    </CollectionView.EmptyView>
+                </CollectionView>
+            </RefreshView>
+            <Grid RowDefinitions="Auto" Margin="10">
+                <Button Text="Inicio" Command="{Binding PushCommand}" 
+                        Style="{StaticResource Button2}"
+                        CommandParameter="inicio"
+                        Grid.Column="0"
+                        FontAttributes="Bold"
+                        ImageSource="arbol1.png"/>
+                <!--<Button Text="Compras" Command="{Binding PushCommand}" 
+                        Style="{StaticResource Button2}"
+                        CommandParameter="compras"
+                        Grid.Column="0"
+                        FontAttributes="Bold"
+                        ImageSource="shopsld.png"
+                        ContentLayout="top, 3"/> -->
+                <Button Text="Nuevo" Command="{Binding PushCommand}" 
+                        Style="{StaticResource Button1}"
+                        CommandParameter="nuevo"
+                        CornerRadius="30"
+                        Grid.Column="1"
+                        ImageSource="newa.png"
+                        ContentLayout="top, 3"/>
+            </Grid>
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

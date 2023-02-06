@@ -1,0 +1,276 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:ReinadelCisne.ViewModels"
+             x:Class="ReinadelCisne.Views.SelectMaquinariaView"
+             Title="Maquinaria">
+    <ContentPage.BindingContext>
+        <vm:SelectMaquinariaVM/>
+    </ContentPage.BindingContext>
+    <Shell.BackButtonBehavior>
+        <BackButtonBehavior Command="{Binding BackCommand}"/>
+    </Shell.BackButtonBehavior>
+    <ContentPage.Content>
+        <StackLayout x:Name="ElementoCostosInd"
+                Margin="7" 
+                  BackgroundColor="#E4E4E4"
+                  Padding="6">
+            <StackLayout Orientation="Horizontal">
+                <Label HorizontalOptions="CenterAndExpand">
+                    <Label.FormattedText>
+                        <FormattedString>
+                            <Span Text="Maquinaria para fabricación&#10;"
+                              FontAttributes="Bold"
+                              FontSize="16"
+                              TextColor="Black"/>
+                            <Span Text="&#10;Elija la maquinaria para elaborar el producto&#10;"
+                              TextColor="Black"
+                              FontSize="14"/>
+                        </FormattedString>
+                    </Label.FormattedText>
+                </Label>
+                <Label HorizontalOptions="CenterAndExpand"
+                       HorizontalTextAlignment="Center">
+                    <Label.FormattedText>
+                        <FormattedString>
+                            <Span Text="Cantidad a fabricar&#10;"
+                              FontAttributes="Bold"
+                              FontSize="16"
+                              TextColor="Black"/>
+                            <Span Text="{Binding CantProducto}"
+                              TextColor="Black"
+                              FontSize="22"/>
+                        </FormattedString>
+                    </Label.FormattedText>
+                </Label>
+            </StackLayout>
+            
+            <Grid ColumnDefinitions="2*,*"
+                      RowDefinitions="Auto, Auto, Auto">
+                <Picker x:Name="picker"
+                        Title="Maquinaria"
+                    BackgroundColor="White"
+                    WidthRequest="150"
+                    HeightRequest="50"
+                    FontSize="16"
+                        ItemsSource="{Binding FixedAssets}"
+                    SelectedItem="{Binding AssetsModel}"
+                        Grid.Row="0"
+                        Grid.Column="0"
+                        ItemDisplayBinding="{Binding Name}">
+                </Picker>
+                <Picker x:Name="picker2"
+                        Title="Tiempo a usar"
+                    BackgroundColor="White"
+                    WidthRequest="150"
+                    HeightRequest="50"
+                    FontSize="16"
+                    SelectedItem="{Binding TypeContrato}"
+                        Grid.Row="1"
+                        Grid.Column="0">
+                    <Picker.ItemsSource>
+                        <x:Array Type="{x:Type x:String}">
+                            <x:String>Horas</x:String>
+                            <x:String>Dias</x:String>
+                            <x:String>Meses</x:String>                            
+                        </x:Array>
+                    </Picker.ItemsSource>
+                </Picker>
+                <Entry Placeholder="Cantidad" 
+                        ClearButtonVisibility="WhileEditing"
+                       Keyboard="Numeric"
+                       Text="{Binding CantUso, Mode=TwoWay}" 
+                       Grid.Row="2" 
+                       Grid.Column="0"
+                       Style="{StaticResource Entry1}"/>
+                <Label Grid.Row="0"
+                        Grid.Column="1"
+                    HorizontalOptions="CenterAndExpand">
+                    <Label.FormattedText>
+                        <FormattedString>
+                            <Span Text="Valor&#10;"
+                              FontAttributes="Bold"
+                              FontSize="16"
+                              TextColor="Black"/>
+                            <Span Text="{Binding AssetsModel.ValorUnit,StringFormat=\{0:c\}}"
+                              TextColor="Black"
+                              FontSize="14"/>
+                        </FormattedString>
+                    </Label.FormattedText>
+                </Label>
+                <ImageButton Source="plus.png"
+                             Aspect="AspectFit"
+                             Grid.Row="1"
+                             Grid.Column="1"
+                             Grid.RowSpan="2"
+                             BackgroundColor="Transparent"
+                             Padding="20"
+                             Command="{Binding PushCommand}"
+                             CommandParameter="nuevo"/>
+            </Grid>
+
+            <StackLayout Orientation="Horizontal">
+                <Label Grid.Row="0"
+                        Grid.Column="1"
+                    HorizontalOptions="CenterAndExpand">
+                    <Label.FormattedText>
+                        <FormattedString>
+                            <Span Text="Dep. año&#10;"
+                              FontAttributes="Bold"
+                              FontSize="16"
+                              TextColor="Black"/>
+                            <Span Text="{Binding DepAnual,StringFormat=\{0:c\}}"
+                              TextColor="Black"
+                              FontSize="14"/>
+                        </FormattedString>
+                    </Label.FormattedText>
+                </Label>
+                <Label Grid.Row="0"
+                        Grid.Column="1"
+                    HorizontalOptions="CenterAndExpand">
+                    <Label.FormattedText>
+                        <FormattedString>
+                            <Span Text="Dep. mes&#10;"
+                              FontAttributes="Bold"
+                              FontSize="16"
+                              TextColor="Black"/>
+                            <Span Text="{Binding DepMes,StringFormat=\{0:c\}}"
+                              TextColor="Black"
+                              FontSize="14"/>
+                        </FormattedString>
+                    </Label.FormattedText>
+                </Label>
+                <Label Grid.Row="0"
+                        Grid.Column="1"
+                    HorizontalOptions="CenterAndExpand">
+                    <Label.FormattedText>
+                        <FormattedString>
+                            <Span Text="Dep. día&#10;"
+                              FontAttributes="Bold"
+                              FontSize="16"
+                              TextColor="Black"/>
+                            <Span Text="{Binding DepDia,StringFormat=\{0:c\}}"
+                              TextColor="Black"
+                              FontSize="14"/>
+                        </FormattedString>
+                    </Label.FormattedText>
+                </Label>
+                <Label Grid.Row="0"
+                        Grid.Column="1"
+                    HorizontalOptions="CenterAndExpand">
+                    <Label.FormattedText>
+                        <FormattedString>
+                            <Span Text="Dep. hora&#10;"
+                              FontAttributes="Bold"
+                              FontSize="16"
+                              TextColor="Black"/>
+                            <Span Text="{Binding DepHora,StringFormat=\{0:c\}}"
+                              TextColor="Black"
+                              FontSize="14"/>
+                        </FormattedString>
+                    </Label.FormattedText>
+                </Label>
+            </StackLayout>
+            <RefreshView IsRefreshing="{Binding IsRefreshing}"
+                             Command="{Binding Path=RefreshCommand}" Grid.Row="8" Grid.ColumnSpan="2">
+                <CollectionView ItemsSource="{Binding FixedAssetsSelected, Mode=OneWay}" 
+                                    SelectionMode="None" x:Name="listaAssets">
+                    <CollectionView.ItemsLayout>
+                        <GridItemsLayout Orientation="Vertical" VerticalItemSpacing="7"/>
+                    </CollectionView.ItemsLayout>
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <Frame Style="{StaticResource FrameLogin}"
+                                       CornerRadius="20"
+                                       Padding="0">
+                                <SwipeView BackgroundColor="Transparent">
+                                    <SwipeView.RightItems>
+                                        <SwipeItems>
+                                            <SwipeItem Text="Eliminar"
+                                                   BackgroundColor="Red"
+                                                   Command="{Binding Path=BindingContext.DeleteCICommand,Source={x:Reference listaAssets}}" CommandParameter="{Binding .}"
+                                                   />
+                                            <SwipeItem Text="Modificar"
+                                                   BackgroundColor="Blue"
+                                                   Command="{Binding Path=BindingContext.ModifyCICommand,Source={x:Reference listaAssets}}" CommandParameter="{Binding .}"
+                                                   />
+                                        </SwipeItems>
+                                    </SwipeView.RightItems>
+                                    <Grid HorizontalOptions="CenterAndExpand" 
+                                          RowDefinitions="Auto, Auto" 
+                                          ColumnDefinitions="2*, *"
+                                          ColumnSpacing="10"
+                                          Margin="0"
+                                          Padding="7">
+                                        <Label Grid.Column="0" Grid.Row="0"                                                    
+                                                   Style="{StaticResource LabelTittles1}"
+                                                   TextColor="White" 
+                                               VerticalOptions="Center">
+                                            <Label.FormattedText>
+                                                <FormattedString>
+                                                    <Span Text="{Binding FixedAssets.Name}" 
+                                                              FontSize="18"/>
+                                                </FormattedString>
+                                            </Label.FormattedText>
+                                        </Label>
+                                        <Label Grid.Column="1" Grid.Row="0"                                                     
+                                                    Style="{StaticResource LabelTittles1}"
+                                                   TextColor="White">
+                                            <Label.FormattedText>
+                                                <FormattedString>
+                                                    <Span Text="Valor:&#10;"/>
+                                                    <Span Text="{Binding FixedAssets.ValorUnit, StringFormat=\{0:c\}}" 
+                                                              FontSize="16"/>
+                                                </FormattedString>
+                                            </Label.FormattedText>
+                                        </Label>
+                                        <Label Grid.Column="0" Grid.Row="1"                                                     
+                                                    Style="{StaticResource LabelTittles1}"
+                                                   TextColor="White"
+                                               VerticalTextAlignment="Center">
+                                            <Label.FormattedText>
+                                                <FormattedString>
+                                                    <Span Text="Tiempo uso: "/>
+                                                    <Span Text="{Binding CantidadUso}" 
+                                                              FontSize="16"/>
+                                                    <Span Text=" "/>
+                                                    <Span Text="{Binding TipoUso}" 
+                                                              FontSize="16"/>
+                                                </FormattedString>
+                                            </Label.FormattedText>
+                                        </Label>
+                                        <Label Grid.Column="1" Grid.Row="1"                                                     
+                                               Style="{StaticResource LabelTittles1}"
+                                               TextColor="White"
+                                               VerticalOptions="Center">
+                                            <Label.FormattedText>
+                                                <FormattedString>
+                                                    <Span Text="Valor por uso:&#10;"/>
+                                                    <Span Text="{Binding PrecioXuso, StringFormat=\{0:c\}}" 
+                                                              FontSize="16"/>
+                                                </FormattedString>
+                                            </Label.FormattedText>
+                                        </Label>
+                                    </Grid>
+                                </SwipeView>
+                            </Frame>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+            </RefreshView>
+            <StackLayout Orientation="Horizontal"
+                         HorizontalOptions="CenterAndExpand"
+                         Padding="0,16,0,16">
+                <Button Text="Cancelar"
+                        Style="{StaticResource ButtonCancel}"
+                        Command="{Binding PushCommand}"
+                        CommandParameter="cancelar"/>
+                <Button Text="Guardar"
+                        Style="{StaticResource Button1}"
+                        Command="{Binding PushCommand}"
+                        CommandParameter="guardar"/>
+
+            </StackLayout>
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

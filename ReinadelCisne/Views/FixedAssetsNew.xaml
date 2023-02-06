@@ -1,0 +1,127 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:ReinadelCisne.ViewModels"
+             x:Class="ReinadelCisne.Views.FixedAssetsNew"
+             Title="Nuevo Activo"
+             BackgroundColor="LightGray">
+    <ContentPage.BindingContext>
+        <vm:FixedAssetsNewVM/>
+    </ContentPage.BindingContext>
+    <ContentPage.Content>
+        <ScrollView VerticalOptions="CenterAndExpand">
+            <Grid RowDefinitions="Auto, Auto, Auto, Auto, Auto, Auto, Auto, Auto, Auto, Auto, Auto, Auto, Auto"
+              Margin="7">
+                <Label Text="Nuevo activo fijo" 
+                   Grid.RowSpan="2" 
+                   VerticalOptions="Center"
+                   Style="{StaticResource LabelTittlesColLectionView}"
+                   FontSize="Subtitle"/>
+                <!--<Label Text="Nuevo grupo" Grid.Row="1" Grid.Column="1" 
+                       TextDecorations="Underline"
+                       HorizontalOptions="Center"
+                       VerticalOptions="Center"
+                       BackgroundColor="Transparent"
+                       FontSize="14" 
+                       TextColor="{StaticResource MdPrimaryVariantColor}" 
+                       FontAttributes="Bold,Italic"
+                       Margin="3">
+                    <Label.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding PushCommand}"
+                                              CommandParameter="newgroup"/>
+                    </Label.GestureRecognizers>
+                </Label>-->
+                <Picker x:Name="grupos"
+                        Title="Grupo"
+                        BackgroundColor="White"
+                        Grid.Row="0"
+                        Grid.Column="1"                        
+                        SelectedItem="{Binding GroupSelectedFA}">
+                    <Picker.ItemsSource>
+                        <x:Array Type="{x:Type x:String}">
+                            <x:String>Muebles y enseres</x:String>
+                            <x:String>Maquinaria</x:String>
+                            <x:String>Equipos de computo y Sw</x:String>
+                            <x:String>Vehiculos</x:String>
+                            <x:String>Edificios</x:String>
+                        </x:Array>
+                    </Picker.ItemsSource>
+                </Picker>
+                <!--ItemsSource="{Binding GroupsRMs}"
+                        ItemDisplayBinding="{Binding Description}"-->
+
+                <Label Text="Nombre" 
+                   Grid.Row="2" 
+                   Style="{StaticResource LabelCuentaVenta}"/>
+                <Entry Text="{Binding FixedAsset.Name, Mode=TwoWay}" 
+                   Grid.Row="3" Grid.ColumnSpan="2"
+                   Style="{StaticResource Entry1}"
+                   />
+
+                <Label Text="Descripción" 
+                   Grid.Row="4" 
+                   Style="{StaticResource LabelCuentaVenta}"/>
+                <Editor Text="{Binding FixedAsset.Description, Mode=TwoWay}" 
+                   Grid.Row="5" Grid.ColumnSpan="2"
+                   Style="{StaticResource Entry1}"
+                   />
+
+                <Label Grid.Row="8" 
+                           Grid.ColumnSpan="2" 
+                           Text="Costo U." 
+                           Style="{StaticResource LabelCuentaVenta}"/>
+                <Entry Grid.Row="9" Grid.ColumnSpan="2"
+                           WidthRequest="10"                       
+                           ClearButtonVisibility="WhileEditing"
+                           Keyboard="Numeric"
+                           Text="{Binding FixedAsset.ValorUnit, Mode=TwoWay}"
+                           Style="{StaticResource Entry1}"/>
+
+                <Label Grid.Row="6" Grid.ColumnSpan="2"                   
+                   Text="Cantidad:" 
+                   Style="{StaticResource LabelCuentaVenta}"
+                   HorizontalOptions="StartAndExpand"/>
+                <Grid Grid.Row="7" Grid.ColumnSpan="2" 
+                  ColumnDefinitions="*, *"
+                  Padding="0,0,0,10">
+
+                    <Entry Grid.Column="0" 
+                           Grid.Row="0"
+                       Text="{Binding Cant, Mode=TwoWay}" Keyboard="Numeric"
+                       Style="{StaticResource Entry1}"
+                       FontSize="18"
+                       VerticalOptions="Center"
+                       Margin="0"
+                       ClearButtonVisibility="WhileEditing"/>
+                    <Frame Grid.Row="0"
+                           Grid.Column="1"
+                           Margin="0"
+                           Padding="0"
+                           BackgroundColor="LightGray"
+                           BorderColor="Transparent">
+                        <Stepper x:Name="_stepperAdd"
+                             Maximum="1000"   
+                             Minimum="0"
+                             Increment="1"
+                             Value="{Binding Cant}"  
+                             Visual="Default"/>
+                    </Frame>                    
+                </Grid>
+
+                <Grid Grid.Row="12" HorizontalOptions="CenterAndExpand"
+                  VerticalOptions="CenterAndExpand"
+                  Grid.ColumnSpan="2"
+                      Padding="0,10,0,0">
+                    <Button Text="Cancelar" Grid.Column="0" 
+                            Style="{StaticResource ButtonCancel}"
+                            Command="{Binding PushCommand}"
+                            CommandParameter="cancel"/>
+                    <Button Text="Guardar" Grid.Column="1" 
+                            Style="{StaticResource ButtonSave}" FontSize="11"
+                            Command="{Binding PushCommand}"
+                            CommandParameter="save"/>
+                </Grid>
+            </Grid>
+        </ScrollView>
+    </ContentPage.Content>
+</ContentPage>

@@ -2,18 +2,117 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:vm="clr-namespace:ReinadelCisne.ViewModels"
-             x:Class="ReinadelCisne.Views.IndirectCostView">
+             x:Class="ReinadelCisne.Views.IndirectCostView"
+             Title="Costos indirectos fabricación"
+             >
     <ContentPage.BindingContext>
         <vm:IndirectCostVM/>
     </ContentPage.BindingContext>
     <ContentPage.Content>
         <StackLayout Padding="7">
+            <StackLayout Orientation="Horizontal"
+                         HorizontalOptions="CenterAndExpand"
+                         Spacing="30"
+                         Margin="0,9,0,20">
+                <StackLayout>
+                    <Label x:Name="TotalElementos"
+                           Style="{StaticResource LabelTittlesColLectionView}">
+                        <Label.FormattedText>
+                            <FormattedString>
+                                <Span Text="Total elementos&#10;"></Span>
+                                <Span Text="{Binding TotalElementos}"
+                                      FontSize="20"></Span>
+                            </FormattedString>
+                        </Label.FormattedText>
+                    </Label>
+                </StackLayout>
+                <StackLayout>
+                    <Label x:Name="TotalValor"
+                           Style="{StaticResource LabelTittlesColLectionView}">
+                        <Label.FormattedText>
+                            <FormattedString>
+                                <Span Text="Total elementos&#10;"></Span>
+                                <Span Text="{Binding TotalValores, StringFormat=\{0:c\}}"
+                                      FontSize="20"></Span>
+                            </FormattedString>
+                        </Label.FormattedText>
+                    </Label>
+                </StackLayout>
+            </StackLayout>
+            <Label Text="Ingreso de valores" 
+                   Style="{StaticResource LabelTittlesColLectionView}"/>
+            <Frame BackgroundColor="LightSkyBlue"
+                   Padding="15"
+                   Margin="10,10,10,20"
+                   CornerRadius="30">
+                <StackLayout>
+                    <Label Text="Descripción"
+                   Style="{StaticResource LabelTittlesColLectionView}"/>
+                    <Entry Style="{StaticResource Entry1}"
+                   Text="{Binding Cif.DescriptionOC}"/>
+                    <Label Text="Valor por mes"
+                   Style="{StaticResource LabelTittlesColLectionView}"
+                   Margin="0,10,0,0"
+                   Padding="0"/>
+                    <Entry Style="{StaticResource Entry1}"
+                   Text="{Binding Cif.CostOC}"
+                           />
+                    <StackLayout Orientation="Horizontal"
+                         HorizontalOptions="CenterAndExpand">
+                        <Button Text="Cancelar"
+                        Style="{StaticResource ButtonCancel}"
+                        Command="{Binding PushCommand}"
+                        CommandParameter="regresar"
+                                CornerRadius="30"/>
+                        <Button Text="Guardar"
+                        Style="{StaticResource ButtonAdd}"
+                        Command="{Binding PushCommand}"
+                        CommandParameter="save"
+                                CornerRadius="30"/>
+                    </StackLayout>
+                </StackLayout>
+            </Frame>
+            <Label Text="Valores registrados:"
+                   Style="{StaticResource LabelTittlesColLectionView}"/>
             <CollectionView BackgroundColor="BlanchedAlmond"
-                            x:Name="ListWF"
-                            ItemsSource="{Binding WorkForces}">
+                            x:Name="ListCIF"
+                            ItemsSource="{Binding OtherCosts}"
+                            >
+                <CollectionView.ItemsLayout>
+                    <LinearItemsLayout Orientation="Vertical"
+                                       ItemSpacing="9"/>
+                </CollectionView.ItemsLayout>
                 <CollectionView.ItemTemplate>
                     <DataTemplate>
-
+                        <Frame BorderColor="Black" 
+                               Padding="0" CornerRadius="40" 
+                               BackgroundColor="Transparent">
+                            <SwipeView BackgroundColor="Transparent">
+                                <SwipeView.RightItems>
+                                    <SwipeItems>
+                                        <SwipeItem Text="Eliminar"
+                                                   BackgroundColor="LightPink"
+                                                   Command="{Binding Path=BindingContext.EliminarCommand,Source={x:Reference ListCIF}}" CommandParameter="{Binding .}"
+                                                   />
+                                        <SwipeItem Text="Modificar"
+                                                   BackgroundColor="LightGreen"
+                                                   Command="{Binding Path=BindingContext.ModificarCommand,Source={x:Reference ListCIF}}" CommandParameter="{Binding .}"
+                                                   />
+                                    </SwipeItems>
+                                </SwipeView.RightItems>
+                                <Grid RowDefinitions="Auto"
+                                          Margin="10">
+                                    <Label Grid.Column="0"
+                                               Text="{Binding DescriptionOC}"
+                                               Style="{StaticResource LabelTittlesColLectionView}"
+                                           FontSize="19"/>
+                                    <Label Grid.Column="1" Text="{Binding CostOC, StringFormat=\{0:C\}}"
+                                               Style="{StaticResource LabelTittlesColLectionView}"
+                                               FontAttributes="Italic"
+                                           FontSize="19"/>
+                                </Grid>
+                            </SwipeView>
+                        </Frame>
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
                 <CollectionView.EmptyView>
@@ -28,7 +127,7 @@
                     </StackLayout>
                 </CollectionView.EmptyView>
             </CollectionView>
-            <Grid ColumnDefinitions="Auto, Auto"
+            <!--<Grid ColumnDefinitions="Auto, Auto"
                   RowDefinitions="Auto"
                   HorizontalOptions="Center">
                 <Button Text="Regresar"
@@ -41,7 +140,7 @@
                         Style="{StaticResource ButtonAdd}"
                         Command="{Binding PushCommand}"
                         CommandParameter="nuevoP"/>
-            </Grid>
+            </Grid>-->
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>

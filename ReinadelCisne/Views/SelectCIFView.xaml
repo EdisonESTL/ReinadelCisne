@@ -1,0 +1,140 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:ReinadelCisne.ViewModels"
+             x:Class="ReinadelCisne.Views.SelectCIFView"
+             Title="Costos indirectos fabricación">
+    <ContentPage.BindingContext>
+        <vm:SelectCIFViewModel/>
+    </ContentPage.BindingContext>
+    <Shell.BackButtonBehavior>
+        <BackButtonBehavior Command="{Binding BackCommand}"/>
+    </Shell.BackButtonBehavior>
+    <ContentPage.Content>
+        <StackLayout x:Name="ElementoCostosInd"
+                Margin="7" 
+                  BackgroundColor="#E4E4E4"
+                  Padding="6">
+            <Label Text="Total costos indirectos registrados"
+                       HorizontalOptions="Center" 
+                       Style="{StaticResource LabelTittlesColLectionView}"/>
+            <Label Text="Costos indirectos de fabricación"
+                       HorizontalOptions="Center" 
+                       Style="{StaticResource LabelTittlesColLectionView}"/>
+            <Grid ColumnDefinitions="*, *"
+                      RowDefinitions="Auto"
+                      HorizontalOptions="CenterAndExpand"
+                      Margin="0,0,0,10">
+                <Button Text="{Binding TotalMOI, StringFormat='Materia prima indirecta: {0:C}'}"
+                            Grid.Column="0"
+                        TextColor="White"/>
+                <Button Text="{Binding TotalWFI, StringFormat='Mano de obra indirecta: {0:C}'}"
+                            Grid.Column="1"
+                        TextColor="White"/>
+            </Grid>
+
+            <!--<Label Text="Añadir otros valores"
+                       Style="{StaticResource LabelTittlesColLectionView}"/>
+            <Grid ColumnDefinitions="*,*"
+                      RowDefinitions="Auto, Auto">
+                <Entry Placeholder="Descripción"
+                           ClearButtonVisibility="WhileEditing"
+                           Grid.Row="0" 
+                           Grid.ColumnSpan="2"
+                           FontSize="Small" 
+                           Text="{Binding CostIndirect.DescriptionOC, Mode=TwoWay}"
+                           Style="{StaticResource Entry1}"/>
+
+                <Entry Placeholder="Valor" 
+                        ClearButtonVisibility="WhileEditing"
+                       Keyboard="Numeric"
+                       Text="{Binding CostIndirect.CostOC, Mode=TwoWay}" 
+                       Grid.Row="1" 
+                       Grid.Column="0"
+                       Style="{StaticResource Entry1}"/>
+                <ImageButton Source="plus.png"
+                                 Aspect="AspectFit"
+                                 Grid.Row="1"
+                                 Grid.Column="1"
+                                 BackgroundColor="Transparent"
+                                 WidthRequest="60"
+                                 Command="{Binding AddCI}"/>
+            </Grid>-->
+
+
+            <RefreshView IsRefreshing="{Binding IsRefreshing}"
+                             Command="{Binding Path=RefreshCommand}" Grid.Row="8" Grid.ColumnSpan="2">
+                <CollectionView ItemsSource="{Binding OtherCosts, Mode=OneWay}" 
+                                    SelectionMode="None" x:Name="listaOtrosCostos">
+                    <CollectionView.ItemsLayout>
+                        <GridItemsLayout Orientation="Vertical" VerticalItemSpacing="7"/>
+                    </CollectionView.ItemsLayout>
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <Frame Style="{StaticResource FrameLogin}"
+                                       CornerRadius="20"
+                                       Padding="0">
+                                <SwipeView BackgroundColor="Transparent">
+                                    <SwipeView.RightItems>
+                                        <SwipeItems>
+                                            <SwipeItem Text="Eliminar"
+                                                   BackgroundColor="Red"
+                                                   Command="{Binding Path=BindingContext.DeleteCICommand,Source={x:Reference listaOtrosCostos}}" CommandParameter="{Binding .}"
+                                                   />
+                                            <SwipeItem Text="Modificar"
+                                                   BackgroundColor="Blue"
+                                                   Command="{Binding Path=BindingContext.ModifyCICommand,Source={x:Reference listaOtrosCostos}}" CommandParameter="{Binding .}"
+                                                   />
+                                        </SwipeItems>
+                                    </SwipeView.RightItems>
+                                    <Grid Padding="10" 
+                                              HorizontalOptions="Center" 
+                                              RowDefinitions="Auto" 
+                                              ColumnDefinitions="Auto, *"
+                                              ColumnSpacing="10">
+                                        <Label Grid.Column="0" Grid.Row="0"                                                    
+                                                   Style="{StaticResource LabelTittles1}"
+                                                   TextColor="White" >
+                                            <Label.FormattedText>
+                                                <FormattedString>
+                                                    <Span Text="Descripción:&#10;" 
+                                                              />
+                                                    <Span Text="{Binding DescriptionOC}" 
+                                                              FontSize="18"/>
+                                                </FormattedString>
+                                            </Label.FormattedText>
+                                        </Label>
+                                        <Label Grid.Column="1" Grid.Row="0"                                                     
+                                                    Style="{StaticResource LabelTittles1}"
+                                                   TextColor="White">
+                                            <Label.FormattedText>
+                                                <FormattedString>
+                                                    <Span Text="Valor:&#10;"/>
+                                                    <Span Text="{Binding CostOC, StringFormat=\{0:c\}}" 
+                                                              FontSize="16"/>
+                                                </FormattedString>
+                                            </Label.FormattedText>
+                                        </Label>
+                                    </Grid>
+                                </SwipeView>
+                            </Frame>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+            </RefreshView>
+            <StackLayout Orientation="Horizontal"
+                         HorizontalOptions="CenterAndExpand"
+                         Padding="0,16,0,16">
+                <Button Text="Cancelar"
+                        Style="{StaticResource ButtonCancel}"
+                        Command="{Binding PushCommand}"
+                        CommandParameter="cancelar"/>
+                <Button Text="Guardar"
+                        Style="{StaticResource Button1}"
+                        Command="{Binding PushCommand}"
+                        CommandParameter="guardar"/>
+
+            </StackLayout>
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

@@ -42,9 +42,13 @@ namespace ReinadelCisne.Services
             _database.CreateTableAsync<ProductShoppingModel>();
             _database.CreateTableAsync<GroupsRMModel>();
             _database.CreateTableAsync<UMedidasRMModel>();
+            _database.CreateTableAsync<CostosConstitucionModel>();
+            _database.CreateTableAsync<FixedAssetsModel>();
+            _database.CreateTableAsync<GroupsFixedAssetsModel>();
+            _database.CreateTableAsync<ListFixedAssetsXproductModel>();
+            _database.CreateTableAsync<ListFAxProductModel>();
         }
-
-                
+                        
         //Proceso Usuario
         public Task<UserModel> GetUser()
         {
@@ -382,6 +386,14 @@ namespace ReinadelCisne.Services
         {
             return _database.GetAllWithChildrenAsync<ItemsListRMModel>();
         }
+        public Task<List<ItemsListRMModel>> GetItemsListRMxListRm(ListRMModel listRM)
+        {
+            var AllItems =  GetAllItems().Result;
+            var ListItems = (from a in AllItems
+                            where a.ListRMModel.Id == listRM.Id
+                            select a).ToList();
+            return Task.Run(() => ListItems);
+        }
         public Task<ListRMModel> GetListRM(int i)
         {
             return _database.GetWithChildrenAsync<ListRMModel>(i);
@@ -420,7 +432,12 @@ namespace ReinadelCisne.Services
                 _database.UpdateAsync(query);
             }
         }
-
+        public Task<RawMaterialModel> GetMaterialxKardex(KardexRMModel kardexRM)
+        {
+            var allKardex = GetMR().Result;
+            var kardEleg = allKardex.Where(x => x.Id == kardexRM.IdRawMaterial).FirstOrDefault();
+            return Task.Run(() => kardEleg);
+        }
         //procesos de Kardex de materia prima
         public Task<int> SaveKardesxRM(KardexRMModel kardexRM)
         {
@@ -685,6 +702,12 @@ namespace ReinadelCisne.Services
         {
             return _database.GetWithChildrenAsync<PersonalModel>(personal);
         }
+
+        /*public Task<WorkForceModel> GetPuestoxObrero(PersonalModel personal)
+        {
+            var perfiles = GetAllWorkForce().Result;
+            //var eleg = perfiles.Where(x => x.)
+        }*/
         #endregion
 
         //Funciones Otros Costos o Costos Indirectos
@@ -738,7 +761,132 @@ namespace ReinadelCisne.Services
         public Task<int> DeleteOtherCost(OtherCostModel otherCost)
         {
             return _database.DeleteAsync(otherCost);
-        } 
+        }
+        #endregion
+
+        //Funciones costos constitución
+        #region Costos constitucion
+        public Task<int> SaveCostosCostitucion(CostosConstitucionModel costosConstitucion)
+        {
+            if (costosConstitucion.Id != 0)
+            {
+                return _database.UpdateAsync(costosConstitucion);
+            }
+            else
+            {
+                return _database.InsertAsync(costosConstitucion);
+            }
+        }
+
+        public Task<int> DeleteCostosConstitucion(CostosConstitucionModel costosConstitucion)
+        {
+            return _database.DeleteAsync(costosConstitucion);
+        }
+
+        public Task<CostosConstitucionModel> Get1CostosConstitucion(CostosConstitucionModel costosConstitucion)
+        {
+            return _database.GetWithChildrenAsync<CostosConstitucionModel>(costosConstitucion.Id);
+        }
+
+        public Task<List<CostosConstitucionModel>> GetAllCostosConstitucion()
+        {
+            return _database.GetAllWithChildrenAsync<CostosConstitucionModel>();
+        }
+        public Task<List<CostosConstitucionModel>> GetAllCostosConstitucion1()
+        {
+            return _database.Table<CostosConstitucionModel>().ToListAsync();
+        }
+        #endregion
+
+        //Funciones Fixed Assets
+        #region Fixed Assets
+        public Task<int> SaveFixedAssets(FixedAssetsModel fixedAssets)
+        {
+            if (fixedAssets.Id != 0)
+            {
+                return _database.UpdateAsync(fixedAssets);
+            }
+            else
+            {
+                return _database.InsertAsync(fixedAssets);
+            }
+        }
+        public Task<int> DeleteFixedAssets(FixedAssetsModel fixedAssets)
+        {
+            return _database.DeleteAsync(fixedAssets);
+        }
+        public Task<FixedAssetsModel> Get1FixedAsset(FixedAssetsModel fixedAssets)
+        {
+            return _database.GetWithChildrenAsync<FixedAssetsModel>(fixedAssets.Id);
+        }
+        public Task<List<FixedAssetsModel>> GetAllFixedAssets()
+        {
+            return _database.GetAllWithChildrenAsync<FixedAssetsModel>();
+        }
+        //Funciones grupos Fixed Assets
+        public Task<int> SaveGroupsFixedAsset(GroupsFixedAssetsModel fixedAssets)
+        {
+            if (fixedAssets.Id != 0)
+            {
+                return _database.UpdateAsync(fixedAssets);
+            }
+            else
+            {
+                return _database.InsertAsync(fixedAssets);
+            }
+        }
+        public Task<int> DeleteGroupsFixedAsset(GroupsFixedAssetsModel fixedAssets)
+        {
+            return _database.DeleteAsync(fixedAssets);
+        }
+        public Task<List<GroupsFixedAssetsModel>> GetAllGroupsFixedAssets()
+        {
+            return _database.Table<GroupsFixedAssetsModel>().ToListAsync();
+        }
+        public Task UpdateRelationFA(GroupsFixedAssetsModel fixedAssets)
+        {
+            return _database.UpdateWithChildrenAsync(fixedAssets);
+        }
+        public Task<List<FixedAssetsModel>> GetAssetsxGroup(string groupsFixed)
+        {
+            var FAS = _database.Table<FixedAssetsModel>();
+
+            var kr = (from f in FAS
+                      where f.Grupo == groupsFixed
+                      select f).ToListAsync();
+            return kr;
+        }
+        //Funciones Lista de FixedAssets
+        public Task<int> SaveListSIxedAssetsProd(ListFixedAssetsXproductModel listFixed)
+        {
+            if(listFixed.Id != 0)
+            {
+                return _database.UpdateAsync(listFixed);
+            }
+            else
+            {
+                return _database.InsertAsync(listFixed);
+            }
+        }
+        public Task UpdateRelationListFAxProd(ListFixedAssetsXproductModel listFixed)
+        {
+            return _database.UpdateWithChildrenAsync(listFixed);
+        }
+        public Task<int> SaveListFAxProd(ListFAxProductModel listFixed)
+        {
+            if (listFixed.Id != 0)
+            {
+                return _database.UpdateAsync(listFixed);
+            }
+            else
+            {
+                return _database.InsertAsync(listFixed);
+            }
+        }
+        public Task<ListFAxProductModel> Get1ListFA(int listFixed)
+        {
+            return _database.GetWithChildrenAsync<ListFAxProductModel>(listFixed);
+        }
         #endregion
     }
 }
