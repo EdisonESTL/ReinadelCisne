@@ -100,7 +100,8 @@
                            Grid.Column="1"/>
                 </Grid>
             </Frame>
-            <RefreshView IsRefreshing="{Binding IsRefreshing}" Command="{Binding RefreshCommand}"
+            <RefreshView IsRefreshing="{Binding IsRefreshing}" 
+                         Command="{Binding RefreshCommand}"
                          Margin="10,0,10,0"
                          VerticalOptions="CenterAndExpand"
                          HorizontalOptions="CenterAndExpand">
@@ -114,7 +115,8 @@
                     </CollectionView.ItemsLayout>
                     <CollectionView.ItemTemplate>
                         <DataTemplate>
-                            <Frame Style="{StaticResource FrameProductss}" HorizontalOptions="CenterAndExpand">
+                            <Frame Style="{StaticResource FrameProductss}" 
+                                   HorizontalOptions="CenterAndExpand">
                                 <SwipeView BackgroundColor="Transparent">
                                     <SwipeView.RightItems>
                                         <SwipeItems>

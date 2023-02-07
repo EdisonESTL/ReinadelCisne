@@ -9,56 +9,27 @@
     </ContentPage.BindingContext>
     <ContentPage.Content>
         <StackLayout Padding="10">
-            <StackLayout Orientation="Horizontal"
-                         HorizontalOptions="Center"
-                         Spacing="30">
-                <StackLayout>
-                    <Label x:Name="TotalElementos"
-                           Style="{StaticResource LabelTittlesColLectionView}">
-                        <Label.FormattedText>
-                            <FormattedString>
-                                <Span Text="Total elementos&#10;"></Span>
-                                <Span Text="{Binding TotalElementos}"
-                                      FontSize="20"></Span>
-                            </FormattedString>
-                        </Label.FormattedText>
-                    </Label>
-                </StackLayout>
-                <StackLayout>
-                    <Label x:Name="TotalValor"
-                           Style="{StaticResource LabelTittlesColLectionView}">
-                        <Label.FormattedText>
-                            <FormattedString>
-                                <Span Text="Total valor&#10;"></Span>
-                                <Span Text="{Binding TotalValores, StringFormat=\{0:c\}}"
-                                      FontSize="20"></Span>
-                            </FormattedString>
-                        </Label.FormattedText>
-                    </Label>
-                </StackLayout>
-            </StackLayout>
             <Label Text="Filtrar por grupo"
                    TextColor="Black"/>
-            <Frame BackgroundColor="DarkRed">
-                <Grid ColumnDefinitions="*, Auto, Auto"
+            <Grid ColumnDefinitions="*, Auto, Auto"
                   RowDefinitions="Auto"
-                      >
-                    <Picker x:Name="grupos"
+                     Margin="60,0,40,20" >
+                <Picker x:Name="grupos"
                         Title="Grupo"
                         BackgroundColor="White"
                         Grid.Column="0"                        
                         SelectedItem="{Binding SeleccionarGroupFA}">
-                        <Picker.ItemsSource>
-                            <x:Array Type="{x:Type x:String}">
-                                <x:String>Muebles y enseres</x:String>
-                                <x:String>Maquinaria</x:String>
-                                <x:String>Equipos</x:String>
-                                <x:String>Vehiculos</x:String>
-                                <x:String>Edificios</x:String>
-                            </x:Array>
-                        </Picker.ItemsSource>
-                    </Picker>
-                    <ImageButton Source="searchhd.png"
+                    <Picker.ItemsSource>
+                        <x:Array Type="{x:Type x:String}">
+                            <x:String>Muebles y enseres</x:String>
+                            <x:String>Maquinaria</x:String>
+                            <x:String>Equipos</x:String>
+                            <x:String>Vehiculos</x:String>
+                            <x:String>Edificios</x:String>
+                        </x:Array>
+                    </Picker.ItemsSource>
+                </Picker>
+                <ImageButton Source="searchhd.png"
                              BackgroundColor="{StaticResource PrimerColor}"
                              CornerRadius="35"
                              Grid.Column="1"
@@ -66,7 +37,7 @@
                              Command="{Binding PerformSearch}"
                              Aspect="AspectFit"
                              Padding="10,0,10,0"/>
-                    <ImageButton Source="arbol1.png"                             
+                <ImageButton Source="arbol1.png"                             
                              BackgroundColor="{StaticResource SegundoColor}"
                              CornerRadius="35"
                              Grid.Column="2"
@@ -75,7 +46,49 @@
                              CommandParameter="todo"
                              Aspect="AspectFit"
                              Padding="15,0,15,0"/>
-                </Grid>
+            </Grid>
+
+            <Frame CornerRadius="10" Margin="0,10,0,18"
+                   Padding="0,9,0,9"
+                   BorderColor="#AAFDF7">
+                <Frame.Background>
+                    <LinearGradientBrush StartPoint="0,0"
+                                         EndPoint="1,1">
+                        <GradientStop Color="#AAFDF7"
+                                          Offset="0.1" />
+                        <GradientStop Color="#FFFFFF"
+                                          Offset="1.0" />
+                    </LinearGradientBrush>
+                </Frame.Background>
+                <StackLayout Orientation="Horizontal"
+                         HorizontalOptions="Center"
+                         Spacing="30"
+                             Margin="10">
+                    <StackLayout>
+                        <Label x:Name="TotalElementos"
+                           Style="{StaticResource LabelTittlesColLectionView}">
+                            <Label.FormattedText>
+                                <FormattedString>
+                                    <Span Text="Total elementos&#10;"></Span>
+                                    <Span Text="{Binding TotalElementos}"
+                                      FontSize="20"></Span>
+                                </FormattedString>
+                            </Label.FormattedText>
+                        </Label>
+                    </StackLayout>
+                    <StackLayout>
+                        <Label x:Name="TotalValor"
+                           Style="{StaticResource LabelTittlesColLectionView}">
+                            <Label.FormattedText>
+                                <FormattedString>
+                                    <Span Text="Total valor&#10;"></Span>
+                                    <Span Text="{Binding TotalValores, StringFormat=\{0:c\}}"
+                                      FontSize="20"></Span>
+                                </FormattedString>
+                            </Label.FormattedText>
+                        </Label>
+                    </StackLayout>
+                </StackLayout>
             </Frame>
             
             <RefreshView IsRefreshing="{Binding IsRefreshing}" Command="{Binding RefreshCommand}">
@@ -93,25 +106,26 @@
                     </CollectionView.ItemsLayout>
                     <CollectionView.ItemTemplate>
                         <DataTemplate>
-                            <SwipeView>
-                                <SwipeView.RightItems>
-                                    <SwipeItems>
-                                        <SwipeItem Text="Eliminar"                                                   
-                                                   IconImageSource="deleteL.png"
-                                                   BackgroundColor="LightPink"
-                                                   Command="{Binding Path=BindingContext.EliminarCommand , Source={x:Reference listaFA}}"
-                                                   CommandParameter="{Binding .}"/>
-                                        <SwipeItem Text="Modificar"
-                                                   IconImageSource="newa.png"
-                                                   BackgroundColor="LightGreen"
-                                                   Command="{Binding Path=BindingContext.ModificarCommand , Source={x:Reference listaFA}}"
-                                                   CommandParameter="{Binding .}"/>
-                                    </SwipeItems>
-                                </SwipeView.RightItems>
-                                <Frame Style="{StaticResource Frame3}"
-                                       CornerRadius="45"
+                            <Frame BackgroundColor="LightGreen"
+                                       CornerRadius="10"
                                        Margin="0"
                                        Padding="10">
+                                <SwipeView BackgroundColor="Transparent">
+                                    <SwipeView.RightItems>
+                                        <SwipeItems>
+                                            <SwipeItem Text="Eliminar"                                                   
+                                                       IconImageSource="deleteL.png"
+                                                       BackgroundColor="LightPink"
+                                                       Command="{Binding Path=BindingContext.EliminarCommand , Source={x:Reference listaFA}}"
+                                                       CommandParameter="{Binding .}"/>
+                                            <SwipeItem Text="Modificar"
+                                                       IconImageSource="newa.png"
+                                                       BackgroundColor="LightGreen"
+                                                       Command="{Binding Path=BindingContext.ModificarCommand , Source={x:Reference listaFA}}"
+                                                       CommandParameter="{Binding .}"/>
+                                        </SwipeItems>
+                                    </SwipeView.RightItems>
+                                
                                     <Grid RowDefinitions="*, *, *"
                                       ColumnDefinitions="*, 3*">
 
@@ -158,8 +172,9 @@
                                             </Label.FormattedText>
                                         </Label>
                                     </Grid>
-                                </Frame>
-                            </SwipeView>
+                                
+                                </SwipeView>
+                            </Frame>
                         </DataTemplate>
                     </CollectionView.ItemTemplate>
                     <CollectionView.EmptyView>

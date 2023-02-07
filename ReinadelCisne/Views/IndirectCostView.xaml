@@ -9,42 +9,12 @@
         <vm:IndirectCostVM/>
     </ContentPage.BindingContext>
     <ContentPage.Content>
-        <StackLayout Padding="7">
-            <StackLayout Orientation="Horizontal"
-                         HorizontalOptions="CenterAndExpand"
-                         Spacing="30"
-                         Margin="0,9,0,20">
-                <StackLayout>
-                    <Label x:Name="TotalElementos"
-                           Style="{StaticResource LabelTittlesColLectionView}">
-                        <Label.FormattedText>
-                            <FormattedString>
-                                <Span Text="Total elementos&#10;"></Span>
-                                <Span Text="{Binding TotalElementos}"
-                                      FontSize="20"></Span>
-                            </FormattedString>
-                        </Label.FormattedText>
-                    </Label>
-                </StackLayout>
-                <StackLayout>
-                    <Label x:Name="TotalValor"
-                           Style="{StaticResource LabelTittlesColLectionView}">
-                        <Label.FormattedText>
-                            <FormattedString>
-                                <Span Text="Total elementos&#10;"></Span>
-                                <Span Text="{Binding TotalValores, StringFormat=\{0:c\}}"
-                                      FontSize="20"></Span>
-                            </FormattedString>
-                        </Label.FormattedText>
-                    </Label>
-                </StackLayout>
-            </StackLayout>
+        <StackLayout Padding="7">            
             <Label Text="Ingreso de valores" 
                    Style="{StaticResource LabelTittlesColLectionView}"/>
-            <Frame BackgroundColor="LightSkyBlue"
+            <Frame Style="{StaticResource Frame1}"
                    Padding="15"
-                   Margin="10,10,10,20"
-                   CornerRadius="30">
+                   CornerRadius="22">
                 <StackLayout>
                     <Label Text="Descripción"
                    Style="{StaticResource LabelTittlesColLectionView}"/>
@@ -72,10 +42,52 @@
                     </StackLayout>
                 </StackLayout>
             </Frame>
+            <Frame CornerRadius="10"
+                   Padding="0,9,0,9"
+                   BorderColor="#AAFDF7"
+                   Margin="9">
+                <Frame.Background>
+                    <LinearGradientBrush StartPoint="0,0"
+                                         EndPoint="1,1">
+                        <GradientStop Color="#AAFDF7"
+                                          Offset="0.1" />
+                        <GradientStop Color="#FFFFFF"
+                                          Offset="1.0" />
+                    </LinearGradientBrush>
+                </Frame.Background>
+                <StackLayout Orientation="Horizontal"
+                         HorizontalOptions="CenterAndExpand"
+                         Spacing="30">
+                    <StackLayout>
+                        <Label x:Name="TotalElementos"
+                           Style="{StaticResource LabelTittlesColLectionView}">
+                            <Label.FormattedText>
+                                <FormattedString>
+                                    <Span Text="Total elementos&#10;"></Span>
+                                    <Span Text="{Binding TotalElementos}"
+                                      FontSize="20"></Span>
+                                </FormattedString>
+                            </Label.FormattedText>
+                        </Label>
+                    </StackLayout>
+                    <StackLayout>
+                        <Label x:Name="TotalValor"
+                           Style="{StaticResource LabelTittlesColLectionView}">
+                            <Label.FormattedText>
+                                <FormattedString>
+                                    <Span Text="Total elementos&#10;"></Span>
+                                    <Span Text="{Binding TotalValores, StringFormat=\{0:c\}}"
+                                      FontSize="20"></Span>
+                                </FormattedString>
+                            </Label.FormattedText>
+                        </Label>
+                    </StackLayout>
+                </StackLayout>
+            </Frame>
+            
             <Label Text="Valores registrados:"
                    Style="{StaticResource LabelTittlesColLectionView}"/>
-            <CollectionView BackgroundColor="BlanchedAlmond"
-                            x:Name="ListCIF"
+            <CollectionView x:Name="ListCIF"
                             ItemsSource="{Binding OtherCosts}"
                             >
                 <CollectionView.ItemsLayout>
@@ -84,9 +96,8 @@
                 </CollectionView.ItemsLayout>
                 <CollectionView.ItemTemplate>
                     <DataTemplate>
-                        <Frame BorderColor="Black" 
-                               Padding="0" CornerRadius="40" 
-                               BackgroundColor="Transparent">
+                        <Frame BackgroundColor="LightGreen"
+                               Padding="0" CornerRadius="20">
                             <SwipeView BackgroundColor="Transparent">
                                 <SwipeView.RightItems>
                                     <SwipeItems>

@@ -9,48 +9,14 @@
     </ContentPage.BindingContext>
     <ContentPage.Content>
         <StackLayout Padding="10">
-            <StackLayout Orientation="Horizontal"
-                         HorizontalOptions="Center"
-                         Spacing="30">
-                <StackLayout>
-                    <Label x:Name="TotalElementos"
-                           Style="{StaticResource LabelTittlesColLectionView}">
-                        <Label.FormattedText>
-                            <FormattedString>
-                                <Span Text="Total elementos&#10;"></Span>
-                                <Span Text="{Binding TotalElementos}"
-                                      FontSize="19"></Span>
-                            </FormattedString>
-                        </Label.FormattedText>
-                    </Label>
-                </StackLayout>
-                <StackLayout>
-                    <Label x:Name="TotalValor"
-                           Style="{StaticResource LabelTittlesColLectionView}">
-                        <Label.FormattedText>
-                            <FormattedString>
-                                <Span Text="Total valor&#10;"></Span>
-                                <Span Text="{Binding TotalValores, StringFormat=\{0:c\}}"
-                                      FontSize="19"></Span>
-                            </FormattedString>
-                        </Label.FormattedText>
-                    </Label>
-                </StackLayout>
-            </StackLayout>
             <Label x:Name="FiltroTitle"
                 Text="Filtrar por grupo"
                    TextColor="Black"/>
-            <Frame BackgroundColor="Indigo"
-                   BorderColor="CornflowerBlue"
-                   CornerRadius="30"
-                   Padding="20"
-                   Margin="0"
-                   VerticalOptions="Center">
-                <Grid x:Name="Cuerpofiltro"
-                ColumnDefinitions="2*, Auto, Auto"
+            <Grid x:Name="Cuerpofiltro"
+                ColumnDefinitions="*, Auto, Auto"
                   RowDefinitions="Auto"
-                  >
-                    <Picker x:Name="picker"
+                  Margin="60,0,40,20">
+                <Picker x:Name="picker"
                         Grid.Column="0"
                     Title="Grupo"
                     TitleColor="Black"
@@ -58,7 +24,7 @@
                     ItemsSource="{Binding GroupsRMs}"
                     ItemDisplayBinding="{Binding Description}"
                     SelectedItem="{Binding GroupSelected}"/>
-                    <ImageButton Source="searchhd.png"
+                <ImageButton Source="searchhd.png"
                              BackgroundColor="{StaticResource PrimerColor}"
                              CornerRadius="35"
                              Grid.Column="1"
@@ -66,7 +32,7 @@
                              Command="{Binding PerformSearch}"
                              Aspect="AspectFit"
                              Padding="10,0,10,0"/>
-                    <ImageButton Source="arbol1.png"                             
+                <ImageButton Source="arbol1.png"                             
                              BackgroundColor="{StaticResource SegundoColor}"
                              CornerRadius="35"
                              Grid.Column="2"
@@ -75,110 +41,154 @@
                              CommandParameter="todo"
                              Aspect="AspectFit"
                              Padding="15,0,15,0"/>
-                </Grid>
+            </Grid>
+
+            <Frame BorderColor="#AAFDF7"
+                   CornerRadius="10"
+                   Padding="0,10,0,10"
+                   Margin="0,10,0,18"
+                   VerticalOptions="Center">
+                <Frame.Background>
+                    <LinearGradientBrush StartPoint="0,0"
+                                         EndPoint="1,1">
+                        <GradientStop Color="#AAFDF7"
+                                          Offset="0.1" />
+                        <GradientStop Color="#FFFFFF"
+                                          Offset="1.0" />
+                    </LinearGradientBrush>
+                </Frame.Background>
+                <StackLayout Orientation="Horizontal"
+                         HorizontalOptions="Center"
+                         Spacing="30"
+                             Margin="10">
+                    <StackLayout>
+                        <Label x:Name="TotalElementos"
+                           Style="{StaticResource LabelTittlesColLectionView}">
+                            <Label.FormattedText>
+                                <FormattedString>
+                                    <Span Text="Total elementos&#10;"></Span>
+                                    <Span Text="{Binding TotalElementos}"
+                                      FontSize="19"></Span>
+                                </FormattedString>
+                            </Label.FormattedText>
+                        </Label>
+                    </StackLayout>
+                    <StackLayout>
+                        <Label x:Name="TotalValor"
+                           Style="{StaticResource LabelTittlesColLectionView}">
+                            <Label.FormattedText>
+                                <FormattedString>
+                                    <Span Text="Total valor&#10;"></Span>
+                                    <Span Text="{Binding TotalValores, StringFormat=\{0:c\}}"
+                                      FontSize="19"></Span>
+                                </FormattedString>
+                            </Label.FormattedText>
+                        </Label>
+                    </StackLayout>
+                </StackLayout>
             </Frame>
             
-            <RefreshView IsRefreshing="{Binding IsRefreshing}" Command="{Binding RefreshCommand}">
-                <CollectionView ItemsSource="{Binding RawMaterials, Mode=OneWay}" 
-                                SelectionMode="Single" 
-                                x:Name="listaMateriaPrima" 
+            <RefreshView IsRefreshing="{Binding IsRefreshing}" 
+                         Command="{Binding RefreshCommand}"
+                         Margin="10,0,10,0"
+                         VerticalOptions="CenterAndExpand"
+                         HorizontalOptions="CenterAndExpand">
+                <CollectionView x:Name="listaMateriaPrima" 
+                    ItemsSource="{Binding RawMaterials, Mode=OneWay}" 
+                                SelectionMode="Single"                                 
                                 SelectionChangedCommand="{Binding SelectdCommand}" 
                                 SelectionChangedCommandParameter="{Binding SelectedItem , Source={x:Reference listaMateriaPrima}}" 
-                                Grid.ColumnSpan="3" 
-                                Grid.Row="2" 
-                                HorizontalOptions="Center"
-                                >
+                               >
                     <CollectionView.ItemsLayout>
-                        <LinearItemsLayout Orientation="Vertical" ItemSpacing="10"/>
+                        <LinearItemsLayout Orientation="Vertical" ItemSpacing="7"/>
                     </CollectionView.ItemsLayout>
                     <CollectionView.ItemTemplate>
                         <DataTemplate>
-                            <SwipeView>
-                                <SwipeView.RightItems>
-                                    <SwipeItems>
-                                        <SwipeItem Text="Eliminar"                                                   
-                                                   IconImageSource="deleteL.png"
-                                                   BackgroundColor="LightPink"
-                                                   Command="{Binding Path=BindingContext.EliminarCommand , Source={x:Reference listaMateriaPrima}}"
-                                                   CommandParameter="{Binding .}"/>
-                                        <SwipeItem Text="Modificar"
-                                                   IconImageSource="newa.png"
-                                                   BackgroundColor="LightGreen"
-                                                   Command="{Binding Path=BindingContext.ModificarCommand , Source={x:Reference listaMateriaPrima}}"
-                                                   CommandParameter="{Binding .}"/>
-                                    </SwipeItems>
-                                </SwipeView.RightItems>
-                                <Frame Style="{StaticResource Frame2}"
-                                       Margin="0"
-                                       Padding="0">
+                            <Frame Style="{StaticResource FrameProductss}"
+                                   HorizontalOptions="CenterAndExpand">
+                                <SwipeView BackgroundColor="Transparent">
+                                    <SwipeView.RightItems>
+                                        <SwipeItems>
+                                            <SwipeItem Text="Eliminar"                                                   
+                                                       IconImageSource="deleteL.png"
+                                                       BackgroundColor="LightPink"
+                                                       Command="{Binding Path=BindingContext.EliminarCommand , Source={x:Reference listaMateriaPrima}}"
+                                                       CommandParameter="{Binding .}"/>
+                                            <SwipeItem Text="Modificar"
+                                                       IconImageSource="newa.png"
+                                                       BackgroundColor="LightGreen"
+                                                       Command="{Binding Path=BindingContext.ModificarCommand , Source={x:Reference listaMateriaPrima}}"
+                                                       CommandParameter="{Binding .}"/>
+                                        </SwipeItems>
+                                    </SwipeView.RightItems>                                
                                     <Grid RowDefinitions="Auto, Auto, Auto"
-                                      ColumnDefinitions="*, 2*, Auto, Auto"
-                                          Padding="11">
+                                          ColumnDefinitions="*, 2*, Auto, Auto">
 
-                                        <Image Source="rawmaterial.png"
-                                           Grid.Column="0"
-                                           Grid.Row="0"
-                                           Grid.RowSpan="2"/>
+                                            <Image Source="rawmaterial.png"
+                                               Grid.Column="0"
+                                               Grid.Row="0"
+                                               Grid.RowSpan="2"/>
 
-                                        <Label Grid.Column="1"
-                                           Grid.ColumnSpan="3"
-                                           Grid.Row="0"                                            
-                                           Style="{StaticResource LabelRegistroVenta}" 
-                                           FontSize="20">
-                                            <Label.FormattedText>
-                                                <FormattedString>
-                                                    <Span Text="{Binding NameRM}"/>
-                                                </FormattedString>
-                                            </Label.FormattedText>
-                                        </Label>
-                                        <Label Grid.Column="1" 
-                                           Grid.ColumnSpan="2"
-                                           Grid.Row="1"
-                                           Text="{Binding DescriptionRM}" Style="{StaticResource LabelTittles1}" FontSize="15"/>
-                                        <Label Grid.Column="3" 
-                                           Grid.Row="1"
-                                           Text="{Binding TypeRM}" 
-                                               Style="{StaticResource LabelTittles1}" 
-                                               FontAttributes="Italic"
-                                               FontSize="15"
-                                               HorizontalOptions="CenterAndExpand"/>
-                                        <Label Grid.Column="0"
-                                           Grid.Row="2"                                           
-                                           Style="{StaticResource LabelRegistroVenta}" 
-                                           FontSize="15">
-                                            <Label.FormattedText>
-                                                <FormattedString>
-                                                    <Span Text="Cant. "/>
-                                                    <Span Text="{Binding CantidadRM}" />
-                                                </FormattedString>
-                                            </Label.FormattedText>
-                                        </Label>
+                                            <Label Grid.Column="1"
+                                               Grid.ColumnSpan="3"
+                                               Grid.Row="0"                                            
+                                               Style="{StaticResource LabelRegistroVenta}" 
+                                               FontSize="20">
+                                                <Label.FormattedText>
+                                                    <FormattedString>
+                                                        <Span Text="{Binding NameRM}"/>
+                                                    </FormattedString>
+                                                </Label.FormattedText>
+                                            </Label>
+                                            <Label Grid.Column="1" 
+                                               Grid.ColumnSpan="2"
+                                               Grid.Row="1"
+                                               Text="{Binding DescriptionRM}" Style="{StaticResource LabelTittles1}" FontSize="15"/>
+                                            <Label Grid.Column="3" 
+                                               Grid.Row="1"
+                                               Text="{Binding TypeRM}" 
+                                                   Style="{StaticResource LabelTittles1}" 
+                                                   FontAttributes="Italic"
+                                                   FontSize="15"
+                                                   HorizontalOptions="CenterAndExpand"/>
+                                            <Label Grid.Column="0"
+                                               Grid.Row="2"                                           
+                                               Style="{StaticResource LabelRegistroVenta}" 
+                                               FontSize="15">
+                                                <Label.FormattedText>
+                                                    <FormattedString>
+                                                        <Span Text="Cant. "/>
+                                                        <Span Text="{Binding CantidadRM}" />
+                                                    </FormattedString>
+                                                </Label.FormattedText>
+                                            </Label>
 
-                                        <Label Grid.Column="1"
-                                           Grid.Row="2"                                            
-                                           Style="{StaticResource LabelRegistroVenta}" 
-                                           FontSize="15">
-                                            <Label.FormattedText>
-                                                <FormattedString>
-                                                    <Span Text="{Binding UMedidaRM.Description}"
-                                                      TextColor="Black"/>
-                                                </FormattedString>
-                                            </Label.FormattedText>
-                                        </Label>
-                                        <Label Grid.Column="3"
-                                           Grid.Row="2"                                           
-                                           Style="{StaticResource LabelRegistroVenta}" 
-                                           FontSize="15">
-                                            <Label.FormattedText>
-                                                <FormattedString>
-                                                    <Span Text="V/U "/>
-                                                    <Span Text="{Binding CostoRM, StringFormat=\{0:C\}}"  />
-                                                </FormattedString>
-                                            </Label.FormattedText>
-                                        </Label>
-                                    </Grid>
-                                </Frame>
-                            </SwipeView>                            
+                                            <Label Grid.Column="1"
+                                               Grid.Row="2"                                            
+                                               Style="{StaticResource LabelRegistroVenta}" 
+                                               FontSize="15">
+                                                <Label.FormattedText>
+                                                    <FormattedString>
+                                                        <Span Text="{Binding UMedidaRM.Description}"
+                                                          TextColor="Black"/>
+                                                    </FormattedString>
+                                                </Label.FormattedText>
+                                            </Label>
+                                            <Label Grid.Column="3"
+                                               Grid.Row="2"                                           
+                                               Style="{StaticResource LabelRegistroVenta}" 
+                                               FontSize="15">
+                                                <Label.FormattedText>
+                                                    <FormattedString>
+                                                        <Span Text="V/U "/>
+                                                        <Span Text="{Binding CostoRM, StringFormat=\{0:C\}}"  />
+                                                    </FormattedString>
+                                                </Label.FormattedText>
+                                            </Label>
+                                        </Grid>
+                                
+                                </SwipeView>
+                            </Frame>
                         </DataTemplate>
                     </CollectionView.ItemTemplate>
                     <CollectionView.EmptyView>

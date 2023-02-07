@@ -179,9 +179,12 @@
                                 ImageSource="shipping.png"
                                 ContentLayout="Top, 9"
                                 VerticalOptions="Center"
-                                BackgroundColor="SkyBlue"
+                                BackgroundColor="{StaticResource TercerColor}"
                                 Command="{Binding PushCommand}"
-                                CommandParameter="servicios">
+                                CommandParameter="servicios"
+                            CornerRadius="30"
+                            BorderColor="{StaticResource PrimerColor}"
+                            BorderWidth="6">
                     </Button>
                     <Button Text="Registrar &#10;pedido" TextColor="Black"
                                 FontAttributes="Bold"
@@ -189,11 +192,13 @@
                                 ImageSource="plumapapel1.png"
                                 ContentLayout="Top, 9"
                                 VerticalOptions="Center"
-                                BackgroundColor="PapayaWhip"
+                                BackgroundColor="{StaticResource SegundoColor}"
                                 Command="{Binding PushCommand}"
                                 CommandParameter="ventanilla"
-                            CornerRadius="0"
-                            Padding="13,0,13,0">
+                            CornerRadius="30"
+                            Padding="13,0,13,0"
+                            BorderColor="{StaticResource PrimerColor}"
+                            BorderWidth="6">
                     </Button>
                 </StackLayout>
                 
@@ -205,10 +210,11 @@
                         CommandParameter="ajustes"/>-->
 
                 <Button Text="Nuevo" Style="{StaticResource Button2}"
-                        BackgroundColor="Chocolate"
                         FontAttributes="Bold,Italic"
                         Margin="6"
-                        TextColor="White"
+                        TextColor="Black"
+                        BorderColor="Chocolate"
+                        BorderWidth="3"
                                 FontSize="16"
                                 ImageSource="newa.png" ContentLayout="left, 3"
                                 Command="{Binding PushCommand}"
