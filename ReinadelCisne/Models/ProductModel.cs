@@ -23,23 +23,20 @@ namespace ReinadelCisne.Models
         public double PrecioVentaProduct { get; set; }
         public double CostElaboracionProduct { get; set; }
 
-
+        public string EstadoProducto { get; set; }
 
         //public double UtilityProduct { get; set; }
 
 
         //Relacion con OrderModel (Ventas)
-        [OneToMany("ProductModelId")]
-        public List<OrderModel> Orders { get; set; }
-
-        //Relacion con ProductShoppingList (Compras)
-        /*[OneToMany("ProductModelId")]
-        public List<ProductShoppingList> productShoppingLists { get; set; }
-        */
+        //[OneToMany("ProductModelId")]
+       // public List<OrderModel> Orders { get; set; }
 
         //Relacion con Kardex
-        [OneToMany("IdProduct")]
-        public List<KardexModel> Kardices { get; set; }
+        [ForeignKey(typeof(KardexRMModel))]
+        public int KardicesId { get; set; }
+        [OneToOne("IdProduct")]
+        public KardexModel Kardices { get; set; }
 
         //Relacion con ListRMModel
         [ForeignKey(typeof(ListRMModel))]
@@ -59,14 +56,16 @@ namespace ReinadelCisne.Models
         [OneToOne]
         public ListOCModel ListOCModel { get; set; }
 
+        //Relación con Maquinaria
+        [ForeignKey(typeof(ListFAxProductModel))]
+        public int ListFAxProductId { get; set; }
+        [OneToOne]
+        public ListFAxProductModel ListFAxProduct { get; set; }
+
         //Relación con los grupos de productos
         [ForeignKey(typeof(GroupsProductModel))]
         public int GroupProductId { get; set; }
         [ManyToOne]
         public GroupsProductModel Groups { get; set; }
-
-        //Relacion con la mano de obra
-        /*[OneToMany]
-        public List<PersonalModel> Personals { get; set; }*/
     }
 }

@@ -61,20 +61,116 @@
                            Text="{Binding DescripcionPS}"
                            Style="{StaticResource Editor1}"/>
                 </Grid>
+                
+                <Grid RowDefinitions="Auto, Auto, Auto, Auto, Auto, Auto" 
+                    Margin="3">
+                    <Label Grid.Row="0" Grid.Column="0"                        
+                           Text="Precio unitario &#10;fabricación" 
+                           HorizontalOptions="Center"
+                           VerticalOptions="Center"                        
+                           Style="{StaticResource LabelTittlesColLectionView}"/>
+                    <Entry  Grid.Row="1" Grid.Column="0" 
+                           Text="{Binding CostoUnitarioPS}" 
+                           Keyboard="Numeric"
+                           Style="{StaticResource Entry1}"/>
+
+                    <Grid Grid.Row="0" Grid.Column="1" Grid.RowSpan="3"
+                          VerticalOptions="EndAndExpand"
+                      ColumnDefinitions="*,*" 
+                      RowDefinitions="Auto,Auto, Auto"
+                          Margin="20,0,0,0">
+                        <Label Text="Cantidad" Style="{StaticResource LabelTittlesColLectionView}"
+                           Grid.Row="0"
+                           Grid.Column="0" 
+                           Grid.ColumnSpan="2"/>
+                        <Entry Grid.Column="0" 
+                               Grid.ColumnSpan="2"
+                               Grid.Row="1"
+                               Text="{Binding UnitPS, Mode=TwoWay}" 
+                               Keyboard="Numeric"
+                               Style="{StaticResource Entry1}"
+                               FontSize="20"
+                               CursorPosition="1"/>
+                        <Button Text="+"
+                            Style="{StaticResource ButtonSave}"
+                            FontSize="30"
+                            TextColor="Black"
+                            Grid.Column="1"
+                            Grid.Row="2"
+                            Command="{Binding SumarCommand}"
+                                CornerRadius="50"/>
+                        <Button Text="-"
+                            Style="{StaticResource ButtonSave}"
+                            FontSize="30"
+                            TextColor="Black"
+                            Grid.Column="0"
+                            Grid.Row="2"
+                            Command="{Binding RestarCommand}"
+                                CornerRadius="50"
+                                BorderColor="{StaticResource QuintoColor}"
+                                BorderWidth="10"
+                                VerticalOptions="Center"/>
+                    </Grid>
+                    <Button Grid.Row="2" Grid.Column="0"
+                            Text="Calcular&#10;costo" 
+                            TextColor="Black"
+                            CornerRadius="30"
+                            FontAttributes="Bold"
+                            BackgroundColor="{StaticResource QuintoColor}"
+                            FontSize="16"
+                            BorderColor="Gold"
+                            BorderWidth="30"
+                            CharacterSpacing="1"                            
+                            Margin="0"
+                            Padding="0"
+                            Command="{Binding CostoProduccionCommand}"/>
+
+                    <!--<Image Grid.Row="2" Grid.Column="1" 
+                           Source="product.png"                        
+                            Margin="0"/>-->
+                    
+                    <Label Grid.Row="3" Grid.Column="0"
+                            Text="Precio Venta" 
+                            VerticalOptions="Center" HorizontalOptions="Center"                         
+                            Style="{StaticResource LabelCuentaVenta}"
+                           Margin="0,10,0,0"/>
+                    <Entry Grid.Row="4" Grid.Column="0"
+                            Text="{Binding PricePS, Mode=TwoWay}" 
+                            Keyboard="Telephone"  
+                            Placeholder="$$"
+                            Style="{StaticResource Entry1}"/>
+                    <Label Grid.Row="3" Grid.Column="1"
+                            Text="Ganancia %" 
+                            VerticalOptions="Center" HorizontalOptions="Center"                         
+                            Style="{StaticResource LabelCuentaVenta}"
+                           Margin="0,10,0,0"/>
+                    <Entry Grid.Row="4" Grid.Column="1"
+                            Text="{Binding PorcentGanancia, Mode=TwoWay}" 
+                            Keyboard="Telephone" 
+                            Style="{StaticResource Entry1}"/>
+                    <Button x:Name="ButoonEquilibrio" 
+                        Grid.Row="5" Grid.Column="0"
+                            Grid.ColumnSpan="2"
+                            Text="Punto Equilibrio"
+                            Style="{StaticResource Button2}"
+                            VerticalOptions="Center"
+                            Command="{Binding ViewPuntoQeCommand}"
+                            Margin="20,0,20,0"/>                    
+                </Grid>
                 <StackLayout x:Name="PuntoEquilibrio"
                              Padding="20"
                              IsVisible="{Binding VerPuntoEquilibrio}"
-                             BackgroundColor="LightCyan">                    
+                             BackgroundColor="LightCyan">
                     <Label x:Name="Titulos" 
                            Style="{StaticResource LabelTittlesColLectionView}">
                         <Label.FormattedText>
                             <FormattedString>
                                 <Span Text="Punto de equilibrio&#10;" FontSize="20"/>
                                 <Span Text="Producto: "/>
-                                <Span Text="{Binding NamePS}"/>                                
+                                <Span Text="{Binding NamePS}"/>
                             </FormattedString>
                         </Label.FormattedText>
-                    </Label>  
+                    </Label>
                     <Grid x:Name="Grafico"
                         RowDefinitions="Auto, *, Auto"
                           BackgroundColor="White">
@@ -137,189 +233,139 @@
                             </Label.FormattedText>
                         </Label>
                     </StackLayout>
-                    <Label Text="Precio demandado"
-                           Style="{StaticResource LabelTittlesColLectionView}"
-                           Margin="0"/>
-                    <Label x:Name="Producto"
-                           Style="{StaticResource LabelTittlesColLectionView}">
-                        <Label.FormattedText>
-                            <FormattedString>
-                                <Span Text="Producto: "/>
-                                <Span Text="{Binding NamePS}"/>                            
-                            </FormattedString>
-                        </Label.FormattedText>
-                    </Label>
-                    <Grid x:Name="CuerpoDemanda"
-                        RowDefinitions="Auto, Auto" 
+                    <Grid x:Name="DatosGráfico"
                           ColumnDefinitions="*,*"
-                          BackgroundColor= "PapayaWhip"
-                          Padding="9"
-                          >
-                        <Grid Grid.Row="1" Grid.Column="0"
-                              ColumnDefinitions="*,*">
-                            <Label Grid.Column="0"
-                                   Style="{StaticResource LabelTittlesColLectionView}" 
-                               Text="Precio 1"
-                            HorizontalOptions="Start" 
-                               VerticalOptions="Center" 
-                                   />
-                            <Entry Grid.Column="1"
-                               Text="{Binding Precio1Demanda}" 
-                               Style="{StaticResource Entry1}"
-                                   Keyboard="Telephone"/>
-                        </Grid>
-                        <Grid Grid.Row="1" Grid.Column="1"
-                               ColumnDefinitions="*,*">
-                            <Label Grid.Column="1"
-                                   Text="Cant. 1"
+                          Margin="0"
+                          Padding="0">
+                        <StackLayout Grid.Column="0"
+                                     VerticalOptions="CenterAndExpand">
+                            <Label Text="Oferta"
+                               Style="{StaticResource LabelTittlesColLectionView}"
+                               FontSize="19"/>
+                            <Grid x:Name="CuerpoOferta"
+                                    ColumnDefinitions="*, *"
+                                     RowDefinitions="Auto, Auto, Auto, Auto, Auto"
+                                  BackgroundColor="LightGreen"
+                                  Padding="7">
+                                <Label Grid.Column="0" Grid.Row="0"
+                                           Text="Mi oferta"
+                                       Grid.ColumnSpan="2"
+                                           Style="{StaticResource LabelTittlesColLectionView}"/>
+                                <Label Grid.Row="1" Grid.Column="1"
+                                       Style="{StaticResource LabelTittles1}"
+                                       Text="{Binding PricePS, StringFormat=\{0:c\}}"
+                                       FontSize="19"
+                                       Margin="0,20,0,20"/>
+                                <Label Grid.Row="1" Grid.Column="0"
+                                       Style="{StaticResource LabelTittles1}"
+                                       Text="{Binding UnitPS}"
+                                       FontSize="19"
+                                       Margin="0,20,0,20"/>
+
+                                <Label Grid.Column="0" Grid.Row="2"
+                                       Grid.ColumnSpan="2"
+                                    Text="Competencia" 
                                    Style="{StaticResource LabelTittlesColLectionView}"
-                            HorizontalOptions="Start" 
-                                   VerticalOptions="Center" />
-                            <Entry Grid.Column="0"
-                                HorizontalOptions="FillAndExpand" 
-                                   Text="{Binding Cantidad1Demanda}" 
-                                   Style="{StaticResource Entry1}"
-                                   Keyboard="Telephone"/>
-                        </Grid>
-                        <Grid Grid.Row="0" Grid.Column="0"
-                              ColumnDefinitions="*, *">
-                            <Label Grid.Column="0"
-                                   Text="Precio 2" 
-                                   Style="{StaticResource LabelTittlesColLectionView}"
-                            HorizontalOptions="Start" VerticalOptions="Center" 
-                                   />
-                            <Entry Grid.Column="1"
-                                HorizontalOptions="FillAndExpand" 
-                                   Text="{Binding Precio2Demanda}" 
+                                   VerticalOptions="Center"
+                                   HorizontalOptions="Center"/>
+                                    <Entry Grid.Column="1" Grid.Row="3"
+                                   Text="{Binding Precio2Oferta}" 
                                    TextColor="White" 
                                    BackgroundColor="DeepSkyBlue" 
-                                   Keyboard="Telephone"/>
-                        </Grid>
-                        <Grid Grid.Row="0" Grid.Column="1"
-                              ColumnDefinitions="*, *">
-                            <Label Grid.Column="1"
+                                   Keyboard="Telephone"
+                                           FontSize="15"
+                                           Margin="0"
+                                           Placeholder="$"/>
+                                    <!--<Label Grid.Column="1" Grid.Row="2"
+                                    Text="Cant. 2" 
                                    Style="{StaticResource LabelTittlesColLectionView}"
-                                   Text="Cant. 2"                                    
-                            HorizontalOptions="Start" 
-                                   VerticalOptions="Center" />
-                            <Entry Grid.Column="0"
-                                HorizontalOptions="FillAndExpand" 
-                                   Text="{Binding Cantidad2Demanda}" 
-                                   TextColor="White" 
-                                   BackgroundColor="DeepSkyBlue" 
-                                   Keyboard="Telephone"/>
-                        </Grid>
-                    </Grid>
-                    <Label Text="Precio ofertado en el mercado"
-                           Style="{StaticResource LabelTittlesColLectionView}"
-                           Margin="0,16,0,0"/>
-                    <Label x:Name="ProductoOfertado"
-                           Style="{StaticResource LabelTittlesColLectionView}">
-                        <Label.FormattedText>
-                            <FormattedString>
-                                <Span Text="Producto: "/>
-                                <Span Text="{Binding NamePS}"/>
-                            </FormattedString>
-                        </Label.FormattedText>
-                    </Label>
-                    <Grid x:Name="CuerpoOferta"
-                        ColumnDefinitions="*, *, *, *"
-                          RowDefinitions="Auto">
-                        <Label Grid.Column="0" Grid.Row="0"
-                            Text="Precio 2" 
+                                   HorizontalOptions="Start" 
+                                   VerticalOptions="Center"/>-->
+                                    <Entry Grid.Column="0" Grid.Row="3"
+                                           Placeholder="Cantidad"
+                                    Text="{Binding Cantidad2Oferta}" 
+                                   TextColor="White" BackgroundColor="DeepSkyBlue" 
+                                   Keyboard="Telephone"
+                                           FontSize="15"/>
+                                <Label Grid.Column="1" Grid.Row="4"
+                                    Text="Valor U." 
+                                   Style="{StaticResource LabelTittles1}"
+                                   HorizontalOptions="Center" 
+                                   VerticalOptions="Center"/>
+                                <Label Grid.Column="0" Grid.Row="4"
+                                    Text="Cantidad" 
+                                   Style="{StaticResource LabelTittles1}"
+                                   HorizontalOptions="Center" 
+                                   VerticalOptions="Center"/>
+                            </Grid>
+                        </StackLayout>
+                        <StackLayout Grid.Column="1">
+                            <Label Text="Demanda"
                                Style="{StaticResource LabelTittlesColLectionView}"
-                               VerticalOptions="Center"
-                               HorizontalOptions="Center"/>
-                        <Entry Grid.Column="1"
-                               Text="{Binding Precio2Oferta}" 
-                               TextColor="White" 
-                               BackgroundColor="DeepSkyBlue" 
-                               Keyboard="Telephone"/>
-                        <Label Grid.Column="3" Grid.Row="0"
-                            Text="Cant. 2" 
-                               Style="{StaticResource LabelTittlesColLectionView}"
-                               HorizontalOptions="Start" 
-                               VerticalOptions="Center"/>
-                        <Entry Grid.Column="2"
-                            Text="{Binding Cantidad2Oferta}" 
-                               TextColor="White" BackgroundColor="DeepSkyBlue" 
-                               Keyboard="Telephone"/>
-                    </Grid>
+                               Margin="0"
+                                   FontSize="19"/>
+                            <Grid x:Name="CuerpoDemanda"
+                                    RowDefinitions="Auto, Auto, Auto, Auto, Auto" 
+                                      ColumnDefinitions="*,*"
+                                      BackgroundColor= "{StaticResource TercerColor}"
+                                      Padding="9"
+                                      >
+                                <Label Grid.ColumnSpan="2" Grid.Row="0"
+                                    Text="Consumidor 1" 
+                                   Style="{StaticResource LabelTittles1}"
+                                   HorizontalOptions="Center" 
+                                   VerticalOptions="Center"/>
+                                    <Grid Grid.Row="1" Grid.Column="1">
+                                        <Entry Placeholder="$"
+                                            Text="{Binding Precio1Demanda}" 
+                                            Style="{StaticResource Entry1}"
+                                           Keyboard="Telephone"/>
+                                    </Grid>
+                                    
+                                    <Grid Grid.Row="1" Grid.Column="0">
+                                            <Entry Placeholder="cant."
+                                                    HorizontalOptions="FillAndExpand" 
+                                                       Text="{Binding Cantidad1Demanda}" 
+                                                       Style="{StaticResource Entry1}"
+                                                       Keyboard="Telephone"/>
+                                    </Grid>
+                                <Label Grid.ColumnSpan="2" Grid.Row="2"
+                                    Text="Consumidor 2" 
+                                   Style="{StaticResource LabelTittles1}"
+                                   HorizontalOptions="Center" 
+                                   VerticalOptions="Center"/>
+                                <Grid Grid.Row="3" Grid.Column="1">
+                                                <Entry Placeholder="$"
+                                            HorizontalOptions="FillAndExpand" 
+                                               Text="{Binding Precio2Demanda}" 
+                                               TextColor="White" 
+                                               BackgroundColor="DeepSkyBlue" 
+                                               Keyboard="Telephone"/>
+                                    </Grid>
+                                    <Grid Grid.Row="3" Grid.Column="0">
+                                                <Entry Placeholder="cant."
+                                            HorizontalOptions="FillAndExpand" 
+                                               Text="{Binding Cantidad2Demanda}" 
+                                               TextColor="White" 
+                                               BackgroundColor="DeepSkyBlue" 
+                                               Keyboard="Telephone"/>
+                                    </Grid>
+                                <Label Grid.Column="1" Grid.Row="4"
+                                    Text="Valor U." 
+                                   Style="{StaticResource LabelTittles1}"
+                                   HorizontalOptions="Center" 
+                                   VerticalOptions="Center"/>
+                                <Label Grid.Column="0" Grid.Row="4"
+                                    Text="Cantidad" 
+                                   Style="{StaticResource LabelTittles1}"
+                                   HorizontalOptions="Center" 
+                                   VerticalOptions="Center"/>
+                            </Grid>
+                        </StackLayout>
+                        
+                    </Grid>        
                 </StackLayout>
-                <Grid RowDefinitions="Auto, Auto, Auto, Auto, Auto" 
-                    Margin="3">
-                    <Label Grid.Row="0" Grid.Column="0"                        
-                           Text="Precio unitario &#10;fabricación" 
-                           HorizontalOptions="Center"
-                           VerticalOptions="Center"                        
-                           Style="{StaticResource LabelTittlesColLectionView}"/>
-                    <Entry  Grid.Row="1" Grid.Column="0" 
-                           Text="{Binding CostoUnitarioPS}" 
-                           Keyboard="Numeric"
-                           Style="{StaticResource Entry1}"/>
-
-                    <Grid Grid.Row="0" Grid.Column="1" Grid.RowSpan="3"
-                          VerticalOptions="EndAndExpand"
-                      ColumnDefinitions="*,*" 
-                      RowDefinitions="Auto,Auto, Auto"
-                          Margin="20,0,0,0">
-                        <Label Text="Cantidad" Style="{StaticResource LabelTittlesColLectionView}"
-                           Grid.Row="0"
-                           Grid.Column="0" 
-                           Grid.ColumnSpan="2"/>
-                        <Entry Grid.Column="0" 
-                               Grid.ColumnSpan="2"
-                               Grid.Row="1"
-                               Text="{Binding UnitPS, Mode=TwoWay}" 
-                               Keyboard="Numeric"
-                               Style="{StaticResource Entry1}"
-                               FontSize="20"
-                               CursorPosition="1"/>
-                        <Button Text="+"
-                            Style="{StaticResource ButtonSave}"
-                            FontSize="30"
-                            TextColor="Black"
-                            Grid.Column="1"
-                            Grid.Row="2"
-                            Command="{Binding SumarCommand}"/>
-                        <Button Text="-"
-                            Style="{StaticResource ButtonSave}"
-                            FontSize="30"
-                            TextColor="Black"
-                            Grid.Column="0"
-                            Grid.Row="2"
-                            Command="{Binding RestarCommand}"
-                                VerticalOptions="Center"/>
-                    </Grid>
-                    <Button Grid.Row="2" Grid.Column="0"
-                        Text="Calcular&#10;costo" Style="{StaticResource ButtonAdd}"
-                            FontSize="16"
-                        Margin="0"
-                            Padding="0"
-                        Command="{Binding CostoProduccionCommand}"/>
-
-                    <!--<Image Grid.Row="2" Grid.Column="1" 
-                           Source="product.png"                        
-                            Margin="0"/>-->
-                    
-                    <Label Grid.Row="3" Grid.Column="0"
-                            Text="Precio Venta" 
-                            VerticalOptions="Center" HorizontalOptions="Center"                         
-                            Style="{StaticResource LabelCuentaVenta}"
-                           Margin="0,30,0,0"/>
-                    <Entry Grid.Row="4" Grid.Column="0"
-                            Text="{Binding PricePS, Mode=TwoWay}" 
-                            Keyboard="Telephone"  
-                            Placeholder="$$"
-                            Style="{StaticResource Entry1}"/>
-                    <Button x:Name="ButoonEquilibrio" 
-                        Grid.Row="4" Grid.Column="1"
-                            Text="Punto Equilibrio"
-                            Style="{StaticResource Button2}"
-                            VerticalOptions="Center"
-                            Command="{Binding ViewPuntoQeCommand}"/>                    
-                </Grid>
-                <Grid Margin="0,22,0,0">
+                <Grid Margin="0,10,0,0">
                     <Button Text="Borrar"
                             Command="{Binding Cancel}" Grid.Column="0" Style="{StaticResource ButtonCancel}"
                                 CornerRadius="30"/>
@@ -327,7 +373,6 @@
                             Command="{Binding Save}" Grid.Column="1" Style="{StaticResource Button1}"
                             CornerRadius="35"/>
                 </Grid>
-                
             </StackLayout>            
         </ScrollView>        
     </ContentPage.Content>

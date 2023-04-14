@@ -1,12 +1,189 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="ReinadelCisne.Views.AjustesView">
+             xmlns:vm="clr-namespace:ReinadelCisne.ViewModels"
+             x:Class="ReinadelCisne.Views.AjustesView"
+             Title="Ajustes de perfil">
+    <ContentPage.BindingContext>
+        <vm:AjustesVM/>
+    </ContentPage.BindingContext>
     <ContentPage.Content>
-        <StackLayout>
-            <Label Text="Welcome to Xamarin.Forms!"
-                VerticalOptions="CenterAndExpand" 
-                HorizontalOptions="CenterAndExpand" />
-        </StackLayout>
+        <ScrollView>
+            <StackLayout Padding="10">
+                <Label Text="Bienvenido"
+                Style="{StaticResource LabelTittles1}"/>
+                <Frame CornerRadius="100"
+                   BorderColor="Black"
+                   WidthRequest="100"
+                   HeightRequest="100"
+                   HorizontalOptions="Center"
+                       BackgroundColor="Transparent"                       
+                       Padding="0">
+                    <Image x:Name="image"
+                           Aspect="Fill"
+                   Source="{Binding Image.Source}"/>
+                </Frame>
+                <Button Text="Actualizar foto de perfil"
+                    Style="{StaticResource Button2}"
+                        TextColor="DarkGreen"
+                    HorizontalOptions="Center"
+                        Command="{Binding PhotoUpdate}"/>
+                <CollectionView ItemsSource="{Binding Fotos}">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <ViewCell>
+                                <StackLayout Orientation="Horizontal">
+                                    <Label Text="{Binding Name}" TextColor="Red"/>
+                                    <Image Source="{Binding Image.Source}" HorizontalOptions="FillAndExpand" HeightRequest="80"/>
+                                </StackLayout>
+                            </ViewCell>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+                <Grid RowDefinitions="Auto, 50" Padding="16, 20, 30, 20">
+                    <StackLayout Grid.Row="0" Grid.ColumnSpan="2" Padding="0,0,0,30" Spacing="0" >
+                        <Label Text="Nombre del negocio:"
+                       FontSize="16"
+                       TextColor="Black"/>
+                        <Entry Placeholder="Nombre del negocio"
+                       BackgroundColor="White"
+                       Margin="0,0,0,5"
+                       FontSize="Small"
+                       Text="{Binding NameNegocio}"
+                       ClearButtonVisibility="WhileEditing"/>
+                        <!--<Label Text="Cédula:" Grid.Row="0"
+                           FontSize="16"
+                           TextColor="Black"/>
+                <Entry Placeholder="Número de cédula"
+                           BackgroundColor="White"
+                           Margin="0,0,0,5"
+                           FontSize="Small"
+                           Text="{Binding CiUser}"
+                           ClearButtonVisibility="WhileEditing"
+                           Keyboard="Numeric"
+                       Grid.Row="1"/>-->
+
+                        <Label Text="Propietario:"
+                           FontSize="16"
+                           TextColor="Black"/>
+                        <Entry Placeholder="Nombre y apellido"
+                           BackgroundColor="White"
+                           Margin="0,0,0,5"
+                           FontSize="Small"
+                           Text="{Binding NameUser}"
+                           ClearButtonVisibility="WhileEditing"/>
+
+                        <Label Text="Correo electrónico:" 
+                           FontSize="16"
+                           TextColor="Black"/>
+                        <Entry Placeholder="Correo electrónico"
+                           BackgroundColor="White"
+                           Margin="0,0,0,5"
+                           FontSize="Small"
+                           Text="{Binding MailUser}"
+                           ClearButtonVisibility="WhileEditing"
+                           Keyboard="Email"/>
+                        <!--
+                <Label Text="Numeco móvil:" Grid.Row="6"
+                           FontSize="16"
+                           TextColor="Black"/>
+                <Entry Placeholder="Número de teléfono"
+                           BackgroundColor="White"
+                           Margin="0,0,0,5"
+                           FontSize="Small"
+                           Text="{Binding PhoneUser}"
+                           ClearButtonVisibility="WhileEditing"
+                           Keyboard="Telephone"
+                       Grid.Row="7"/>-->
+
+                        <Label Text="Contraseña:"
+                           FontSize="16"
+                           TextColor="Black"/>
+                        <Entry Placeholder="Contraseña"
+                           BackgroundColor="White"
+                           Margin="0,0,0,5"
+                           FontSize="Small"
+                           Text="{Binding PasswordUser}"
+                           ClearButtonVisibility="WhileEditing"
+                           IsPassword="True"/>
+
+                        <Label Text="Repetir Contraseña:"
+                           FontSize="16"
+                           TextColor="Black"/>
+                        <Entry Placeholder="Repetir contraseña"
+                           BackgroundColor="White"
+                           Margin="0,0,0,5"
+                           FontSize="Small"
+                           Text="{Binding PassClon}" 
+                           ClearButtonVisibility="WhileEditing"
+                           IsPassword="True"/>
+
+                        <Label Text="Pin de 5 digitos:"
+                           FontSize="16"
+                           TextColor="Black"/>
+                        <Entry Placeholder="Pin"
+                           BackgroundColor="White"
+                           FontSize="Small"
+                           Text="{Binding PinUser}"
+                           ClearButtonVisibility="WhileEditing"/>
+                    </StackLayout>
+
+                    <Frame BorderColor="Transparent"
+                       HasShadow="True"
+                       Visual="Default"
+                       CornerRadius="30"
+                       HeightRequest="60"
+                       WidthRequest="160"
+                       Grid.Row="1"
+                       Grid.Column="0"
+                       HorizontalOptions="CenterAndExpand"
+                       Padding="0">
+                        <Frame.Background>
+                            <!-- StartPoint defaults to (0,0) -->
+                            <LinearGradientBrush EndPoint="0,1"
+                                             StartPoint="0,0">
+                                <GradientStop Color="#F87F2E"
+                          Offset="0.0" />
+                                <GradientStop Color="#FD160F"
+                          Offset="1.0" />
+                            </LinearGradientBrush>
+                        </Frame.Background>
+                        <Button Text="Cancelar"
+                        BackgroundColor="Transparent"
+                        TextColor="Black"
+                        Command="{Binding CancelCommand}"
+                        />
+                    </Frame>
+
+                    <Frame BorderColor="Transparent"
+                       HasShadow="True"
+                       Visual="Default"
+                       CornerRadius="30"
+                       HeightRequest="60"
+                       WidthRequest="160"
+                       Grid.Row="1"
+                        Grid.Column="1"
+                       HorizontalOptions="CenterAndExpand"
+                       Padding="0">
+                        <Frame.Background>
+                            <!-- StartPoint defaults to (0,0) -->
+                            <LinearGradientBrush EndPoint="0,1"
+                                             StartPoint="0,0">
+                                <GradientStop Color="#77CAC4"
+                          Offset="0.0" />
+                                <GradientStop Color="#037C5F"
+                          Offset="1.0" />
+                            </LinearGradientBrush>
+                        </Frame.Background>
+                        <Button Text="Guardar"
+                        BackgroundColor="Transparent"
+                        TextColor="Black"
+                        Command="{Binding RegisterCommand}"
+                        />
+                    </Frame>
+
+                </Grid>
+            </StackLayout>
+        </ScrollView>
     </ContentPage.Content>
 </ContentPage>

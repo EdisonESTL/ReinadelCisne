@@ -22,10 +22,10 @@ namespace ReinadelCisne.Models
         public SaleModel SaleModel { get; set; }
 
         //Relacion con ProductModel
-        [ForeignKey(typeof(ProductModel))]
-        public int ProductModelId { get; set; }
+        [ForeignKey(typeof(KardexModel))]
+        public int KardexProductModelId { get; set; }
         [ManyToOne]
-        public ProductModel ProductModel {get;set;}
+        public KardexModel KardexModel {get;set;}
    
     }
 }

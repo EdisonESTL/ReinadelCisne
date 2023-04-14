@@ -91,15 +91,17 @@
                                 x:Name="LisCostConstitucion" 
                                 SelectionChangedCommand="{Binding SelectdCommand}" 
                                 SelectionChangedCommandParameter="{Binding SelectedItem , Source={x:Reference LisCostConstitucion}}"
-                                EmptyView="No hay valores registrados">
+                                EmptyView="No hay valores registrados"
+                                Margin="10,0,10,0">
                     <CollectionView.ItemsLayout>
                         <LinearItemsLayout Orientation="Vertical"
                                            ItemSpacing="9"/>
                     </CollectionView.ItemsLayout>
                     <CollectionView.ItemTemplate>
                         <DataTemplate>
-                            <Frame BackgroundColor="LightGreen" 
-                                   Padding="0" CornerRadius="20">
+                            <Frame BackgroundColor="{StaticResource QuintoColor}" 
+                                   CornerRadius="10"
+                                   Padding="0">
                                 <SwipeView BackgroundColor="Transparent">
                                     <SwipeView.RightItems>
                                         <SwipeItems>

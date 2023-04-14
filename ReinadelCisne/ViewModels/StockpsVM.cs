@@ -11,6 +11,7 @@ using System.Text;
 using System.Web;
 using System.Windows.Input;
 using Xamarin.Forms;
+using System.Diagnostics;
 
 namespace ReinadelCisne.ViewModels
 {
@@ -82,7 +83,19 @@ namespace ReinadelCisne.ViewModels
             }
         }
         private ProductModel _objMod;
-        public ProductModel ObjModify { get => _objMod; set { _objMod = value; OnPropertyChanged(); } }
+        public ProductModel ObjModify 
+        { 
+            get => _objMod; 
+            set 
+            { 
+                if(value != _objMod)
+                {
+                    _objMod = value;
+                    OnPropertyChanged();
+                }
+                
+            }
+        }
 
         private GroupsProductModel _groupProd;
         public GroupsProductModel GroupProd { get => _groupProd; set { _groupProd = value; OnPropertyChanged(); } }
@@ -129,14 +142,19 @@ namespace ReinadelCisne.ViewModels
             }
         }
 
-        private double _pricePS;
+        private double _pricePS = 0;
         public double PricePS
         {
             get => _pricePS;
             set
             {
-                _pricePS = value;
-                OnPropertyChanged();
+                if(value != _pricePS)
+                {
+                    _pricePS = value;
+                    OnPropertyChanged();
+                    //CalcularPorcentajGanacia();
+                }
+                
             }
         }
 
@@ -305,15 +323,27 @@ namespace ReinadelCisne.ViewModels
 
         private string[] months = new string[] { "1", "2", "3" };
         private float[] valuemont = new float[] { 187, 187 };
-        //private float[] valuemont ;
         private float[] valuemont2 = new float[] { 0, 71 };
         private List<float> PuntosLinea1 { get; set; } = new List<float>();
-        //float[] Linea1xy = new float[];
-        //float[] Linea2xy = new float[];
         private List<float> PuntosLinea2 { get; set; } = new List<float>();
 
         private SKColor blueColor = SKColor.Parse("#09C");
         private SKColor redColor = SKColor.Parse("#CC0000");
+
+        double porcntGanacia = 0;
+        public double PorcentGanancia
+        {
+            get => porcntGanacia;
+            set
+            {
+                if (value != porcntGanacia)
+                {
+                    porcntGanacia = value;
+                    OnPropertyChanged();
+                    CalcularPrecioVenta();
+                }
+            }
+        }
 
         private int _id;
         public int Id
@@ -358,41 +388,7 @@ namespace ReinadelCisne.ViewModels
                 OnPropertyChanged();
             }
         }
-
-        
-        
-        private void PuntoEquilibrio()
-        { 
-            //Valores oferta
-            var P1o = CostoUnitarioPS;
-            var P2o = Precio2Oferta;
-            var Q1o = UnitPS;
-            var Q2o = Cantidad2Oferta;
-
-            //Valores Demanda
-            var P1d = Precio1Demanda;
-            var P2d = Precio2Demanda;
-            var Q1d = Cantidad1Demanda;
-            var Q2d = Cantidad2Demanda;
-
-            if(P1d == 0 &&  P2d == 0 && Q1d == 0 && Q2d == 0)
-            {
-                QPromedio = 0;
-                PPromedio = 0;
-            }
-            else
-            {
-                var Q = (P1d - P1o + ((P2o - P1o) / (Q2o - Q1o) * Q1o) - ((P2d - P1d) / (Q2d - Q1d) * Q1d)) / (((P2o - P1o) / (Q2o - Q1o)) - ((P2d - P1d) / (Q2d - Q1d)));
-                var P = ((P2o - P1o) / (Q2o - Q1o)) * (Q - Q1o) + P1o;
-
-                QPromedio = (float)Math.Round(Q);
-                PPromedio = (float)P;
-            }
-            
-        }
-
-        
-
+         
         private double _utilityPS = 1;
         public double UtilityPS
         {
@@ -540,6 +536,36 @@ namespace ReinadelCisne.ViewModels
             CalcularDemanda();
             PuntoEquilibrio();
         }
+        private void PuntoEquilibrio()
+        {
+            //Valores oferta
+            //var P1o = CostoUnitarioPS;
+            var P1o = PricePS;
+            var P2o = Precio2Oferta;
+            var Q1o = UnitPS;
+            var Q2o = Cantidad2Oferta;
+
+            //Valores Demanda
+            var P1d = Precio1Demanda;
+            var P2d = Precio2Demanda;
+            var Q1d = Cantidad1Demanda;
+            var Q2d = Cantidad2Demanda;
+
+            if (P1d == 0 && P2d == 0 && Q1d == 0 && Q2d == 0)
+            {
+                QPromedio = 0;
+                PPromedio = 0;
+            }
+            else
+            {
+                var Q = (P1d - P1o + ((P2o - P1o) / (Q2o - Q1o) * Q1o) - ((P2d - P1d) / (Q2d - Q1d) * Q1d)) / (((P2o - P1o) / (Q2o - Q1o)) - ((P2d - P1d) / (Q2d - Q1d)));
+                var P = ((P2o - P1o) / (Q2o - Q1o)) * (Q - Q1o) + P1o;
+
+                QPromedio = (float)Math.Round(Q);
+                PPromedio = (float)P;
+            }
+
+        }
         private void CrearNuevoGrupo(string result)
         {
             GroupsProductModel groups = new GroupsProductModel
@@ -592,59 +618,120 @@ namespace ReinadelCisne.ViewModels
         {
             if (!string.IsNullOrEmpty(NamePS) && PricePS > 0)
             {
-                //double precio = double.Parse(PricePS);
-
-                ProductModel product = new ProductModel()
+                //Si el producto viene de costos producción
+                if(ObjModify != null && ObjModify.EstadoProducto == null)
                 {
-                    Id = Id,
-                    NameProduct = NamePS,
-                    AmountProduct = UnitPS,
-                    DateTime = DateTime.Now,
-                    DescriptionProduct = DescripcionPS,
-                    UnidadMedida = UnidaddMedidaPS,
-                    PrecioVentaProduct = PricePS,
-                    CostElaboracionProduct = CostoUnitarioPS
-                };
+                    //Actualizo valores ingresados
+                    ObjModify.AmountProduct = UnitPS;
+                    ObjModify.NameProduct = NamePS;
+                    if(ObjModify.DateTime == null)
+                    {
+                        ObjModify.DateTime = DateTime.Now;
+                    }
+                    ObjModify.DescriptionProduct = DescripcionPS;
+                    ObjModify.UnidadMedida = UnidaddMedidaPS;
+                    ObjModify.PrecioVentaProduct = PricePS;
+                    ObjModify.CostElaboracionProduct = CostoUnitarioPS;
 
-                var resp = App.Database.SaveProduct(product);
-                resp.Wait();
+                    ObjModify.EstadoProducto = "ordenProduccion";
 
-                //Trabajo con materia prima
-                if (IdListRM != 0)
-                {
-                    var Lrm = App.Database.GetListRM(IdListRM).Result;
-                    product.ListRMModel = Lrm;
+                    var resp = App.Database.SaveProduct(ObjModify);
+                    resp.Wait();
+
+                    ObjModify.Groups = GroupProd;
+                    App.Database.UpdateRelationsProduct(ObjModify);
+
+                    //Creación de Kardex y confirmación de creaaión
+                    if (resp != null)
+                    {
+                        CrearKardex(ObjModify);
+                        Shell.Current.DisplayAlert("Éxito", "Se guardo " + ObjModify.NameProduct, "ok");
+                        //Limpio todo
+                        ObjModify = new ProductModel();
+                        CancelPS();
+                        //Regreso a productos
+                        Shell.Current.GoToAsync($"//Rini/Productos?Regreso=true");
+                    }
+                    else
+                    {
+                        Shell.Current.DisplayAlert("Error", "No se ha podido guardar", "ok");
+                    }
                 }
-
-                //Trabajo con mano de obra
-                if (IdListWF != 0)
+                //Si el objeto vien para ser modificado
+                else if(ObjModify != null && ObjModify.EstadoProducto != null)
                 {
-                    var Lwf = App.Database.GetListWF(IdListWF).Result;
-                    product.ListWFModel = Lwf;
-                }
+                    //Actualizo valores ingresados
+                    ObjModify.AmountProduct = UnitPS;
+                    ObjModify.NameProduct = NamePS;
+                    if (ObjModify.DateTime == null)
+                    {
+                        ObjModify.DateTime = DateTime.Now;
+                    }
+                    ObjModify.DescriptionProduct = DescripcionPS;
+                    ObjModify.UnidadMedida = UnidaddMedidaPS;
+                    ObjModify.PrecioVentaProduct = PricePS;
+                    ObjModify.CostElaboracionProduct = CostoUnitarioPS;
 
-                //trabajo con otros costos
-                if (IdListOC != 0)
-                {
-                    var Loc = App.Database.GetListOC(IdListOC).Result;
-                    product.ListOCModel = Loc;
-                }
+                    var resp = App.Database.SaveProduct(ObjModify);
+                    resp.Wait();
 
-                product.Groups = GroupProd;
-                //Actualizo relación de productos
-                App.Database.UpdateRelationsRM(product);
-
-                if (resp != null)
-                {
-                    Shell.Current.DisplayAlert("Éxito", "Se guardo " + product.NameProduct, "ok");
-                    CrearKardex(product, resp.Result);
-                    product.Id = 0;
-                    CancelPS();
-                    Shell.Current.GoToAsync($"//Rini/Productos?Regreso=true");
-                }
+                    ObjModify.Groups = GroupProd;
+                    App.Database.UpdateRelationsProduct(ObjModify);
+                    //Creación de Kardex y confirmación de creaaión
+                    if (resp != null)
+                    {
+                        Shell.Current.DisplayAlert("Éxito", "Se guardo " + ObjModify.NameProduct, "ok");
+                        //Limpio todo
+                        ObjModify = new ProductModel();
+                        CancelPS();
+                        //Regreso a productos
+                        Shell.Current.GoToAsync($"//Rini/Productos?Regreso=true");
+                    }
+                    else
+                    {
+                        Shell.Current.DisplayAlert("Error", "No se ha podido guardar", "ok");
+                    }
+                } 
+                //Si se crea un producto sin calcular costos produccion
                 else
                 {
-                    Shell.Current.DisplayAlert("Error", "No se ha podido guardar", "ok");
+                    //Creo nuevo objeto
+                    ProductModel product = new ProductModel()
+                    {
+                        Id = Id,
+                        NameProduct = NamePS,
+                        AmountProduct = UnitPS,
+                        DateTime = DateTime.Now,
+                        DescriptionProduct = DescripcionPS,
+                        UnidadMedida = UnidaddMedidaPS,
+                        PrecioVentaProduct = PricePS,
+                        CostElaboracionProduct = CostoUnitarioPS
+                    };
+
+                    product.EstadoProducto = "Terminado";
+
+                    var resp = App.Database.SaveProduct(product);
+                    resp.Wait();
+
+                    product.Groups = GroupProd;
+                    //Actualizo relación de productos
+                    App.Database.UpdateRelationsProduct(product);
+
+                    //Creación de Kardex y confirmación de creaaión
+                    if (resp != null)
+                    {
+                        CrearKardex(product);
+                        Shell.Current.DisplayAlert("Éxito", "Se guardo " + product.NameProduct, "ok");
+                        //Limpio todo
+                        product.Id = 0;
+                        CancelPS();
+                        //Regreso a productos
+                        Shell.Current.GoToAsync($"//Rini/Productos?Regreso=true");
+                    }
+                    else
+                    {
+                        Shell.Current.DisplayAlert("Error", "No se ha podido guardar", "ok");
+                    }
                 }
             }
             else
@@ -653,58 +740,49 @@ namespace ReinadelCisne.ViewModels
             }
         }
 
-        private void CrearKardex(ProductModel product, int resul)
+        private void CrearKardex(ProductModel product)
         {
-            //var conob = App.Database.Get1Product(product.Id).Result;
-            if (resul == 2)
+            //Creo Kardex el kardex contien los ultimos valores
+            KardexModel kardex = new KardexModel
             {
-                KardexModel kardex = new KardexModel
-                {
-                    Date = DateTime.Now,
-                    //Valor = product.PrecioVentaProduct * product.CantProduct,
-                    //Cantidad = product.CantProduct,
-                    ValorPromPond = product.PrecioVentaProduct
-                };
+                Date = DateTime.Now,
+                Valor = product.PrecioVentaProduct * product.AmountProduct,
+                Cantidad = product.AmountProduct,
+                ValorPromPond = product.PrecioVentaProduct
+            };
 
-                App.Database.SaveMovKardex(kardex);
+            var kf = App.Database.SaveMovKardex(kardex);
+            kf.Wait();
 
-                kardex.ProductModel = product;
-                App.Database.UpdateRelationKardexProduct(kardex);
-                Shell.Current.DisplayAlert("Exito", "Se creo kardex", "ok");
-            }
-            if (resul == 1)
+            kardex.ProductModel = product;
+            App.Database.UpdateRelationKardexProduct(kardex);
+
+            product.Kardices = kardex;
+            App.Database.UpdateRelationsProduct(product);
+            GuardarSaldoInicial(kardex);
+            //var resp1 = App.Database.GetAllKardxProduct().Result;
+            Shell.Current.DisplayAlert("Exito", "Se creo kardex", "ok");            
+        }
+
+        private void GuardarSaldoInicial(KardexModel kardex)
+        {
+            SaldosKardexProductModel saldosKardex = new SaldosKardexProductModel
             {
-                try
-                {
-                    var bb = ObjModify.Kardices;
-                    var d = bb[0];
+                Date = DateTime.Now,
+                Cantidad = kardex.Cantidad,
+                ValorUnitario = kardex.ValorPromPond,
+                SaldoTotal = kardex.Valor,
+                NombreReconocimiento = "Estado inicial"
+            };
 
-                    d.Valor = product.PrecioVentaProduct;
-                    //d.Cantidad = product.CantProduct;
-                    d.ValorPromPond = product.PrecioVentaProduct;
-                    App.Database.SaveMovKardex(d);
+            App.Database.SaveSaldoKardxPr(saldosKardex);
 
-                    /*
-                    var rr = App.Database.GetFirstKardex(product);
-                    rr.Wait();
-                    KardexModel rest = rr.Result;
-                    rest.ValorUnitario = product.PrecioVentaProduct;
-                    rest.Cantidad = product.CantProduct;
-                    rest.ValorPromPond = product.PrecioVentaProduct;
+            saldosKardex.KardexProductModel = kardex;
+            App.Database.UpdateRelationsSaldosKrdxProd(saldosKardex);
 
-                    App.Database.SaveMovKardex(rest);
+            kardex.SaldosProducts = new List<SaldosKardexProductModel> { saldosKardex };
+            App.Database.UpdateRelationKardexProduct(kardex);
 
-                    rest.ProductModel = product;
-                    App.Database.UpdateRelationKardexProduct(rest);*/
-                }
-                catch (Exception)
-                {
-                    Console.WriteLine("Failed to load idproduct.");
-                }
-
-                //obtener id kardex
-                //obtener el primer kardex
-            }
 
         }
 
@@ -777,7 +855,7 @@ namespace ReinadelCisne.ViewModels
             DescripcionPS = product.DescriptionProduct;
             PricePS = product.PrecioVentaProduct;
             UnidaddMedidaPS = product.UnidadMedida;
-            CostoUnitarioPS = product.CostElaboracionProduct;
+            CostoUnitarioPS = Math.Round(product.CostElaboracionProduct, 2);
             /*
             if(product.ListRMModelId != 0) 
             {
@@ -838,18 +916,20 @@ namespace ReinadelCisne.ViewModels
 
                 Linea2.Add(entry);
             }
-            Oferta = new LineChart { Entries = Linea1, 
-                LabelTextSize = 22, 
-                LabelOrientation = Orientation.Horizontal, 
-                BackgroundColor = SKColor.Empty,
-                LineMode = LineMode.Straight
-            };
-            Demanda = new LineChart { Entries = Linea2, 
-                LabelTextSize = 22, 
+            Oferta = new LineChart { Entries = Linea1,
+                LabelTextSize = 22,
                 LabelOrientation = Orientation.Horizontal,
-                BackgroundColor = SKColor.Empty, 
+                BackgroundColor = SKColor.Empty,
+                LineMode = LineMode.Straight,
+                LineAreaAlpha = 0
+            };
+            Demanda = new LineChart { Entries = Linea2,
+                LabelTextSize = 22,
+                LabelOrientation = Orientation.Horizontal,
+                BackgroundColor = SKColor.Empty,
                 LabelColor = SKColor.Empty,
-                LineMode = LineMode.Straight
+                LineMode = LineMode.Straight,
+                LineAreaAlpha = 0
             };
             //Demanda = new LineChart
             /*foreach (var punto in PuntosLinea1)
@@ -921,7 +1001,8 @@ namespace ReinadelCisne.ViewModels
 
             try
             {
-                P1x = CostoUnitarioPS;
+                //P1x = CostoUnitarioPS;
+                P1x = PricePS;
                 Q1y = UnitPS;
                 P2x = Precio2Oferta;
                 Q2y = Cantidad2Oferta;
@@ -1024,7 +1105,8 @@ namespace ReinadelCisne.ViewModels
             }
             catch
             {
-                OverflowException e;
+                // OverflowException e;
+                Debug.WriteLine("Exception: " );
             }
             #region MyRegion
             /*double P2P1 = P2 - P1;
@@ -1208,7 +1290,8 @@ namespace ReinadelCisne.ViewModels
             }
             catch
             {
-                OverflowException e;
+                //OverflowException e;
+                Debug.WriteLine("Exception: ");
             }
             #region MyRegion
             //double CantidadMaxima;
@@ -1267,6 +1350,30 @@ namespace ReinadelCisne.ViewModels
             *//*********************************************/
             #endregion
 
+        }
+        private void CalcularPrecioVenta()
+        {
+            var cal = CostoUnitarioPS + (CostoUnitarioPS * (porcntGanacia / 100));
+            if (cal > 0)
+            {
+                PricePS = cal;
+            }
+            else
+            {
+                PricePS = 0;
+            }
+        }
+        private void CalcularPorcentajGanacia()
+        {
+            var cal = ((PricePS - CostoUnitarioPS) / CostoUnitarioPS) * 100;
+            if (cal > 0)
+            {
+                porcntGanacia = cal;
+            }
+            else
+            {
+                porcntGanacia = 0;
+            }
         }
     }
 }

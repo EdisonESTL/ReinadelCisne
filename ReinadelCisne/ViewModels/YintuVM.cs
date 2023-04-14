@@ -1,6 +1,14 @@
-﻿using System;
+﻿using Microcharts;
+using Microcharts.Forms;
+using SkiaSharp;
+using ReinadelCisne.Models;
+using ReinadelCisne.Auxiliars;
+using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Linq;
 using System.Text;
+using System.Web;
 using System.Windows.Input;
 using Xamarin.Forms;
 
@@ -45,7 +53,7 @@ namespace ReinadelCisne.ViewModels
             {
                 case "productos":
                     Shell.Current.GoToAsync("//Rini/Productos"); break;                    
-                case "servicios":
+                case "productosProceso":
                     Shell.Current.GoToAsync("//Rini/RProductosEnProceso"); break;
                 case "ventas":
                     Shell.Current.GoToAsync("//Rini/RVentas"); break;
@@ -71,6 +79,8 @@ namespace ReinadelCisne.ViewModels
                     Shell.Current.GoToAsync("//Rini/Assets"); break;
                 case "nuevo":
                     YintuNuevo(); break;
+                case "ordenProduccion":
+                    Shell.Current.GoToAsync("//Rini/OrdenProduccion"); break;
                 default:
                     break;
             }

@@ -20,6 +20,36 @@ namespace ReinadelCisne.ViewModels
         private double _precioProduct;
         private string _nameProdj;
         private int _cantProdj;
+        private WorkForceModel _workForce;
+        private double _totalMaquinaria;
+        string tiempoProduccion;
+        double cantTimpoProduccion;
+        public double CantTiempoProduccion
+        {
+            get => cantTimpoProduccion;
+            set
+            {
+                if(value != cantTimpoProduccion)
+                {
+                    cantTimpoProduccion = value;
+                    OnPropertyChanged();
+                    AddCostosIndirectos();
+                }
+            }
+        }
+        public string TiempoProduccion
+        {
+            get => tiempoProduccion;
+            set
+            {
+                if(value != tiempoProduccion)
+                {
+                    tiempoProduccion = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
 
         ListRMModel _listaMaterialxProducto;
         public ListRMModel ListaMaterialxProducto
@@ -48,7 +78,19 @@ namespace ReinadelCisne.ViewModels
                 }
             }
         }
-
+        ListFAxProductModel _listaMaquinariaxProducto;
+        public ListFAxProductModel ListaMaquinariaxProducto
+        {
+            get => _listaMaquinariaxProducto;
+            set
+            {
+                if(_listaMaquinariaxProducto != value)
+                {
+                    _listaMaquinariaxProducto = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
         public string NameProd
         {
             get => _nameProdj;
@@ -177,9 +219,7 @@ namespace ReinadelCisne.ViewModels
 
         private int IdListRM { get; set; }
         private int IdListWF { get; set; }
-        private int IdListCI { get; set; }
-        private WorkForceModel _workForce;
-        private double _totalMaquinaria;
+        private int IdListCI { get; set; }        
 
         public WorkForceModel WorkForce
         {
@@ -297,6 +337,7 @@ namespace ReinadelCisne.ViewModels
         {
             TotalWFI = WorkForcesIndiecto.Sum(x => x.Pay);
             TotalMOI = MaterialProduccionIndirecto.Sum(x => x.Total);
+
             TotalCI = OtherCosts.Sum(x => x.CostOC) + TotalWFI + TotalMOI;
             LimpiarCI();
         }
@@ -379,8 +420,22 @@ namespace ReinadelCisne.ViewModels
 
                 ProductoconPrecio.ListRMModel = ListaMaterialxProducto;
                 ProductoconPrecio.ListWFModel = ListaPersonalxProducto;
-                App.Database.UpdateRelationsRM(ProductoconPrecio);
+                ProductoconPrecio.ListFAxProduct = ListaMaquinariaxProducto;
+                ProductoconPrecio.ListOCModelId = IdListCI;
+                App.Database.UpdateRelationsProduct(ProductoconPrecio);
 
+                OrderProduccionModel orderProduccion = new OrderProduccionModel
+                {
+                    FechaOrder = DateTime.Now,
+                    TiempoProduccion = TiempoProduccion,
+                    CantTiempoProduccion = CantTiempoProduccion,
+                    EstadoOrder = "Pendiente"
+                };
+
+                App.Database.SaveOrderProduccion(orderProduccion);
+
+                orderProduccion.Product = ProductoconPrecio;
+                App.Database.UpdateRelationsOrderProduccion(orderProduccion);
                 Shell.Current.DisplayAlert("Costos Guardados", "Valores guardados correctamente", "ok");
                 Shell.Current.GoToAsync($"//Rini/Productos/NewStock?IdObjetoconPrecio={ProductoconPrecio.Id}");
             }          
@@ -505,11 +560,51 @@ namespace ReinadelCisne.ViewModels
         private void AddCostosIndirectos()
         {
             try
-            {
+            {                
                 var Costosindirectos = App.Database.GetAllOtherCost().Result;
-                var totalcostosInd = Costosindirectos.Sum(x => x.CostOC);
-                TotalCI = totalcostosInd + TotalWFI + TotalRMI;
-                CalculoPrecioProducto();
+                var totalCostosIndMes = Costosindirectos.Sum(x => x.CostOC);
+                var totalCostosIndAnio = totalCostosIndMes * 12;
+                var totalCostosIndSemana = totalCostosIndMes / 4;
+                var totalCostosIndDia = totalCostosIndMes / 30;
+                var totalCostosIndHora = totalCostosIndDia / 24;
+                if (!string.IsNullOrEmpty(TiempoProduccion))
+                {
+                    switch (TiempoProduccion)
+                    {
+                        case "Hora":
+                            TotalCI = (totalCostosIndHora * cantTimpoProduccion) + TotalWFI + TotalRMI;
+                            CalculoPrecioProducto();
+                            
+                            break;
+                        case "Día":
+                            TotalCI = (totalCostosIndDia * cantTimpoProduccion) + TotalWFI + TotalRMI;
+                            CalculoPrecioProducto();
+                            break;
+                        case "Año":
+                            TotalCI = (totalCostosIndAnio * cantTimpoProduccion) + TotalWFI + TotalRMI;
+                            CalculoPrecioProducto();
+                            break;
+                        case "Mes":
+                            TotalCI = (totalCostosIndMes * cantTimpoProduccion) + TotalWFI + TotalRMI;
+                            CalculoPrecioProducto();
+                            break;
+                        default:
+                            break;
+                    }
+                    ListOCModel listOCModel = new ListOCModel()
+                    {
+                        Total = (float)TotalCI
+                    };
+                    var re = App.Database.SaveListOC(listOCModel);
+                    re.Wait();
+                    foreach (var c in Costosindirectos)
+                    {
+                        c.ListOCModel = listOCModel;
+                        App.Database.UpdateRelationOC(c);
+                    }
+                    IdListCI = listOCModel.Id;
+                }
+                
 
             }
             catch
@@ -525,8 +620,8 @@ namespace ReinadelCisne.ViewModels
                 var IdListaMaquinaria = int.Parse(idMaquinaria);
                 if(IdListaMaquinaria > 0)
                 {
-                    var maqui = App.Database.Get1ListFA(IdListaMaquinaria).Result;
-                    TotalMaquinaria = maqui.ValorTotalMaquinas + maqui.ValorTotalDepreciaciones;
+                    ListaMaquinariaxProducto = App.Database.Get1ListFA(IdListaMaquinaria).Result;
+                    TotalMaquinaria = ListaMaquinariaxProducto.ValorTotalDepreciaciones;
                     CalculoPrecioProducto();
                 }
             }
@@ -578,20 +673,7 @@ namespace ReinadelCisne.ViewModels
                             TotalWFI = TotalWFI + mm.Pay;
                             CalculoPrecioProducto();
                         }
-                    }                    
-
-                    //foreach()
-
-                    /*if(rm.WorkForce.Type == "Directo")
-                    {
-                        WorkForces.Add(rm);
-                        SumarWF();
-                    }
-                    else
-                    {
-                        WorkForcesIndiecto.Add(rm);
-                        SumarCI();
-                    } */
+                    }     
                 }
             }
             catch (Exception)
@@ -608,8 +690,8 @@ namespace ReinadelCisne.ViewModels
                 {
                     double matDir = 0;
                     double matIndir = 0;
-                    ListRMModel ListaMaterialProducto = await App.Database.GetListRM(int.Parse(idRM));
-                    List<ItemsListRMModel> Material = await App.Database.GetItemsListRMxListRm(ListaMaterialProducto);
+                    ListaMaterialxProducto = await App.Database.GetListRM(int.Parse(idRM));
+                    List<ItemsListRMModel> Material = await App.Database.GetItemsListRMxListRm(ListaMaterialxProducto);
                                         
                     foreach(ItemsListRMModel material in Material)
                     {
@@ -628,6 +710,7 @@ namespace ReinadelCisne.ViewModels
                     }
                     TotalRM = (float)matDir;
                     TotalRMI = (float)matIndir;
+                    AddCostosIndirectos();
                     CalculoPrecioProducto();
                 }
             }

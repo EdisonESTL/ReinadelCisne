@@ -32,6 +32,7 @@
             <Color x:Key="SegundoColor">#A5FAF4</Color>
             <Color x:Key="TercerColor">#FBF4A9</Color>
             <Color x:Key="CuartoColor">#E4E4E4</Color>
+            <Color x:Key="QuintoColor">#0EFFF9</Color>
         </ResourceDictionary>
         
         <!--Buttons Style-->

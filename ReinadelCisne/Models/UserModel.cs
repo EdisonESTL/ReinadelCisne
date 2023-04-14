@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using SQLite;
 using SQLiteNetExtensions;
+using Xamarin.Forms;
 
 namespace ReinadelCisne.Models
 {
@@ -38,5 +39,13 @@ namespace ReinadelCisne.Models
 
         [Column("TypeUser")]
         public string TypeUser { get; set; }
+
+        [Column("Photo")]
+        public Image Image { get; set; }
+
+        public UserModel()
+        {
+            Image = new Image();
+        }
     }
 }

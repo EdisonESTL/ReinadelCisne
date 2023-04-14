@@ -11,23 +11,22 @@ namespace ReinadelCisne.Models
         [PrimaryKey, AutoIncrement]
         public int Id { get; set; }
         public DateTime Date { get; set; }
-        public double Valor { get; set; }
+        public double Valor { get; set; } //Valor Total
         public int Cantidad { get; set; }
-        public double ValorPromPond { get; set; }
-
+        public double ValorPromPond { get; set; } //Valor unitario
 
         //Relacion con producto
         [ForeignKey(typeof(ProductModel))]
         public int IdProduct { get; set; }
-        [ManyToOne]
+        [OneToOne]
         public ProductModel ProductModel { get; set; }
 
         //Relacion con ventas
-        [ForeignKey(typeof(OrderModel))]
-        public int IdOrder { get; set; }
-        [OneToOne]
-        public OrderModel OrderModel { get; set; }
+        [OneToMany("KardexProductModelId")]
+        public List<OrderModel> OrderModel { get; set; }
 
-        
+        //Relacion con saldos
+        [OneToMany("KardexProductModelId")]
+        public List<SaldosKardexProductModel> SaldosProducts { get; set; }
     }
 }

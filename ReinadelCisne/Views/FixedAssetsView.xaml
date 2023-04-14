@@ -100,13 +100,14 @@
                                 Grid.ColumnSpan="3" 
                                 Grid.Row="2" 
                                 HorizontalOptions="Center"
+                                Margin="10,0,10,0"
                                 >
                     <CollectionView.ItemsLayout>
                         <LinearItemsLayout Orientation="Vertical" ItemSpacing="10"/>
                     </CollectionView.ItemsLayout>
                     <CollectionView.ItemTemplate>
                         <DataTemplate>
-                            <Frame BackgroundColor="LightGreen"
+                            <Frame BackgroundColor="{StaticResource QuintoColor}"
                                        CornerRadius="10"
                                        Margin="0"
                                        Padding="10">

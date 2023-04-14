@@ -25,8 +25,8 @@ namespace ReinadelCisne.ViewModels
             }
         }
 
-        private SaleModel _seleccionPP;
-        public SaleModel SeleccionPP
+        private OrderProduccionModel _seleccionPP;
+        public OrderProduccionModel SeleccionPP
         {
             get => _seleccionPP;
             set
@@ -38,7 +38,7 @@ namespace ReinadelCisne.ViewModels
                 }
             }
         }
-
+        public ObservableCollection<OrderProduccionModel> OrderProduccions { get; set; } = new ObservableCollection<OrderProduccionModel>();
         public ObservableCollection<SaleModel> ListProdProce { get; private set; } = new ObservableCollection<SaleModel>();
         public ICommand RefreshCommand
         {
@@ -61,13 +61,25 @@ namespace ReinadelCisne.ViewModels
             var recibo = obj as string;
             Direccionar(recibo);
         });
-        public ICommand SelectListPP => new Command((obj) =>
+        public ICommand SelectListPP => new Command(async (obj) =>
         {
-            SaleModel selc = obj as SaleModel;
+            SeleccionPP = obj as OrderProduccionModel;
             ListProductInProcess();
-            Shell.Current.GoToAsync($"//Rini/RProductosEnProceso/DetailPP?IdPP={selc.Id}");
-            
+            string action = await Shell.Current.DisplayActionSheet("Cambiar de estado?", "Cancel", null, "Terminado");
+            CambiarEstado(action);
         });
+
+        private void CambiarEstado(string action)
+        {
+            SeleccionPP.EstadoOrder = action;
+            App.Database.SaveOrderProduccion(SeleccionPP);
+
+            SeleccionPP.Product.EstadoProducto = action;
+            App.Database.SaveProduct(SeleccionPP.Product);
+
+            ListProductInProcess();
+        }
+
         public ICommand EntregaCommand => new Command((obj) =>
         {
             SaleModel mod = obj as SaleModel;
@@ -94,19 +106,18 @@ namespace ReinadelCisne.ViewModels
                     break;
             }
         }
+
         private async void ListProductInProcess()
         {
-            ListProdProce.Clear();
-            List<string> products = new List<string>();
-            var lps = await App.Database.ListSales();
-            var respp = (from n in lps
-                         where n.SaleStatus == "En proceso"
-                         select n).ToList();
-            if (respp.Count > 0)
+            OrderProduccions.Clear();
+
+            List<OrderProduccionModel> orders = await App.Database.GetAllOrdersProduccion();
+            if (orders != null)
             {
-                foreach (var tp in respp.OrderByDescending(x => x.Id))
+
+                foreach (var ord in orders.Where(x => x.EstadoOrder == "Aprobada"))
                 {
-                    ListProdProce.Add(tp);
+                    OrderProduccions.Add(ord);
                 }
             }
 

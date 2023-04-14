@@ -121,7 +121,7 @@ namespace ReinadelCisne.ViewModels
                       where s.DateSale.Date >= StartDate.Date && s.DateSale.Date <= FinishDate.Date & s.WayToPay != "por cobrar"
                        select new
                       {
-                          ProductId = o.ProductModelId,
+                          ProductId = o.Id,
                           Amount = o.AmountProduct
                       }).ToList();
 
@@ -198,7 +198,7 @@ namespace ReinadelCisne.ViewModels
                        where s.DateSale.Date >= datei.Date && s.DateSale.Date <= datef.Date & s.WayToPay != "por cobrar"
                        select new
                        {
-                           ProductId = o.ProductModelId,
+                           ProductId = o.Id,
                            Amount = o.AmountProduct
                        }).ToList();
 
@@ -273,7 +273,7 @@ namespace ReinadelCisne.ViewModels
                        where s.DateSale.Month >= StartDate.Month && s.DateSale.Month <= FinishDate.Month & s.WayToPay != "por cobrar"
                        select new
                        {
-                           ProductId = o.ProductModelId,
+                           ProductId = o.Id,
                            Amount = o.AmountProduct
                        }).ToList();
 
@@ -346,7 +346,7 @@ namespace ReinadelCisne.ViewModels
                        where s.DateSale.Year >= StartDate.Year && s.DateSale.Year <= FinishDate.Year
                        select new
                        {
-                           ProductId = o.ProductModelId,
+                           ProductId = o.Id,
                            Amount = o.AmountProduct
                        }).ToList();
 

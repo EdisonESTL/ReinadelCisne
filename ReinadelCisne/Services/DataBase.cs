@@ -47,6 +47,8 @@ namespace ReinadelCisne.Services
             _database.CreateTableAsync<GroupsFixedAssetsModel>();
             _database.CreateTableAsync<ListFixedAssetsXproductModel>();
             _database.CreateTableAsync<ListFAxProductModel>();
+            _database.CreateTableAsync<OrderProduccionModel>();
+            _database.CreateTableAsync<SaldosKardexProductModel>();
         }
                         
         //Proceso Usuario
@@ -121,42 +123,15 @@ namespace ReinadelCisne.Services
         {
             if (product.Id != 0)
             {
-
-                return Task.Run(() =>
-                {
-                    int ctr;
-                    _database.UpdateAsync(product);
-                    ctr = 1;
-                    return ctr;
-                });
+                return _database.UpdateAsync(product);
             }
             else
             {
-                return Task.Run(() =>
-                {
-                    int ctr;
-                    _database.InsertAsync(product);
-                    ctr = 2;
-                    return ctr;
-                });
-                //var g =_database.InsertAsync(product);
-                /*KardexModel kardex = new KardexModel
-                {
-                    ValorUnitario = product.PrecioVentaProduct,
-                    Cantidad = product.CantProduct,
-                    ValorPromPond = product.PrecioVentaProduct
-                };
-
-                SaveMovKardex(kardex);
-
-                kardex.ProductModel = product;
-                
-                UpdateRelationKardexProduct(kardex);*/
-                //return g;
+                return _database.InsertAsync(product);                
             }
         }
-        /*Actualizar Relaciones de Materia Prima*/
-        public Task UpdateRelationsRM(ProductModel product)
+        /*Actualizar Relaciones de Producto*/
+        public Task UpdateRelationsProduct(ProductModel product)
         {
             return _database.UpdateWithChildrenAsync(product);
         }
@@ -202,13 +177,7 @@ namespace ReinadelCisne.Services
         {
             if (kardex.Id != 0)
             {
-                return Task<int>.Run(() =>
-                {
-                    int ctr;
-                    _database.UpdateAsync(kardex);
-                    ctr = 2;
-                    return ctr;
-                });
+                return _database.UpdateAsync(kardex);
             }
             else
             {
@@ -220,15 +189,24 @@ namespace ReinadelCisne.Services
         {
             return _database.UpdateWithChildrenAsync(kardex);
         }
+        //Obtener Kardex
+        public Task<KardexModel> Get1KardexProduct(int kardexModel)
+        {
+            return _database.GetWithChildrenAsync<KardexModel>(kardexModel);
+        }
         /*Obtener listado de kardex de un producto*/
-        public Task<List<KardexModel>> GetKardices(ProductModel product)
+        public Task<KardexModel> GetKardices(ProductModel product)
         {
             var fg = _database.Table<KardexModel>();
             //var fg = _database.Table<KardexModel>().OrderByDescending(x=>x.Id);
             var resp = (from a in fg
-                        where a.IdProduct == product.Id
-                        select a).ToListAsync();
+                        where a.ProductModel.Id == product.Id
+                        select a).FirstOrDefaultAsync();
             return resp;
+        }
+        public Task<List<KardexModel>> GetAllKardxProduct()
+        {
+            return _database.GetAllWithChildrenAsync<KardexModel>();
         }
         /*Obtener el primer movimiento kardex de un producto*/
         public Task<KardexModel> GetFirstKardex(ProductModel Producto)
@@ -239,7 +217,27 @@ namespace ReinadelCisne.Services
                        select a).FirstOrDefaultAsync();*/
             return lis;
         }
+        public Task<int> SaveSaldoKardxPr(SaldosKardexProductModel kardex)
+        {
+            if (kardex.Id != 0)
+            {
+                return _database.UpdateAsync(kardex);
+            }
+            else
+            {
+                return _database.InsertAsync(kardex);
+            }
+        }
 
+        public Task<List<SaldosKardexProductModel>> GetAllSaldosKrdxProd()
+        {
+            return _database.GetAllWithChildrenAsync<SaldosKardexProductModel>();
+        }
+
+        public Task UpdateRelationsSaldosKrdxProd(SaldosKardexProductModel kardex)
+        {
+            return _database.UpdateWithChildrenAsync(kardex);
+        }
         //Procesos Grupos Productos
 
         /*Guardar Grupo de productos*/
@@ -317,6 +315,14 @@ namespace ReinadelCisne.Services
         {
             return _database.GetWithChildrenAsync<SaleModel>(idOrder);
         } 
+        public Task<List<OrderModel>> GetAllOrders()
+        {
+            return _database.GetAllWithChildrenAsync<OrderModel>();
+        }
+        public Task UpdateRelationOrderModel(OrderModel order)
+        {
+            return _database.UpdateWithChildrenAsync(order);
+        }
         #endregion
         
         //Procesos de Materia prima
@@ -888,5 +894,32 @@ namespace ReinadelCisne.Services
             return _database.GetWithChildrenAsync<ListFAxProductModel>(listFixed);
         }
         #endregion
+
+        //Funciones Ordenes de produccion 
+        public Task<int> SaveOrderProduccion(OrderProduccionModel order)
+        {
+            if (order.Id != 0)
+            {
+                return _database.UpdateAsync(order);
+            }
+            else
+            {
+                return _database.InsertAsync(order);
+            }
+        }
+        public Task<List<OrderProduccionModel>> GetAllOrdersProduccion()
+        {
+            return _database.GetAllWithChildrenAsync<OrderProduccionModel>();
+        }
+
+        public Task<OrderProduccionModel> GetOrderProduccion(int orderID)
+        {
+            return _database.GetWithChildrenAsync<OrderProduccionModel>(orderID);
+        }
+
+        public Task UpdateRelationsOrderProduccion(OrderProduccionModel orderProduccion)
+        {
+            return _database.UpdateWithChildrenAsync(orderProduccion);
+        }
     }
 }

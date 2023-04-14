@@ -67,13 +67,12 @@
                 <Picker x:Name="grupos"
                         Title="Tiempo"
                         BackgroundColor="White"                    
-                        SelectedItem="{Binding SeleccionarGroupFA}"
+                        SelectedItem="{Binding TiempoProduccion}"
                         Grid.Column="1">
                     <Picker.ItemsSource>
                         <x:Array Type="{x:Type x:String}">
                             <x:String>Hora</x:String>
                             <x:String>Día</x:String>
-                            <x:String>Semana</x:String>
                             <x:String>Mes</x:String>
                             <x:String>Año</x:String>
                         </x:Array>
@@ -81,7 +80,8 @@
                 </Picker>
                 <Entry Placeholder="Cantidad" 
                     Style="{StaticResource Entry1}"
-                       Grid.Column="2"/>
+                       Grid.Column="2"
+                       Text="{Binding CantTiempoProduccion}"/>
             </Grid>
             <Grid x:Name="AreaResultados"
                   RowDefinitions="Auto, Auto"

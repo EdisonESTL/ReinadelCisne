@@ -156,7 +156,8 @@ namespace ReinadelCisne.ViewModels
                 await App.Database.SaveClients(client);
 
                 if (EsPedido == false)
-                {                    
+                {               
+                    //Creo la venta
                     SaleModel d = new SaleModel();
                     d.DateSale = DateTime.Now;
                     d.TotalSale = Cuenta;
@@ -164,17 +165,24 @@ namespace ReinadelCisne.ViewModels
                     d.WayToPay = WayPay;
                     d.DateDelivery = DateTime.Now;
                     d.SaleStatus = "Entregado";
-
+                    //Guardo la venta
                     await App.Database.SaveSale(d);
-                    d.Orders = new List<OrderModel>();
+                    //Guardo el cleinte en la venta
                     d.ClientModel = new ClientModel();
                     d.ClientModel = client;
-
+                    //Creo en la venta una nueva lista de detalles/orden
+                    d.Orders = new List<OrderModel>();
+                    //Lleno la lista de detalle
                     foreach (OrderModel obj in Order)
                     {
+                        //Guardo el detalle
                         await App.Database.SaveOrder(obj);
+                        //Añado a la lista d edetalled ela venta
                         d.Orders.Add(obj);
                         await App.Database.UpdateRealtionSales(d);
+                        //Actualizo relacion del detalle con producto
+                        await App.Database.UpdateRelationOrderModel(obj);
+                        //Actualizo Inventario
                         UpdateCantidadesInv(obj);
                     }
 
@@ -287,54 +295,41 @@ namespace ReinadelCisne.ViewModels
             }
 
         }
-        private void UpdateCantidadesInv(OrderModel obj)
+        private async void  UpdateCantidadesInv(OrderModel obj)
         {
+            //Obtengo el kardex del producto en la orde/detalle
+            var KrdxProd = await App.Database.Get1KardexProduct(obj.KardexModel.Id);
 
-
-            //actualiza cantidad de productos en poseción
-            var id = obj.ProductModelId;
-
-            ProductModel updt = App.Database.Get1Product(id).Result;
-
-            //var NewCantidad = updt.CantProduct - obj.AmountProduct;
-            //CalcularPromedioPonderado(updt.CantProduct * updt.PrecioVentaProduct, obj.AmountProduct, obj.ValorUnitario, updt.CantProduct, out double resp);
-            //var NewValor = NewCantidad * obj.ValorUnitario;
-
-            KardexModel kardex = new KardexModel
+            //Actualizo cantidad
+            var newCant = KrdxProd.Cantidad - obj.AmountProduct;
+            //Actualizo Precio unitario
+            var newPrice = obj.ValorUnitario;
+            //Creo el nuevo saldo
+            SaldosKardexProductModel newSaldo = new SaldosKardexProductModel()
             {
                 Date = DateTime.Now,
-                //Cantidad = NewCantidad,
-                //Valor = NewValor,
-                ValorPromPond = obj.ValorUnitario
+                Cantidad = newCant,
+                ValorUnitario = newPrice,
+                SaldoTotal = newCant * KrdxProd.ValorPromPond,
+                IdReconcimiento = obj.Id,
+                NombreReconocimiento = "Venta"
             };
-            App.Database.SaveMovKardex(kardex);
+            //Guardo el nuevo saldo
+            await App.Database.SaveSaldoKardxPr(newSaldo);
+            //Asigo al nuevo saldo al kardex que pertenece
+            newSaldo.KardexProductModel = KrdxProd;
+            await App.Database.UpdateRelationsSaldosKrdxProd(newSaldo);
 
-            kardex.ProductModel = updt;
+            //Ingreso los nuevos valores al kardex (El kardex tiene los ultimos valores)
+            KrdxProd.Cantidad = newCant;
+            KrdxProd.Valor = newCant * KrdxProd.ValorPromPond;
+            //Guardo Kardex
+            await App.Database.SaveMovKardex(KrdxProd);
+            //En el kardex añado el nuevo saldo
+            KrdxProd.SaldosProducts.Add(newSaldo);
+            await App.Database.UpdateRelationKardexProduct(KrdxProd);
 
-            //updt.CantProduct = NewCantidad;
-
-            App.Database.SaveProduct(updt);
-            App.Database.UpdateRelationKardexProduct(kardex);
-
-            //Actualiza cantidad de materia prima
-            var aux = obj.ProductModelId;
-            var product = App.Database.Get1Product(aux).Result;
-            if (product.ListRMModelId != 0)
-            {
-                var recetaProducto = App.Database.GetListRM(product.ListRMModelId).Result;
-                var materialesdeReceta = App.Database.GetAllItems().Result;
-
-                var seleccion = (from m in materialesdeReceta
-                                 where m.ListRMModelId == recetaProducto.Id
-                                 select m).ToList();
-
-                foreach (var s in seleccion)
-                {
-                    RawMaterialModel rm = App.Database.GetOneRM(s.RawMaterialModelId).Result;
-                    rm.CantidadRM -= s.Amount;
-                    App.Database.UpdateRawMaterial(rm);
-                }
-            }
+            await Shell.Current.DisplayAlert("Hola", "Inventario actualizado", "ok");
         }
         private async void AppplyDiscount()
         {
@@ -355,7 +350,10 @@ namespace ReinadelCisne.ViewModels
             {
                 foreach (ProductModel tp in lps)
                 {
-                    ListPS.Add(tp);
+                    if (tp.EstadoProducto == "Terminado")
+                    {
+                        ListPS.Add(tp);
+                    }                  
 
                 }
             }
@@ -368,16 +366,22 @@ namespace ReinadelCisne.ViewModels
 
             if (!string.IsNullOrEmpty(res))
             {
+                //Cargo orden/detalle de venta
                 OrderModel pedido = new OrderModel
                 {
-                    ProductModelId = selectedPS.Id,
+                    Date=DateTime.Now,
                     ValorUnitario = selectedPS.PrecioVentaProduct,
                     AmountProduct = int.Parse(res),
                     Valor = selectedPS.PrecioVentaProduct * int.Parse(res)
                 };
 
+                //Asigno en el detalle el kardex del producto
+                pedido.KardexModel = selectedPS.Kardices;
+
+                //Sumo la cuenta
                 Cuenta += selectedPS.PrecioVentaProduct * int.Parse(res);
 
+                //Añado a la lista el pedido/detallede venta
                 Order.Add(pedido);
                 ListProductStock();
             }

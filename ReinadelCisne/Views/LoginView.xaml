@@ -37,18 +37,19 @@
             
             <Grid Grid.Row="1" BackgroundColor="White" 
                   Padding="10, 30, 10, 15"
-                  RowDefinitions="3*, *, 4*, *, 0.9*, *">
+                  RowDefinitions="3*, *, 4*, *, 0.9*, *"
+                  ColumnDefinitions="*,*">
                 <StackLayout Orientation="Horizontal" Grid.Row="0"
                              Margin="0"
                              Padding="0"
                              HorizontalOptions="CenterAndExpand"
                              Grid.ColumnSpan="2">
                     <Image Source="arbol.png" Aspect="AspectFit"
-                           HorizontalOptions="Center"                           
-                           HeightRequest="110"/>
+                           HorizontalOptions="Center"
+                           WidthRequest="160"/>
                     <Label Text="Yintu." HorizontalOptions="Center" TextColor="DimGray"
                            VerticalOptions="Center"
-                           FontSize="70"
+                           FontSize="60"
                            Margin="0,0,0,0"
                            FontAttributes="Bold"/>                    
                 </StackLayout>

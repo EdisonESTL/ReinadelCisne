@@ -60,7 +60,7 @@ namespace ReinadelCisne.ViewModels
         
         public ObservableCollection<ProductModel> ListPS { get; private set; } = new ObservableCollection<ProductModel>();
         public ObservableCollection<GroupsProductModel> GroupsProducts { get; private set; } = new ObservableCollection<GroupsProductModel>();
-
+        public ObservableCollection<KardexModel> ListProductTerminados { get; set; } = new ObservableCollection<KardexModel>();
         public ICommand RefreshCommand
         {
             get
@@ -83,9 +83,9 @@ namespace ReinadelCisne.ViewModels
         });
         public ICommand SelectedCommnad => new Command((obj) =>
         {
-            PassString pass = obj as PassString;
+            ProductModel pass = obj as ProductModel;
             ListProductStock();
-            Shell.Current.GoToAsync($"//Rini/Productos/Kardex?objId={pass.Data3}");
+            Shell.Current.GoToAsync($"//Rini/Productos/Kardex?objId={pass.Id}");
         });
         public ICommand GoBackCommand => new Command(() =>
         {
@@ -175,17 +175,39 @@ namespace ReinadelCisne.ViewModels
             ListPS.Clear();
             GroupsSelected = null;
 
+            var ListKardProduct = await App.Database.GetAllKardxProduct();
+
+            if(ListKardProduct != null)
+            {
+                foreach(var kr in ListKardProduct)
+                {
+                    if(kr.SaldosProducts.Count > 0)
+                    {
+                        if(kr.ProductModel.EstadoProducto == "Terminado")
+                        {
+                            ListProductTerminados.Add(kr);
+                        }
+                    }
+                }
+                Productos = ListProductTerminados.Count;
+                Costo = ListProductTerminados.Sum(x => x.ValorPromPond * x.Cantidad);
+            }
+            #region r
             List<ProductModel> lps = await App.Database.ListProduct();
+
             if (lps != null)
             {
-                foreach (var tp in lps.OrderByDescending(x => x.Id))
-                {                    
+                foreach (var tp in lps.Where(x => x.EstadoProducto == "Terminado").OrderByDescending(x => x.Id))
+                {
+                    tp.AmountProduct = tp.Kardices.Cantidad;
+                    tp.PrecioVentaProduct = tp.Kardices.ValorPromPond;
                     ListPS.Add(tp);
                 }
 
                 Productos = ListPS.Count;
                 Costo = ListPS.Sum(x => x.PrecioVentaProduct * x.AmountProduct);
-            }
+            } 
+            #endregion
 
         }
         private async void DeletePS(object obj)

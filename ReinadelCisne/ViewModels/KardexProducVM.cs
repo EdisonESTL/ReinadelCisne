@@ -1,11 +1,12 @@
-﻿using System;
+﻿using ReinadelCisne.Models;
+using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Text;
 using System.Web;
 using Xamarin.Forms;
-using ReinadelCisne.Models;
+using System.Linq;
 using ReinadelCisne.Auxiliars;
-using System.Collections.ObjectModel;
 
 namespace ReinadelCisne.ViewModels
 {
@@ -23,7 +24,7 @@ namespace ReinadelCisne.ViewModels
         }
 
         public ObservableCollection<PassString> Kard { get; private set; } = new ObservableCollection<PassString>();
-
+        public ObservableCollection<AuxiliarLayoutKardexRM> KardexLayout { get; set; } = new ObservableCollection<AuxiliarLayoutKardexRM>();
         private string _descripcion;
         public string Descripcion
         {
@@ -72,25 +73,48 @@ namespace ReinadelCisne.ViewModels
 
         private void ObtenerKardex(ProductModel objresp)
         {
-            List<KardexModel> resp = App.Database.GetKardices(objresp).Result;
-            LLenarList(resp, objresp.DateTime);
             
+            var kardxProduct = objresp.Kardices;
+            LLenarList(kardxProduct);
         }
 
-        private void LLenarList(List<KardexModel> resp, DateTime dateTime)
+        private void LLenarList(KardexModel resp)
         {
-            foreach (var b in resp)
+            //var resp1 = App.Database.GetAllKardxProduct().Result;
+            var krdx = App.Database.Get1KardexProduct(resp.Id).Result;
+            var ventasOrder = App.Database.ListOrders().Result;
+            List<SaldosKardexProductModel> sald = krdx.SaldosProducts;
+
+            foreach(var ss in sald)
             {
-                PassString pass = new PassString
+                //Inicio llenado inicial de kardex
+                AuxiliarLayoutKardexRM KardexAll = new AuxiliarLayoutKardexRM
                 {
-                    Data0 = dateTime.ToString("d"),
-                    Data1 = "$" + b.ValorPromPond.ToString(),
-                    Data2 = b.Cantidad.ToString(),
-                    Data3 = "$" + b.Valor.ToString()
+                    Date = ss.Date,
+                    Detail = ss.NombreReconocimiento
                 };
 
-                Kard.Add(pass);
+                //Llenado de salidas
+                var vents = (from vt in ventasOrder
+                             where ss.NombreReconocimiento == "Venta" && ss.IdReconcimiento == vt.Id
+                             select vt).FirstOrDefault();
+
+                if(vents != null)
+                {
+                    KardexAll.SalidaCantidad = vents.AmountProduct;
+                    KardexAll.SalidaValorUnitario = vents.ValorUnitario;
+                    KardexAll.SalidaValorTotal = vents.Valor;
+                }
+                //LLenado de saldos
+                KardexAll.SaldoCantidad = ss.Cantidad;
+                KardexAll.SaldoValorUnitario = ss.ValorUnitario;
+                KardexAll.SaldoTotal = ss.Cantidad * ss.ValorUnitario;
+
+                //Lleno Laoyout para mostrar
+                KardexLayout.Add(KardexAll);
             }
+
+            
         }
     }
 }

@@ -57,15 +57,20 @@
                             SelectionChangedCommandParameter="{Binding SelectedItem , Source={x:Reference MenuCV}}" 
                             ItemsSource="{Binding KardexLayout}"
                             >
+                <CollectionView.ItemsLayout>
+                    <LinearItemsLayout Orientation="Vertical" ItemSpacing="10"/>
+                </CollectionView.ItemsLayout>
                 <CollectionView.ItemTemplate>
                     <DataTemplate>
                         <Frame BackgroundColor="{StaticResource CuartoColor}"
                                BorderColor="{StaticResource SegundoColor}"
                                CornerRadius="30"
-                               Margin="0">
+                               Margin="0"
+                               Padding="0">
                             <Grid ColumnDefinitions="Auto,Auto,*"
                                       RowDefinitions="Auto, Auto, Auto"
-                                      HorizontalOptions="CenterAndExpand">
+                                      HorizontalOptions="CenterAndExpand"
+                                  Margin="0,16,0,10">
                                 <StackLayout Grid.Column="0"
                                                  Grid.ColumnSpan="3"
                                                  Orientation="Horizontal"

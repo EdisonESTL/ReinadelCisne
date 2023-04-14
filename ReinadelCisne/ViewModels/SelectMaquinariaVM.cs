@@ -204,7 +204,8 @@ namespace ReinadelCisne.ViewModels
                 {
                     TipoUso = TypeContrato,
                     CantidadUso = cantUso,
-                    PrecioXuso = depreciacion/CantProducto,
+                    //PrecioXuso = depreciacion/CantProducto,
+                    PrecioXuso = depreciacion,
                     FixedAssets = assetsModel
                 };
 
@@ -218,18 +219,18 @@ namespace ReinadelCisne.ViewModels
             //Equipos de cómputo y software 33.33% anual.
 
             DepAnual = assetsModel.ValorUnit * 0.3333;
-            DepMes = DepAnual / 12;
-            DepDia = DepAnual / 360;
-            DepHora = DepDia / 24;
+            DepMes = Math.Round(DepAnual, 2) / 12;
+            DepDia = Math.Round(DepAnual, 2) / 360;
+            DepHora = Math.Round(DepDia, 2) / 24;
 
             switch (TypeContrato)
             {
                 case "Horas":
-                    return DepHora * cantUso;
+                    return (Math.Round(DepHora, 2) * cantUso);
                 case "Dias":
-                    return DepDia * cantUso;
+                    return (Math.Round(DepDia, 2) * cantUso);
                 case "Meses":
-                    return DepMes * cantUso;
+                    return (Math.Round(DepMes, 2) * cantUso);
                 default:
                     return 0;
             }
@@ -241,18 +242,18 @@ namespace ReinadelCisne.ViewModels
             //Vehículos, equipos de transporte y equipo caminero móvil 20% anual.
 
             DepAnual = assetsModel.ValorUnit * 0.20;
-            DepMes = DepAnual / 12;
-            DepDia = DepAnual / 360;
-            DepHora = DepDia / 24;
+            DepMes = Math.Round(DepAnual, 2) / 12;
+            DepDia = Math.Round(DepAnual, 2) / 360;
+            DepHora = Math.Round(DepDia, 2) / 24;
 
             switch (TypeContrato)
             {
                 case "Horas":
-                    return DepHora * cantUso;
+                    return (Math.Round(DepHora, 2) * cantUso);
                 case "Dias":
-                    return DepDia * cantUso;
+                    return (Math.Round(DepDia, 2) * cantUso);
                 case "Meses":
-                    return DepMes * cantUso;
+                    return (Math.Round(DepMes, 2) * cantUso);
                 default:
                     return 0;
             }
@@ -264,18 +265,18 @@ namespace ReinadelCisne.ViewModels
             //Instalaciones, maquinarias, equipos y muebles 10% anual.
 
             DepAnual = assetsModel.ValorUnit * 0.10;
-            DepMes = DepAnual / 12;
-            DepDia = DepAnual / 360;
-            DepHora = depDia / 24;
+            DepMes = Math.Round(DepAnual, 2) / 12;
+            DepDia = Math.Round(DepAnual, 2) / 360;
+            DepHora = Math.Round(depDia, 2) / 24;
 
             switch (TypeContrato)
             {
                 case "Horas":
-                    return (DepHora * cantUso);
+                    return (Math.Round(DepHora, 2) * cantUso);
                 case "Dias":
-                    return (DepDia * cantUso);
+                    return (Math.Round(DepDia, 2) * cantUso);
                 case "Meses":
-                    return (DepMes * cantUso);
+                    return (Math.Round(DepMes, 2) * cantUso);
                 default:
                     return 0;
             }

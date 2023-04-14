@@ -34,7 +34,8 @@
                     <StackLayout Grid.Row="0"
                                  Grid.Column="1"
                                  HorizontalOptions="CenterAndExpand"
-                                 VerticalOptions="Center">
+                                 VerticalOptions="Center"
+                                 IsVisible="false">
                         <Label Text="¿Pedido?"
                            Style="{StaticResource LabelTittles1}"
                            />

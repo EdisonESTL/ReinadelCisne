@@ -21,6 +21,7 @@ namespace ReinadelCisne.Models
         [OneToOne]
         public RawMaterialModel RawMaterialModell { get; set; }
         
+        //Relacion con compras
         [OneToMany("KardexRMModelId")]
         public List<ShoppingListModel> ShoppingModell { get; set; }        
 
@@ -28,6 +29,7 @@ namespace ReinadelCisne.Models
         [OneToMany("RawMaterialModelId")]
         public List<ItemsListRMModel> itemsListRMs { get; set; }
 
+        //Relacion con saldos
         [OneToMany("KardexRMModelId")]
         public List<SaldosRMModel> SaldosRMs { get; set; }
 

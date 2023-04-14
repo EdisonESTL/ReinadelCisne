@@ -16,6 +16,7 @@ namespace ReinadelCisne.Models
         public double Discount { get; set; }
         public string WayToPay { get; set; }
         public string SaleStatus{ get; set; }
+
         //Relacion con OrderModel
         [OneToMany("SaleModeld", CascadeOperations = CascadeOperation.CascadeDelete)]
         public List<OrderModel> Orders {get; set;}

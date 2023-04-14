@@ -74,7 +74,7 @@ namespace ReinadelCisne.ViewModels
             var productlist = App.Database.ListProduct().Result;
 
             var listshp = (from shp in ft
-                           join mat in productlist on shp.ProductModelId equals mat.Id
+                           join mat in productlist on shp.SaleModeld equals mat.Id
                            select new
                            {
                                Producto = mat.NameProduct,

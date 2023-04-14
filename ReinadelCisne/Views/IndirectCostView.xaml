@@ -89,15 +89,15 @@
                    Style="{StaticResource LabelTittlesColLectionView}"/>
             <CollectionView x:Name="ListCIF"
                             ItemsSource="{Binding OtherCosts}"
-                            >
+                            Margin="10,0,10,0">
                 <CollectionView.ItemsLayout>
                     <LinearItemsLayout Orientation="Vertical"
                                        ItemSpacing="9"/>
                 </CollectionView.ItemsLayout>
                 <CollectionView.ItemTemplate>
                     <DataTemplate>
-                        <Frame BackgroundColor="LightGreen"
-                               Padding="0" CornerRadius="20">
+                        <Frame BackgroundColor="{StaticResource QuintoColor}"
+                               Padding="0" CornerRadius="10">
                             <SwipeView BackgroundColor="Transparent">
                                 <SwipeView.RightItems>
                                     <SwipeItems>

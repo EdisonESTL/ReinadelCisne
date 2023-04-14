@@ -1,0 +1,200 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:ReinadelCisne.ViewModels"
+             x:Class="ReinadelCisne.Views.OrdenProduccionView"
+             Title="Ordenes de producción">
+    <ContentPage.BindingContext>
+        <vm:OrdenProduccionVM/>
+    </ContentPage.BindingContext>
+    <ContentPage.Content>
+        <StackLayout Padding="10">
+            <Frame CornerRadius="10" Margin="0,10,0,18"
+                   Padding="0,9,0,9"
+                   BorderColor="#AAFDF7">
+                <Frame.Background>
+                    <LinearGradientBrush StartPoint="0,0"
+                                         EndPoint="1,1">
+                        <GradientStop Color="#AAFDF7"
+                                          Offset="0.1" />
+                        <GradientStop Color="#FFFFFF"
+                                          Offset="1.0" />
+                    </LinearGradientBrush>
+                </Frame.Background>
+                <StackLayout Orientation="Horizontal"
+                         HorizontalOptions="Center"
+                         Spacing="30"
+                             Margin="10">
+                    <StackLayout>
+                        <Label x:Name="TotalElementos"
+                           Style="{StaticResource LabelTittlesColLectionView}">
+                            <Label.FormattedText>
+                                <FormattedString>
+                                    <Span Text="Total elementos&#10;"></Span>
+                                    <Span Text="{Binding TotalElementos}"
+                                      FontSize="20"></Span>
+                                </FormattedString>
+                            </Label.FormattedText>
+                        </Label>
+                    </StackLayout>
+                    <StackLayout>
+                        <Label x:Name="TotalValor"
+                           Style="{StaticResource LabelTittlesColLectionView}">
+                            <Label.FormattedText>
+                                <FormattedString>
+                                    <Span Text="Total valor&#10;"></Span>
+                                    <Span Text="{Binding TotalValores, StringFormat=\{0:c\}}"
+                                      FontSize="20"></Span>
+                                </FormattedString>
+                            </Label.FormattedText>
+                        </Label>
+                    </StackLayout>
+                </StackLayout>
+            </Frame>
+
+            <RefreshView IsRefreshing="{Binding IsRefreshing}" Command="{Binding RefreshCommand}">
+                <CollectionView ItemsSource="{Binding OrderProduccions, Mode=TwoWay}" 
+                                SelectionMode="Single" 
+                                x:Name="listaFA" 
+                                SelectionChangedCommand="{Binding SelectdCommand}" 
+                                SelectionChangedCommandParameter="{Binding SelectedItem , Source={x:Reference listaFA}}" 
+                                Grid.ColumnSpan="3" 
+                                Grid.Row="2" 
+                                HorizontalOptions="Center"
+                                Margin="10,0,10,0"
+                                >
+                    <CollectionView.ItemsLayout>
+                        <LinearItemsLayout Orientation="Vertical" ItemSpacing="10"/>
+                    </CollectionView.ItemsLayout>
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <Frame BackgroundColor="{StaticResource QuintoColor}"
+                                       CornerRadius="10"
+                                       Margin="0"
+                                       Padding="10">
+                                <SwipeView BackgroundColor="Transparent">
+                                    <SwipeView.RightItems>
+                                        <SwipeItems>
+                                            <SwipeItem Text="Eliminar"                                                   
+                                                       IconImageSource="deleteL.png"
+                                                       BackgroundColor="LightPink"
+                                                       Command="{Binding Path=BindingContext.EliminarCommand , Source={x:Reference listaFA}}"
+                                                       CommandParameter="{Binding .}"/>
+                                            <SwipeItem Text="Modificar"
+                                                       IconImageSource="newa.png"
+                                                       BackgroundColor="LightGreen"
+                                                       Command="{Binding Path=BindingContext.ModificarCommand , Source={x:Reference listaFA}}"
+                                                       CommandParameter="{Binding .}"/>
+                                        </SwipeItems>
+                                    </SwipeView.RightItems>
+
+                                    <Grid RowDefinitions="Auto, Auto, Auto, Auto"
+                                      ColumnDefinitions="*, 3*">
+
+                                        <Image Source="shipping.png"
+                                           Grid.Column="0"
+                                           Grid.Row="0"
+                                           Grid.RowSpan="2"/>
+
+                                        <Label Grid.Column="1"
+                                           Grid.Row="0"                                            
+                                           Style="{StaticResource LabelRegistroVenta}" 
+                                           FontSize="15">
+                                            <Label.FormattedText>
+                                                <FormattedString>
+                                                    <Span Text="{Binding Product.NameProduct}"/>
+                                                </FormattedString>
+                                            </Label.FormattedText>
+                                        </Label>
+                                        <Label Grid.Column="1" 
+                                           Grid.Row="1"
+                                           Text="{Binding Product.DescriptionProduct}" Style="{StaticResource LabelTittles1}" FontSize="15"/>
+
+                                        <Label Grid.Column="0"
+                                           Grid.Row="2"                                           
+                                           Style="{StaticResource LabelRegistroVenta}" 
+                                           FontSize="15">
+                                            <Label.FormattedText>
+                                                <FormattedString>
+                                                    <Span Text="Cant. "/>
+                                                    <Span Text="{Binding Product.AmountProduct}" />
+                                                </FormattedString>
+                                            </Label.FormattedText>
+                                        </Label>
+
+                                        <Label Grid.Column="1"
+                                           Grid.Row="2"                                           
+                                           Style="{StaticResource LabelRegistroVenta}" 
+                                           FontSize="15">
+                                            <Label.FormattedText>
+                                                <FormattedString>
+                                                    <Span Text="Tiempo disponible: "/>
+                                                    <Span Text="{Binding CantTiempoProduccion}"  />
+                                                    <Span Text=" "  />
+                                                    <Span Text="{Binding TiempoProduccion}"  />
+                                                </FormattedString>
+                                            </Label.FormattedText>
+                                        </Label>
+
+                                        <Label Grid.Column="0"
+                                           Grid.Row="3"                                           
+                                           Style="{StaticResource LabelRegistroVenta}" 
+                                           FontSize="15">
+                                            <Label.FormattedText>
+                                                <FormattedString>
+                                                    <Span Text="Estado: "/>
+                                                    <Span Text="{Binding EstadoOrder}"  />
+
+                                                </FormattedString>
+                                            </Label.FormattedText>
+                                        </Label>
+                                        
+                                        <Label Grid.Column="1"
+                                           Grid.Row="3"                                           
+                                           Style="{StaticResource LabelRegistroVenta}" 
+                                           FontSize="15">
+                                            <Label.FormattedText>
+                                                <FormattedString>
+                                                    <Span Text="Recibido: "/>
+                                                    <Span Text="{Binding FechaOrder, StringFormat=\{0: dd MMM yyyy\}}"  />
+                                                    
+                                                </FormattedString>
+                                            </Label.FormattedText>
+                                        </Label>
+                                    </Grid>
+
+                                </SwipeView>
+                            </Frame>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                    <CollectionView.EmptyView>
+                        <StackLayout HorizontalOptions="CenterAndExpand"
+                             VerticalOptions="CenterAndExpand">
+                            <Label Text="Hola, no hay activos registrados."
+                                   Margin="10,25,10,10"
+                                   Style="{StaticResource LabelTittlesColLectionView}"
+                                   HorizontalOptions="Fill"
+                                   HorizontalTextAlignment="Center" 
+                                   TextColor="Black"/>
+                        </StackLayout>
+                    </CollectionView.EmptyView>
+                </CollectionView>
+            </RefreshView>
+            <Grid RowDefinitions="Auto" Margin="10">
+                <Button Text="Inicio" Command="{Binding PushCommand}" 
+                        Style="{StaticResource Button2}"
+                        CommandParameter="inicio"
+                        Grid.Column="0"
+                        FontAttributes="Bold"
+                        ImageSource="arbol1.png"/>
+                <Button Text="Nuevo" Command="{Binding PushCommand}" 
+                        Style="{StaticResource Button1}"
+                        CommandParameter="nuevo"
+                        CornerRadius="30"
+                        Grid.Column="1"
+                        ImageSource="newa.png"
+                        ContentLayout="top, 3"/>
+            </Grid>
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

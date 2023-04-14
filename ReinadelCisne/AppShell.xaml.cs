@@ -94,6 +94,9 @@ namespace ReinadelCisne
             Routes.Add("//Rini/Assets", typeof(FixedAssetsView));
             Routes.Add("NewAset", typeof(FixedAssetsNew));
 
+            //Rutas Ordenes Produccion
+            Routes.Add("//Rini/OrdenProduccion", typeof(OrdenProduccionView));
+            Routes.Add("DetailOrdenProduccion", typeof(DetailOrdenProduccionView));
 
             foreach (KeyValuePair<string, Type> item in Routes)
             {

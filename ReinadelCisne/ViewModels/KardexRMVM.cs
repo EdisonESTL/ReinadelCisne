@@ -68,6 +68,7 @@ namespace ReinadelCisne.ViewModels
 
             List<ShoppingListModel> Compras = query.ShoppingModell;
             List<SaldosRMModel> Saldos = query.SaldosRMs;
+            List<ItemsListRMModel> Producciones = query.itemsListRMs;
 
             
             foreach(var s in Saldos)
@@ -91,40 +92,26 @@ namespace ReinadelCisne.ViewModels
                     KardexAll.EntradaValorTotal = KardexAll.EntradaCantidad * KardexAll.EntradaValorUnitario;
                 }
 
+                //Lleno de salidas
+                var salida = (from pr in Producciones
+                              where s.NombreReconocimiento == "Consumo" && s.IdReconcimiento == pr.Id
+                              select pr).FirstOrDefault();
+
+                if(salida != null)
+                {
+                    KardexAll.SalidaCantidad = salida.Amount;
+                    KardexAll.SalidaValorUnitario = salida.UnitCost;
+                    KardexAll.SalidaValorTotal = salida.TotalCost;
+                }
                 //LLenado de saldos
 
                 KardexAll.SaldoCantidad = s.Cantidad;
                 KardexAll.SaldoValorUnitario = s.ValorUnitario;
-                KardexAll.SaldoTotal = s.SaldoTotal;
+                KardexAll.SaldoTotal = s.Cantidad * s.ValorUnitario;
 
                 //Lleno Laoyout para mostrar
                 KardexLayout.Add(KardexAll);
             }
-            //var ds = query.ShoppingModell;
-
-            /*PassString itms = new PassString()
-            {
-                Data0 = query.Date.ToString("dddd d MMM yyyy"),
-                Data1 = "inventario inicial",
-                Data2 = query.Cantidad.ToString(),
-                Data3 = query.ValorUnitario.ToString("C"),
-                Data4 = (query.Cantidad * query.ValorUnitario).ToString("C")
-            };
-
-            FormatoK.Add(itms);
-            foreach(var a in ds)
-            {
-                PassString it = new PassString()
-                {
-                    Data0 = a.Date.ToString("dddd d MMM yyyy"),
-                    Data1 = "compra",
-                    Data2 = a.Amount.ToString(),
-                    Data3 = a.ValorUnitario.ToString("C"),
-                    Data4 = (a.Amount * a.ValorUnitario).ToString("C")
-                };
-
-                FormatoK.Add(it);
-            }*/
         }
 
         private void LLenarSaldos(KardexRMModel query)

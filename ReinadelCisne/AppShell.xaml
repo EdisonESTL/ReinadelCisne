@@ -133,9 +133,9 @@
         <ShellContent ContentTemplate="{DataTemplate views:GoView}" Route="RGo"/>
     </FlyoutItem>
     
-    <FlyoutItem Title="Ajustes"
+    <FlyoutItem Title="Perfil"
                 Icon="configg.png"
                 Route="Rcon">
-        <ShellContent ContentTemplate="{DataTemplate views:AjustesView}" Route="RVentanilla"/>
+        <ShellContent ContentTemplate="{DataTemplate views:AjustesView}" Route="RPerfil"/>
     </FlyoutItem>
 </Shell>

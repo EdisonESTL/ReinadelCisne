@@ -116,6 +116,7 @@
                     <CollectionView.ItemTemplate>
                         <DataTemplate>
                             <Frame Style="{StaticResource FrameProductss}" 
+                                   BackgroundColor="{StaticResource QuintoColor}"
                                    HorizontalOptions="CenterAndExpand">
                                 <SwipeView BackgroundColor="Transparent">
                                     <SwipeView.RightItems>

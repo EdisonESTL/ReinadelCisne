@@ -30,29 +30,26 @@
                     </LinearGradientBrush>
                 </Frame.Background>
                 
-                <Grid RowSpacing="0" RowDefinitions="Auto, Auto"
-                      ColumnDefinitions="100,124" 
+                <Grid RowSpacing="0" RowDefinitions="3*, *"
+                      ColumnDefinitions="*,*" 
                       HorizontalOptions="CenterAndExpand"
-                      Margin="10,0,10,0"
+                      Margin="10,10,10,10"
                       Padding="0">
-                    <Image Source="arbol.png" Aspect="AspectFit" 
-                           VerticalOptions="Center"
-                           HorizontalOptions="Center" Grid.Row="0" Grid.Column="0"
-                           Grid.RowSpan="2"/>
+                    <Image Grid.Row="0" Grid.Column="0" Grid.RowSpan="2"
+                           Source="Virgen_del_Cisne.png"
+                               Aspect="AspectFit"/>
                     <Label Text="{Binding NameNegocio}" Grid.Row="0"
                            Grid.Column="1" FontAttributes="Bold"
-                           TextColor="Black" FontSize="16"
-                           VerticalOptions="EndAndExpand"
-                           HorizontalOptions="CenterAndExpand"/>
+                           TextColor="Black" FontSize="20"
+                           HorizontalTextAlignment="Center"/>
                     <Label Text="{Binding NameOwner}" Grid.Row="1" Grid.Column="1"
-                           TextColor="Black" FontSize="13"
-                           VerticalOptions="Center"
-                           HorizontalOptions="CenterAndExpand"/>
+                           TextColor="Black" FontSize="15"
+                           VerticalOptions="Center"/>
                 </Grid>
             </Frame>
             
             <ScrollView Padding="0">
-                <Grid RowDefinitions="*,*" ColumnDefinitions="*,*,*"
+                <Grid RowDefinitions="*,*, *" ColumnDefinitions="*,*,*"
                       RowSpacing="6"
                       Margin="10,0,10,0" 
                       ColumnSpacing="6" 
@@ -77,8 +74,8 @@
 
                     
 
-                    <Frame Style="{StaticResource Frame3}"
-                           Grid.Row="0"
+                    <Frame Style="{StaticResource Frame2}"
+                           Grid.Row="2"
                            Grid.Column="2"
                            Padding="0"
                            BorderColor="Indigo">
@@ -111,9 +108,9 @@
                                 Margin="0,10,0,10"/>
                     </Frame>
 
-                    <Frame Style="{StaticResource Frame1}"
-                       Grid.Row="1"
-                       Grid.Column="1"
+                    <Frame Style="{StaticResource Frame3}"
+                       Grid.Row="0"
+                       Grid.Column="2"
                        Padding="0"
                            BorderColor="Indigo">
                         <Button Text="Costos &#10;Indirectos" TextColor="Black"
@@ -127,7 +124,11 @@
                                 VerticalOptions="Center"
                                 Margin="0,9,0,9"/>
                     </Frame>
-
+                    <Image Source="arbol.png" Aspect="AspectFit" 
+                           VerticalOptions="Center"
+                           HorizontalOptions="Center" Grid.Row="1" Grid.Column="1"
+                           Margin="0"
+                           WidthRequest="100"/>
                     <Frame Style="{StaticResource Frame1}"
                        Grid.Row="1"
                        Grid.Column="2"
@@ -162,6 +163,41 @@
                                 VerticalOptions="Center"
                                 Margin="0,9,0,9"/>
                     </Frame>
+                    <Frame Style="{StaticResource Frame2}"
+                       Grid.Row="2"
+                       Grid.Column="0"
+                       Padding="0"
+                           BorderColor="Indigo">
+                        <Button Text="Órdenes de producción" 
+                                TextColor="Black"
+                                FontAttributes="Bold"
+                            FontSize="13"
+                            ImageSource="Reports.png"
+                            ContentLayout="Top, 0"
+                            BackgroundColor="Transparent"
+                            Command="{Binding PushCommand}"
+                            CommandParameter="ordenProduccion"
+                                VerticalOptions="Center"
+                                Margin="0,3,0,9">
+                        </Button>
+                    </Frame>
+                    <Frame Style="{StaticResource Frame2}"
+                       Grid.Row="2"
+                       Grid.Column="1"
+                       Padding="0"
+                           BorderColor="Indigo">
+                        <Button Text="productos en proceso" 
+                                TextColor="Black"
+                                FontAttributes="Bold"
+                                FontSize="13"
+                                ImageSource="shipping.png"
+                                ContentLayout="Top, 9"
+                                BackgroundColor="Transparent"
+                                Command="{Binding PushCommand}"
+                                CommandParameter="productosProceso"
+                                VerticalOptions="Center"
+                                Margin="0,9,0,9"/>
+                    </Frame>
                 </Grid>
             </ScrollView>
             <StackLayout Orientation="Vertical" HorizontalOptions="Center"
@@ -173,19 +209,28 @@
                              Padding="0"
                              Spacing="13"
                              Margin="0,10,0,10">
-                    <Button Text="Productos en &#10;proceso" TextColor="Black"
+                    <!--<Button Text="Productos en &#10;proceso" TextColor="Black"
                                 FontAttributes="Bold"
                                 FontSize="13"
                                 ImageSource="shipping.png"
                                 ContentLayout="Top, 9"
                                 VerticalOptions="Center"
                                 BackgroundColor="{StaticResource TercerColor}"
-                                Command="{Binding PushCommand}"
-                                CommandParameter="servicios"
+                                
                             CornerRadius="30"
                             BorderColor="{StaticResource PrimerColor}"
                             BorderWidth="6">
-                    </Button>
+                    </Button>-->
+                    <Button Text="Nuevo" Style="{StaticResource Button2}"
+                        FontAttributes="Bold,Italic"
+                        Margin="6"
+                        TextColor="Black"
+                        BorderColor="Chocolate"
+                        BorderWidth="3"
+                                FontSize="16"
+                                ImageSource="newa.png" ContentLayout="left, 3"
+                                Command="{Binding PushCommand}"
+                                CommandParameter="nuevo"/>
                     <Button Text="Registrar &#10;pedido" TextColor="Black"
                                 FontAttributes="Bold"
                                 FontSize="13"
@@ -209,16 +254,7 @@
                         Command="{Binding PushCommand}"
                         CommandParameter="ajustes"/>-->
 
-                <Button Text="Nuevo" Style="{StaticResource Button2}"
-                        FontAttributes="Bold,Italic"
-                        Margin="6"
-                        TextColor="Black"
-                        BorderColor="Chocolate"
-                        BorderWidth="3"
-                                FontSize="16"
-                                ImageSource="newa.png" ContentLayout="left, 3"
-                                Command="{Binding PushCommand}"
-                                CommandParameter="nuevo"/>
+                
             </StackLayout>
         </StackLayout>
     </ContentPage.Content>
