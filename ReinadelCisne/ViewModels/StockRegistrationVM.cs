@@ -81,11 +81,11 @@ namespace ReinadelCisne.ViewModels
         {
             Shell.Current.GoToAsync($"//Rini/Productos/NewStock?IdObjetoconPrecio=0");
         });
-        public ICommand SelectedCommnad => new Command((obj) =>
+        public ICommand SelectedCommand => new Command((obj) =>
         {
-            ProductModel pass = obj as ProductModel;
+            KardexModel pass = obj as KardexModel;
             ListProductStock();
-            Shell.Current.GoToAsync($"//Rini/Productos/Kardex?objId={pass.Id}");
+            Shell.Current.GoToAsync($"//Rini/Productos/Kardex?objId={pass.ProductModel.Id}");
         });
         public ICommand GoBackCommand => new Command(() =>
         {
@@ -109,7 +109,7 @@ namespace ReinadelCisne.ViewModels
         //Constructor
         public StockRegistrationVM()
         {
-            ListProductStock();
+            //ListProductStock();
             //NumProducts();
             //CostProduct();
             GroupProds();
@@ -172,7 +172,7 @@ namespace ReinadelCisne.ViewModels
         }
         private async void ListProductStock()
         {
-            ListPS.Clear();
+            ListProductTerminados.Clear();
             GroupsSelected = null;
 
             var ListKardProduct = await App.Database.GetAllKardxProduct();
@@ -181,19 +181,23 @@ namespace ReinadelCisne.ViewModels
             {
                 foreach(var kr in ListKardProduct)
                 {
-                    if(kr.SaldosProducts.Count > 0)
+                    if(kr.SaldosProducts.Count > 0 && kr.Cantidad > 0)
                     {
-                        if(kr.ProductModel.EstadoProducto == "Terminado")
+                        if(kr.ProductModel != null)
                         {
-                            ListProductTerminados.Add(kr);
+                            if (kr.ProductModel.EstadoProducto == "Terminado")
+                            {
+                                ListProductTerminados.Add(kr);
+                            }
                         }
+                        
                     }
                 }
                 Productos = ListProductTerminados.Count;
                 Costo = ListProductTerminados.Sum(x => x.ValorPromPond * x.Cantidad);
             }
             #region r
-            List<ProductModel> lps = await App.Database.ListProduct();
+            /*List<ProductModel> lps = await App.Database.ListProduct();
 
             if (lps != null)
             {
@@ -206,18 +210,18 @@ namespace ReinadelCisne.ViewModels
 
                 Productos = ListPS.Count;
                 Costo = ListPS.Sum(x => x.PrecioVentaProduct * x.AmountProduct);
-            } 
+            } */
             #endregion
 
         }
         private async void DeletePS(object obj)
         {
             //string Id = obj.Data3;
-            var obja = obj as ProductModel; 
+            var obja = obj as KardexModel; 
 
             //var resu = App.Database.Get1Product(int.Parse(Id)).Result;
-            await App.Database.DeleteProduct(obja);
-            await Shell.Current.DisplayAlert("Hola", obja.NameProduct + " con precio: " + obja.PrecioVentaProduct + " Ha sido eliminado", "Ok");
+            await App.Database.DeleteProduct(obja.ProductModel);
+            await Shell.Current.DisplayAlert("Hola", obja.ProductModel.NameProduct + " con precio: " + obja.ProductModel.PrecioVentaProduct + " Ha sido eliminado", "Ok");
             ListProductStock();
             //NumProducts();
             //CostProduct();

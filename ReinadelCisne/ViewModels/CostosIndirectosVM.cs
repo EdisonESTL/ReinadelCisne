@@ -566,7 +566,7 @@ namespace ReinadelCisne.ViewModels
                 var totalCostosIndAnio = totalCostosIndMes * 12;
                 var totalCostosIndSemana = totalCostosIndMes / 4;
                 var totalCostosIndDia = totalCostosIndMes / 30;
-                var totalCostosIndHora = totalCostosIndDia / 24;
+                var totalCostosIndHora = totalCostosIndDia / 8;
                 if (!string.IsNullOrEmpty(TiempoProduccion))
                 {
                     switch (TiempoProduccion)

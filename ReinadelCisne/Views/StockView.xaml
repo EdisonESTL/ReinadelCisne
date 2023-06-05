@@ -64,18 +64,19 @@
                 
                 <Grid RowDefinitions="Auto, Auto, Auto, Auto, Auto, Auto" 
                     Margin="3">
-                    <Label Grid.Row="0" Grid.Column="0"                        
-                           Text="Precio unitario &#10;fabricación" 
-                           HorizontalOptions="Center"
-                           VerticalOptions="Center"                        
-                           Style="{StaticResource LabelTittlesColLectionView}"/>
-                    <Entry  Grid.Row="1" Grid.Column="0" 
+                    <Label Grid.Row="0" Grid.Column="1"                        
+                           Text="Costo elaboración por unidad" 
+                           HorizontalTextAlignment="Center"
+                           Style="{StaticResource LabelTittlesColLectionView}"
+                           HeightRequest="40"/>
+                    <Entry  Grid.Row="1" Grid.Column="1" 
                            Text="{Binding CostoUnitarioPS}" 
                            Keyboard="Numeric"
                            Style="{StaticResource Entry1}"/>
 
-                    <Grid Grid.Row="0" Grid.Column="1" Grid.RowSpan="3"
-                          VerticalOptions="EndAndExpand"
+                    <Grid Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2"
+                          VerticalOptions="CenterAndExpand"
+                          HorizontalOptions="Center"
                       ColumnDefinitions="*,*" 
                       RowDefinitions="Auto,Auto, Auto"
                           Margin="20,0,0,0">
@@ -98,7 +99,8 @@
                             Grid.Column="1"
                             Grid.Row="2"
                             Command="{Binding SumarCommand}"
-                                CornerRadius="50"/>
+                                CornerRadius="50"
+                                BackgroundColor="{StaticResource PrimerColor}"/>
                         <Button Text="-"
                             Style="{StaticResource ButtonSave}"
                             FontSize="30"
@@ -107,23 +109,22 @@
                             Grid.Row="2"
                             Command="{Binding RestarCommand}"
                                 CornerRadius="50"
-                                BorderColor="{StaticResource QuintoColor}"
-                                BorderWidth="10"
+                                BackgroundColor="{StaticResource PrimerColor}"
                                 VerticalOptions="Center"/>
                     </Grid>
-                    <Button Grid.Row="2" Grid.Column="0"
-                            Text="Calcular&#10;costo" 
+                    <Button Grid.Row="0" Grid.Column="0"
+                            Grid.RowSpan="2"
+                            Text="Calcular costo elaboración" 
                             TextColor="Black"
                             CornerRadius="30"
                             FontAttributes="Bold"
-                            BackgroundColor="{StaticResource QuintoColor}"
-                            FontSize="16"
-                            BorderColor="Gold"
-                            BorderWidth="30"
-                            CharacterSpacing="1"                            
-                            Margin="0"
-                            Padding="0"
-                            Command="{Binding CostoProduccionCommand}"/>
+                            BackgroundColor="{StaticResource PrimerColor}"
+                            FontSize="13"
+                            Command="{Binding CostoProduccionCommand}"
+                            ImageSource="artesania.png"
+                            ContentLayout="bottom,3"
+                            VerticalOptions="CenterAndExpand"
+                            />
 
                     <!--<Image Grid.Row="2" Grid.Column="1" 
                            Source="product.png"                        

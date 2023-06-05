@@ -641,7 +641,7 @@ namespace ReinadelCisne.ViewModels
                     ObjModify.Groups = GroupProd;
                     App.Database.UpdateRelationsProduct(ObjModify);
 
-                    //Creación de Kardex y confirmación de creaaión
+                    //Creación de Kardex y confirmación de creación
                     if (resp != null)
                     {
                         CrearKardex(ObjModify);
@@ -657,7 +657,7 @@ namespace ReinadelCisne.ViewModels
                         Shell.Current.DisplayAlert("Error", "No se ha podido guardar", "ok");
                     }
                 }
-                //Si el objeto vien para ser modificado
+                //Si el objeto viene para ser modificado
                 else if(ObjModify != null && ObjModify.EstadoProducto != null)
                 {
                     //Actualizo valores ingresados
@@ -717,7 +717,7 @@ namespace ReinadelCisne.ViewModels
                     //Actualizo relación de productos
                     App.Database.UpdateRelationsProduct(product);
 
-                    //Creación de Kardex y confirmación de creaaión
+                    //Creación de Kardex y confirmación de creación
                     if (resp != null)
                     {
                         CrearKardex(product);
@@ -742,7 +742,7 @@ namespace ReinadelCisne.ViewModels
 
         private void CrearKardex(ProductModel product)
         {
-            //Creo Kardex el kardex contien los ultimos valores
+            //Creo Kardex el kardex contiene los ultimos valores
             KardexModel kardex = new KardexModel
             {
                 Date = DateTime.Now,

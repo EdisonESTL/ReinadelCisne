@@ -9,7 +9,7 @@ using System.Linq;
 using System.Globalization;
 
 namespace ReinadelCisne.ViewModels
-{    
+{
     public class GoVM : BaseVM
     {
         #region Atributos
@@ -101,7 +101,7 @@ namespace ReinadelCisne.ViewModels
             }
         }
         #endregion
-        public ObservableCollection<ProductModel> ListPS { get; private set; } = new ObservableCollection<ProductModel>();
+        public ObservableCollection<KardexModel> ListPS { get; private set; } = new ObservableCollection<KardexModel>();
         public ObservableCollection<GroupsProductModel> GruposProductos { get; private set; } = new ObservableCollection<GroupsProductModel>();
         private List<OrderModel> Order { get; set; } = new List<OrderModel>();
 
@@ -118,10 +118,10 @@ namespace ReinadelCisne.ViewModels
         //Eleccion de opcion en menu
         public ICommand SelectedCommand => new Command((obj) =>
         {
-            ProductModel prods = obj as ProductModel;
-
+            KardexModel prods = obj as KardexModel;
+            ProductModel productoOnly = prods.ProductModel;
             //ListOrder.Add(prods);
-            SumarOrden(prods);
+            SumarOrden(productoOnly);
         });
         //Aplicar Descuento
         public ICommand DiscountCommand => new Command(() =>
@@ -156,7 +156,7 @@ namespace ReinadelCisne.ViewModels
                 await App.Database.SaveClients(client);
 
                 if (EsPedido == false)
-                {               
+                {
                     //Creo la venta
                     SaleModel d = new SaleModel();
                     d.DateSale = DateTime.Now;
@@ -203,7 +203,7 @@ namespace ReinadelCisne.ViewModels
                         d.WayToPay = WayPay;
                         d.DateDelivery = datet;
                         d.SaleStatus = "En proceso";
-                        
+
 
                         await App.Database.SaveSale(d);
                         d.Orders = new List<OrderModel>();
@@ -217,7 +217,7 @@ namespace ReinadelCisne.ViewModels
                             await App.Database.UpdateRealtionSales(d);
                             //UpdateCantidadesInv(obj);
                         }
-                    }                    
+                    }
                 }
 
                 ClearOrder();
@@ -229,7 +229,7 @@ namespace ReinadelCisne.ViewModels
             }
         });
 
-        
+
 
         //Direcciona a la lista de ventas
         public ICommand RegisterSale => new Command(() =>
@@ -249,7 +249,7 @@ namespace ReinadelCisne.ViewModels
             Shell.Current.GoToAsync("//Rini");
         });
 
-        
+
         #endregion
         //Constructor
         public GoVM()
@@ -264,13 +264,13 @@ namespace ReinadelCisne.ViewModels
         {
             ListPS.Clear();
 
-            List<ProductModel> lps = await App.Database.ListProduct();
+            List<KardexModel> lps = await App.Database.GetAllKardxProduct();
             var resp = (from p in lps
-                        where p.GroupProductId == objr.Id
+                        where p.ProductModel.GroupProductId == objr.Id
                         select p).ToList();
             if (resp != null)
             {
-                foreach (ProductModel tp in resp)
+                foreach (var tp in resp)
                 {
                     ListPS.Add(tp);
 
@@ -295,7 +295,7 @@ namespace ReinadelCisne.ViewModels
             }
 
         }
-        private async void  UpdateCantidadesInv(OrderModel obj)
+        private async void UpdateCantidadesInv(OrderModel obj)
         {
             //Obtengo el kardex del producto en la orde/detalle
             var KrdxProd = await App.Database.Get1KardexProduct(obj.KardexModel.Id);
@@ -345,57 +345,60 @@ namespace ReinadelCisne.ViewModels
         {
             ListPS.Clear();
 
-            List<ProductModel> lps = await App.Database.ListProduct();
+            //List<ProductModel> lps = await App.Database.ListProduct();
+            List<KardexModel> lps = await App.Database.GetAllKardxProduct();
             if (lps != null)
             {
-                foreach (ProductModel tp in lps)
+                foreach (var tp in lps)
                 {
-                    if (tp.EstadoProducto == "Terminado")
+                    if (tp.Cantidad > 0 && tp.ProductModel != null)
                     {
-                        ListPS.Add(tp);
-                    }                  
-
+                        if (tp.ProductModel.EstadoProducto == "Terminado")
+                        {
+                            ListPS.Add(tp);
+                        }
+                    }
                 }
             }
-
         }
-        //Calcula el total de la venta
-        private async void SumarOrden(ProductModel selectedPS)
-        {
-            var res = await Shell.Current.DisplayPromptAsync(selectedPS.NameProduct, "Cuantos desea?", initialValue: "1", maxLength: 2, keyboard: Keyboard.Numeric);
-
-            if (!string.IsNullOrEmpty(res))
+            //Calcula el total de la venta
+            private async void SumarOrden(ProductModel selectedPS)
             {
-                //Cargo orden/detalle de venta
-                OrderModel pedido = new OrderModel
+                var res = await Shell.Current.DisplayPromptAsync(selectedPS.NameProduct, "Cuantos desea?", initialValue: "1", maxLength: 2, keyboard: Keyboard.Numeric);
+
+                if (!string.IsNullOrEmpty(res))
                 {
-                    Date=DateTime.Now,
-                    ValorUnitario = selectedPS.PrecioVentaProduct,
-                    AmountProduct = int.Parse(res),
-                    Valor = selectedPS.PrecioVentaProduct * int.Parse(res)
-                };
+                    //Cargo orden/detalle de venta
+                    OrderModel pedido = new OrderModel
+                    {
+                        Date = DateTime.Now,
+                        ValorUnitario = selectedPS.PrecioVentaProduct,
+                        AmountProduct = int.Parse(res),
+                        Valor = selectedPS.PrecioVentaProduct * int.Parse(res)
+                    };
 
-                //Asigno en el detalle el kardex del producto
-                pedido.KardexModel = selectedPS.Kardices;
+                    //Asigno en el detalle el kardex del producto
+                    pedido.KardexModel = selectedPS.Kardices;
 
-                //Sumo la cuenta
-                Cuenta += selectedPS.PrecioVentaProduct * int.Parse(res);
+                    //Sumo la cuenta
+                    Cuenta += selectedPS.PrecioVentaProduct * int.Parse(res);
 
-                //Añado a la lista el pedido/detallede venta
-                Order.Add(pedido);
-                ListProductStock();
+                    //Añado a la lista el pedido/detallede venta
+                    Order.Add(pedido);
+                    ListProductStock();
+                }
             }
-        }
-        //Limpia la orden
-        private void ClearOrder()
-        {
-            Cuenta = 0.00;
-            EntryDesc = 0;
-            Order.Clear();
-            ClientexC = string.Empty;
-            WayPay = string.Empty;
-            EsPedido = false;
-        } 
-        #endregion
+            //Limpia la orden
+            private void ClearOrder()
+            {
+                Cuenta = 0.00;
+                EntryDesc = 0;
+                Order.Clear();
+                ClientexC = string.Empty;
+                WayPay = string.Empty;
+                EsPedido = false;
+            }
+            #endregion
+        
     }
 }

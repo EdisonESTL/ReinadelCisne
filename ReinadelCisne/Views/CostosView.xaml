@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:vm="clr-namespace:ReinadelCisne.ViewModels"
              x:Class="ReinadelCisne.Views.CostosView"
-             Title="Costo de Producción">
+             Title="Costo de Elaboración">
     <ContentPage.BindingContext>
         <vm:CostosIndirectosVM/>
     </ContentPage.BindingContext>
@@ -11,139 +11,156 @@
         <BackButtonBehavior Command="{Binding BackCommand}"/>
     </Shell.BackButtonBehavior>
     <ContentPage.Content>
-        <StackLayout Margin="3"
+        <ScrollView>
+            <StackLayout Margin="3"
                      VerticalOptions="CenterAndExpand">
-            <Grid x:Name="Cabecera"
-                ColumnDefinitions="2*,*">
-                <StackLayout x:Name="TitulosProducto"
-                             Grid.Column="0">
-                    <Label Style="{StaticResource LabelTittles1}">
-                        <Label.FormattedText>
-                            <FormattedString>
-                                <Span Text="Nombre producto: &#10;"
+                <Grid x:Name="Cabecera"
+                ColumnDefinitions="*,*"
+                  RowDefinitions="Auto"
+                  Padding="10">
+                    <StackLayout x:Name="TitulosProducto"
+                             Grid.Column="0"
+                             Grid.Row="0">
+                        <Label Style="{StaticResource LabelTittles1}">
+                            <Label.FormattedText>
+                                <FormattedString>
+                                    <Span Text="Nombre producto: &#10;"
                                       FontAttributes="None"/>
-                                <Span Text="{Binding NameProd}"
+                                    <Span Text="{Binding NameProd}"
                                   CharacterSpacing="1"
                                   FontSize="22"
                                       FontAttributes="Bold"/>
-                            </FormattedString>
-                        </Label.FormattedText>
-                    </Label>
-                    <Label Style="{StaticResource LabelTittles1}"
+                                </FormattedString>
+                            </Label.FormattedText>
+                        </Label>
+                        <Label Style="{StaticResource LabelTittles1}"
                            >
+                            <Label.FormattedText>
+                                <FormattedString>
+                                    <Span Text="# Unidades:    "/>
+                                    <Span Text="{Binding CantProd}"
+                                  CharacterSpacing="1"
+                                  FontSize="22"
+                                      FontAttributes="Bold"/>
+                                </FormattedString>
+                            </Label.FormattedText>
+                        </Label>
+                    </StackLayout>
+                    <Label Grid.Column="1"
+                       Grid.Row="0"
+                       HorizontalTextAlignment="Center"
+                       VerticalTextAlignment="Center"
+                       Style="{StaticResource LabelTittles1}">
                         <Label.FormattedText>
                             <FormattedString>
-                                <Span Text="# Unidades:    "/>
-                                <Span Text="{Binding CantProd}"
-                                  CharacterSpacing="1"
-                                  FontSize="22"
-                                      FontAttributes="Bold"/>
-                            </FormattedString>
-                        </Label.FormattedText>
-                    </Label>
-                </StackLayout>
-                <Label Grid.Column="1"
-                       HorizontalTextAlignment="Center"
-                       Style="{StaticResource LabelTittles1}">
-                    <Label.FormattedText>
-                        <FormattedString>
-                            <Span Text="Precio fabricación: &#10;"
+                                <Span Text="Precio por unidad:&#10;"
                                   TextColor="Black"
                                   FontSize="16"/>
-                            <Span Text="{Binding PrecioProduct, StringFormat=\{0:C\}}"
+                                <Span Text="{Binding PrecioProduct, StringFormat=\{0:C\}}"
                                   TextColor="Black"
                                   FontSize="22"
                                   FontAttributes="Bold"/>
-                        </FormattedString>
-                    </Label.FormattedText>
-                </Label>
-            </Grid>
-            
-            <Grid x:Name="Tiempo"
-                ColumnDefinitions="*,*,*">
-                <Label Text="Tiempo estimado &#10; de fabricación"
+                            </FormattedString>
+                        </Label.FormattedText>
+                    </Label>
+                </Grid>
+
+                <Grid x:Name="Tiempo"
+                ColumnDefinitions="*, *"
+                  RowDefinitions="Auto, Auto"
+                      Padding="20,0,20,0"
+                  >
+                    <Label Text="Tiempo estimado de elaboración"
                        Grid.Column="0"
-                       Style="{StaticResource LabelTittlesColLectionView}"/>
-                <Picker x:Name="grupos"
+                       Grid.Row="0"
+                       Grid.ColumnSpan="2"
+                       Style="{StaticResource LabelTittlesColLectionView}"
+                       HorizontalTextAlignment="Center"/>
+                    <Picker x:Name="grupos"
                         Title="Tiempo"
                         BackgroundColor="White"                    
                         SelectedItem="{Binding TiempoProduccion}"
-                        Grid.Column="1">
-                    <Picker.ItemsSource>
-                        <x:Array Type="{x:Type x:String}">
-                            <x:String>Hora</x:String>
-                            <x:String>Día</x:String>
-                            <x:String>Mes</x:String>
-                            <x:String>Año</x:String>
-                        </x:Array>
-                    </Picker.ItemsSource>
-                </Picker>
-                <Entry Placeholder="Cantidad" 
+                        Grid.Row="1"
+                        Grid.Column="0"
+                            Margin="0,0,15,0">
+                        <Picker.ItemsSource>
+                            <x:Array Type="{x:Type x:String}">
+                                <x:String>Hora</x:String>
+                                <x:String>Día</x:String>
+                                <x:String>Mes</x:String>
+                                <x:String>Año</x:String>
+                            </x:Array>
+                        </Picker.ItemsSource>
+                    </Picker>
+                    <Entry Placeholder="Cantidad" 
                     Style="{StaticResource Entry1}"
-                       Grid.Column="2"
-                       Text="{Binding CantTiempoProduccion}"/>
-            </Grid>
-            <Grid x:Name="AreaResultados"
+                       Grid.Row="1"
+                       Grid.Column="1"
+                       Text="{Binding CantTiempoProduccion}"
+                           Margin="15,0,0,0"
+                       />
+                </Grid>
+                <Grid x:Name="AreaResultados"
                   RowDefinitions="Auto, Auto"
                   BackgroundColor="Linen"
                   Margin="20"
                   Padding="20"
-                  RowSpacing="30">                
-                <Label Grid.Row="0"                       
+                  RowSpacing="30">
+                    <Label Grid.Row="0"                       
                        Grid.Column="0"
                        Style="{StaticResource LabelTittlesColLectionView}">
-                    <Label.FormattedText>
-                        <FormattedString>
-                            <Span Text="Materia prima directa &#10;"/>
-                            <Span Text="{Binding TotalRM, StringFormat=\{0:c\}}"
+                        <Label.FormattedText>
+                            <FormattedString>
+                                <Span Text="Materia prima directa &#10;"/>
+                                <Span Text="{Binding TotalRM, StringFormat=\{0:c\}}"
                                   FontSize="22"/>
-                        </FormattedString>
-                    </Label.FormattedText>
-                </Label>
+                            </FormattedString>
+                        </Label.FormattedText>
+                    </Label>
 
-                <Label Grid.Row="0"                       
+                    <Label Grid.Row="0"                       
                        Grid.Column="1"
                        Style="{StaticResource LabelTittlesColLectionView}">
-                    <Label.FormattedText>
-                        <FormattedString>
-                            <Span Text="Mano de obra directa &#10;"/>
-                            <Span Text="{Binding TotalWF, StringFormat=\{0:c\}}"
+                        <Label.FormattedText>
+                            <FormattedString>
+                                <Span Text="Mano de obra directa &#10;"/>
+                                <Span Text="{Binding TotalWF, StringFormat=\{0:c\}}"
                                   FontSize="22"/>
-                        </FormattedString>
-                    </Label.FormattedText>
-                </Label>
-                <Label Grid.Row="1"                       
+                            </FormattedString>
+                        </Label.FormattedText>
+                    </Label>
+                    <Label Grid.Row="1"                       
                        Grid.Column="0"
                        Style="{StaticResource LabelTittlesColLectionView}">
-                    <Label.FormattedText>
-                        <FormattedString>
-                            <Span Text="Costos indirectos de fabricación &#10;"/>
-                            <Span Text="{Binding TotalCI, StringFormat=\{0:c\}}"
+                        <Label.FormattedText>
+                            <FormattedString>
+                                <Span Text="Costos indirectos de fabricación &#10;"/>
+                                <Span Text="{Binding TotalCI, StringFormat=\{0:c\}}"
                                   FontSize="22"/>
-                        </FormattedString>
-                    </Label.FormattedText>
-                </Label>
-                <Label Grid.Row="1"                       
+                            </FormattedString>
+                        </Label.FormattedText>
+                    </Label>
+                    <Label Grid.Row="1"                       
                        Grid.Column="1"
                        Style="{StaticResource LabelTittlesColLectionView}">
-                    <Label.FormattedText>
-                        <FormattedString>
-                            <Span Text="Maquinaria &#10;"/>
-                            <Span Text="{Binding TotalMaquinaria, StringFormat=\{0:c\}}"
+                        <Label.FormattedText>
+                            <FormattedString>
+                                <Span Text="Maquinaria &#10;"/>
+                                <Span Text="{Binding TotalMaquinaria, StringFormat=\{0:c\}}"
                                   FontSize="22"/>
-                        </FormattedString>
-                    </Label.FormattedText>
-                </Label>                
-            </Grid>
-            
-            <Grid x:Name="AreaButtons" 
+                            </FormattedString>
+                        </Label.FormattedText>
+                    </Label>
+                </Grid>
+
+                <Grid x:Name="AreaButtons" 
                 RowDefinitions="Auto, Auto"
                   ColumnDefinitions="*,*"
                   RowSpacing="17"
                   Padding="7,15,7,15"
                   BackgroundColor="LightGray"
                   >
-                <Button Text="Materia Prima"
+                    <Button Text="Materia Prima"
                         Grid.Row="0"
                         Grid.Column="0"
                         ImageSource="rawmaterial.png"
@@ -158,7 +175,7 @@
                         CommandParameter="VerMT"
                         BackgroundColor="LightSkyBlue"
                         TextColor="Black"/>
-                <Button Text="Mano de Obra"
+                    <Button Text="Mano de Obra"
                         ImageSource="manoobra.png"
                         ContentLayout="left,0"
                         Style="{StaticResource Button2}"
@@ -171,7 +188,7 @@
                         CommandParameter="VerWF"
                         BackgroundColor="LightGreen"
                         TextColor="Black"/>
-                <Button Text="Costos Indirectos"
+                    <Button Text="Costos Indirectos"
                         ImageSource="costind.png"
                         ContentLayout="left,0"
                         Style="{StaticResource Button2}"
@@ -186,7 +203,7 @@
                         Padding="0"
                         BackgroundColor="LightYellow"
                         TextColor="Black"/>
-                <Button Text="Maquinaria"
+                    <Button Text="Maquinaria"
                         ImageSource="ActivoFijoM.png"
                         ContentLayout="left,9"
                         Style="{StaticResource Button2}"
@@ -201,21 +218,22 @@
                         Margin="0"
                         BackgroundColor="LightSalmon"
                         TextColor="Black"/>
-            </Grid>
-            <StackLayout Orientation="Horizontal"
+                </Grid>
+                <StackLayout Orientation="Horizontal"
                          HorizontalOptions="Center"
                          Margin="0,15,0,15"
                          Spacing="30">
-                <Button Text="Cancelar"
+                    <Button Text="Cancelar"
                             Style="{StaticResource ButtonCancel}"
                             Command="{Binding PushCommand}"
                             CommandParameter="Cancel"/>
-                <Button Text="Guardar"
+                    <Button Text="Guardar"
                             Style="{StaticResource Button1}"
                             TextColor="White"
                             Command="{Binding PushCommand}"
                             CommandParameter="GuardarTodo"/>
+                </StackLayout>
             </StackLayout>
-        </StackLayout>
+        </ScrollView>
     </ContentPage.Content>
 </ContentPage>

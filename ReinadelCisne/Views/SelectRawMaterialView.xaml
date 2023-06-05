@@ -13,8 +13,8 @@
     <ContentPage.Content>
         <StackLayout Padding="10">
             <Frame x:Name="Cuadrobusqueda" IsVisible="true"
-                Style="{StaticResource Frame1}">                
-                <Grid ColumnDefinitions="*, *"
+                   BackgroundColor="LightGray">                
+                <Grid ColumnDefinitions="*, Auto"
                   RowDefinitions="Auto, Auto, Auto, Auto, Auto, Auto"
                       RowSpacing="11">                    
                     <Label x:Name="TituloSeleccionarRM" 
@@ -50,11 +50,11 @@
                             SelectedItem="{Binding RawMaterialSelected}"
                             TextColor="Black"
                     />
-                    
+
                     <ImageButton Source="buscar.png"
-                                 BackgroundColor="Chocolate"
+                                 BackgroundColor="White"
                                  BorderColor="Black"
-                                 BorderWidth="3"
+                                 BorderWidth="2"
                                  CornerRadius="35"
                                  Grid.Column="1"
                                  Grid.Row="0"
@@ -106,13 +106,11 @@
                             <Entry Text="{Binding CantUsarMaterial}" 
                             Style="{StaticResource Entry1}"/>
                         </StackLayout>
-                        <ImageButton Source="arbol.png"                             
-                             BackgroundColor="DarkRed"
+                        <ImageButton Source="plus.png"  
                              CornerRadius="35"
                              Command="{Binding PushCommand}"
                              CommandParameter="nuevo"
                              Aspect="AspectFill"
-                                     Padding="16"
                                  BorderColor="White"
                                  BorderWidth="1"
                                      WidthRequest="70"

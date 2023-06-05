@@ -52,7 +52,7 @@ namespace ReinadelCisne.ViewModels
             switch (textbtn)
             {
                 case "productos":
-                    Shell.Current.GoToAsync("//Rini/Productos"); break;                    
+                    Shell.Current.GoToAsync("//Rini/Productos?Regreso=true"); break;                    
                 case "productosProceso":
                     Shell.Current.GoToAsync("//Rini/RProductosEnProceso"); break;
                 case "ventas":
@@ -88,12 +88,14 @@ namespace ReinadelCisne.ViewModels
 
         private async void YintuNuevo()
         {
+            //Shell.Current.GoToAsync("//Rini/Productos/NewStock");
+            
             string action = await Shell.Current.DisplayActionSheet("Nuevo", "Cancelar", null, "Producto", "Pedido", "Materia prima", "Mano de obra", "Costo indirecto");
 
             switch (action)
             {
                 case "Producto":
-                    await Shell.Current.GoToAsync("//Rini/Productos/NewStock");
+                    await Shell.Current.GoToAsync($"//Rini/Productos/NewStock?IdObjetoconPrecio=0");
                     break;
                 case "Pedido":
                     await Shell.Current.GoToAsync("//Rini/RVentanilla");
@@ -102,7 +104,7 @@ namespace ReinadelCisne.ViewModels
                     await Shell.Current.GoToAsync("//Rini/RMateriaPrima/NewMP");
                     break;
                 case "Mano de obra":
-                    await Shell.Current.GoToAsync("//Rini/ManoObra");
+                    await Shell.Current.GoToAsync($"//Rini/ManoObra/NewManoObra?modificarRM=0");
                     break;
                 case "Costo indirecto":
                     await Shell.Current.GoToAsync("//Rini/OtherCost");

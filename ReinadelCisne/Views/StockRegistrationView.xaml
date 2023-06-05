@@ -106,9 +106,9 @@
                          VerticalOptions="CenterAndExpand"
                          HorizontalOptions="CenterAndExpand">
                 <CollectionView x:Name="ListStock"
-                                ItemsSource="{Binding ListPS, Mode=TwoWay}" 
+                                ItemsSource="{Binding ListProductTerminados}"
                                 SelectionMode="Single"
-                                SelectionChangedCommand="{Binding SelectedCommnad}"
+                                SelectionChangedCommand="{Binding SelectedCommand}"
                                 SelectionChangedCommandParameter="{Binding SelectedItem, Source={x:Reference ListStock}}">
                     <CollectionView.ItemsLayout>
                         <LinearItemsLayout Orientation="Vertical" ItemSpacing="7"/>
@@ -141,10 +141,10 @@
                                                Grid.RowSpan="2"
                                                Grid.Column="0"
                                                Aspect="AspectFit"/>
-                                        <Label Grid.Column="1" Text="{Binding NameProduct}" Style="{StaticResource LabelValorsTittles}"
+                                        <Label Grid.Column="1" Text="{Binding ProductModel.NameProduct}" Style="{StaticResource LabelValorsTittles}"
                                                Grid.Row="0"
                                                VerticalOptions="Center"/>
-                                        <Label Grid.Column="2" Text="{Binding PrecioVentaProduct, StringFormat=\{0:c\}}" Style="{StaticResource LabelTittles1}"
+                                        <Label Grid.Column="2" Text="{Binding ProductModel.PrecioVentaProduct, StringFormat=\{0:c\}}" Style="{StaticResource LabelTittles1}"
                                                Grid.Row="0"
                                                Grid.RowSpan="2"
                                                VerticalOptions="Center"
@@ -156,7 +156,7 @@
                                             <Label.FormattedText>
                                                 <FormattedString>
                                                     <Span Text="Cant. disponible:&#10; "/>
-                                                    <Span Text="{Binding AmountProduct}"
+                                                    <Span Text="{Binding Cantidad}"
                                                           FontSize="19"/>
                                                 </FormattedString>
                                             </Label.FormattedText>

@@ -221,12 +221,12 @@ namespace ReinadelCisne.ViewModels
             DepAnual = assetsModel.ValorUnit * 0.3333;
             DepMes = Math.Round(DepAnual, 2) / 12;
             DepDia = Math.Round(DepAnual, 2) / 360;
-            DepHora = Math.Round(DepDia, 2) / 24;
+            DepHora = Math.Round(DepDia, 3) / 24;
 
             switch (TypeContrato)
             {
                 case "Horas":
-                    return (Math.Round(DepHora, 2) * cantUso);
+                    return (Math.Round(DepHora, 3) * cantUso);
                 case "Dias":
                     return (Math.Round(DepDia, 2) * cantUso);
                 case "Meses":
@@ -244,12 +244,12 @@ namespace ReinadelCisne.ViewModels
             DepAnual = assetsModel.ValorUnit * 0.20;
             DepMes = Math.Round(DepAnual, 2) / 12;
             DepDia = Math.Round(DepAnual, 2) / 360;
-            DepHora = Math.Round(DepDia, 2) / 24;
+            DepHora = Math.Round(DepDia, 3) / 24;
 
             switch (TypeContrato)
             {
                 case "Horas":
-                    return (Math.Round(DepHora, 2) * cantUso);
+                    return (Math.Round(DepHora, 3) * cantUso);
                 case "Dias":
                     return (Math.Round(DepDia, 2) * cantUso);
                 case "Meses":
@@ -267,7 +267,7 @@ namespace ReinadelCisne.ViewModels
             DepAnual = assetsModel.ValorUnit * 0.10;
             DepMes = Math.Round(DepAnual, 2) / 12;
             DepDia = Math.Round(DepAnual, 2) / 360;
-            DepHora = Math.Round(depDia, 2) / 24;
+            DepHora = Math.Round(depDia, 3) / 24;
 
             switch (TypeContrato)
             {
@@ -276,7 +276,7 @@ namespace ReinadelCisne.ViewModels
                 case "Dias":
                     return (Math.Round(DepDia, 2) * cantUso);
                 case "Meses":
-                    return (Math.Round(DepMes, 2) * cantUso);
+                    return (Math.Round(DepMes, 3) * cantUso);
                 default:
                     return 0;
             }
