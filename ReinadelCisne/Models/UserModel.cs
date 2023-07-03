@@ -40,12 +40,12 @@ namespace ReinadelCisne.Models
         [Column("TypeUser")]
         public string TypeUser { get; set; }
 
-        [Column("Photo")]
+        /*[Column("Photo")]
         public Image Image { get; set; }
 
         public UserModel()
         {
             Image = new Image();
-        }
+        }*/
     }
 }

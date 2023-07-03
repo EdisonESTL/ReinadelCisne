@@ -49,8 +49,36 @@ namespace ReinadelCisne.Services
             _database.CreateTableAsync<ListFAxProductModel>();
             _database.CreateTableAsync<OrderProduccionModel>();
             _database.CreateTableAsync<SaldosKardexProductModel>();
+            _database.CreateTableAsync<UserPhotosModel>();
+            _database.CreateTableAsync<ImagesAppModel>();
         }
-                        
+        //Procesos guardar fotos
+        public Task<int> SaveImageApp(ImagesAppModel images)
+        {
+            if (images.Id != 0)
+            {
+                return _database.UpdateAsync(images);
+            }
+            else
+            {
+                return _database.InsertAsync(images);
+            }
+        }
+        public Task<int> SaveImage(UserPhotosModel Image)
+        {
+            if(Image.Id != 0)
+            {
+                return _database.UpdateAsync(Image);
+            }
+            else
+            {
+                return _database.InsertAsync(Image);
+            }
+        }
+        public Task<UserPhotosModel> GetImageUser(UserModel user)
+        {
+            return _database.Table<UserPhotosModel>().FirstOrDefaultAsync(u => u.IdForeign == user.Id && u.StringForeign == "UserModel");
+        }
         //Proceso Usuario
         public Task<UserModel> GetUser()
         {
@@ -58,7 +86,16 @@ namespace ReinadelCisne.Services
         }
         public Task<int> SaveUser(UserModel user)
         {
-            return _database.InsertAsync(user);
+            if(user.Id != 0)
+            {
+                return _database.UpdateAsync(user);
+
+            }
+            else
+            {
+                return _database.InsertAsync(user);
+
+            }
         }
         public bool ValidarUsuario(string ci, string contrasenia)
         {

@@ -23,5 +23,10 @@ namespace ReinadelCisne.Models
         {
             Image = new Image();
         }
+
+        [Column("IdForeign")]
+        public int IdForeign { get; set; }
+        [Column("SringForeign")]
+        public string StringForeign { get; set; }
     }
 }

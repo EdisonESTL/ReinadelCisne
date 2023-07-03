@@ -38,13 +38,35 @@ namespace ReinadelCisne.ViewModels
             }
         }
 
+        private UserModel _userRegister;
+        public UserModel UserRegister
+        {
+            get => _userRegister;
+            set
+            {
+                if (_userRegister != value)
+                {
+                    _userRegister = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
         public ICommand PushCommand { get; set; }
 
         public YintuVM()
         {
             PushCommand = new Command<string>((textbtn) => Direcc(textbtn));
-            NameOwner = UserModel.NameUser;
-            NameNegocio = UserModel.NegocioUser;
+            
+            ChargeUser();
+            //NameOwner = UserModel.NameUser;
+            //NameNegocio = UserModel.NegocioUser;
+        }
+
+        public void ChargeUser()
+        {
+            var user = App.Database.GetUser();
+            UserRegister = user.Result;
         }
 
         private void Direcc(string textbtn)

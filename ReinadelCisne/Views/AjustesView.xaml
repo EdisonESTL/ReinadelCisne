@@ -17,8 +17,8 @@
                    WidthRequest="100"
                    HeightRequest="100"
                    HorizontalOptions="Center"
-                       BackgroundColor="Transparent"                       
-                       Padding="0">
+                   BackgroundColor="Transparent"                       
+                   Padding="0">
                     <Image x:Name="image"
                            Aspect="Fill"
                    Source="{Binding Image.Source}"/>
@@ -28,7 +28,7 @@
                         TextColor="DarkGreen"
                     HorizontalOptions="Center"
                         Command="{Binding PhotoUpdate}"/>
-                <CollectionView ItemsSource="{Binding Fotos}">
+                <CollectionView ItemsSource="{Binding Fotos}" IsVisible="False">
                     <CollectionView.ItemTemplate>
                         <DataTemplate>
                             <ViewCell>
@@ -49,7 +49,7 @@
                        BackgroundColor="White"
                        Margin="0,0,0,5"
                        FontSize="Small"
-                       Text="{Binding NameNegocio}"
+                       Text="{Binding UserRegister.NegocioUser}"
                        ClearButtonVisibility="WhileEditing"/>
                         <!--<Label Text="Cédula:" Grid.Row="0"
                            FontSize="16"
@@ -70,7 +70,7 @@
                            BackgroundColor="White"
                            Margin="0,0,0,5"
                            FontSize="Small"
-                           Text="{Binding NameUser}"
+                           Text="{Binding UserRegister.NameUser}"
                            ClearButtonVisibility="WhileEditing"/>
 
                         <Label Text="Correo electrónico:" 
@@ -80,7 +80,7 @@
                            BackgroundColor="White"
                            Margin="0,0,0,5"
                            FontSize="Small"
-                           Text="{Binding MailUser}"
+                           Text="{Binding UserRegister.MailUser}"
                            ClearButtonVisibility="WhileEditing"
                            Keyboard="Email"/>
                         <!--
@@ -103,7 +103,7 @@
                            BackgroundColor="White"
                            Margin="0,0,0,5"
                            FontSize="Small"
-                           Text="{Binding PasswordUser}"
+                           Text="{Binding NewPassword}"
                            ClearButtonVisibility="WhileEditing"
                            IsPassword="True"/>
 
@@ -178,7 +178,7 @@
                         <Button Text="Guardar"
                         BackgroundColor="Transparent"
                         TextColor="Black"
-                        Command="{Binding RegisterCommand}"
+                        Command="{Binding Update}"
                         />
                     </Frame>
 

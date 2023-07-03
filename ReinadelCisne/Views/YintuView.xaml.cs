@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ReinadelCisne.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -15,6 +16,15 @@ namespace ReinadelCisne.Views
         public YintuView()
         {
             InitializeComponent();
+        }
+        protected override void OnAppearing()
+        {
+            base.OnAppearing();
+
+            if (BindingContext is YintuVM viewModel)
+            {
+                viewModel.ChargeUser(); // Llamar al método Init() en el ViewModel
+            }
         }
     }
 }

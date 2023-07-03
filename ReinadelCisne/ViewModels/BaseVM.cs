@@ -5,6 +5,9 @@ using System.Runtime.CompilerServices;
 using Xamarin.Forms;
 using ReinadelCisne.Models;
 using System.Windows.Input;
+using SkiaSharp;
+using SkiaSharp.Views.Forms;
+using System.Threading.Tasks;
 
 namespace ReinadelCisne.ViewModels
 {
@@ -99,6 +102,7 @@ namespace ReinadelCisne.ViewModels
             var f = App.Database.GetUser();
             UserModel = f.Result;
             //NameNegocio = UserModel.NegocioUser;
+            Console.WriteLine("llegue");
         }
         /* private bool _isRefreshing = false;
 public bool IsRefreshing
@@ -118,5 +122,10 @@ public ICommand RefreshCommand => new Command(() =>
 
     IsRefreshing = false;
 });*/
+        //Convertir Imagens a byte[ ]
+        /*public async Task<byte[]> ImageSourceToByteArray(ImageSource imageSource)
+        {
+            byte[] bytesIamge = new byte[imageSource.]
+        }*/
     }
 }

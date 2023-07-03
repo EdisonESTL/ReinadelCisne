@@ -36,13 +36,13 @@
                       Margin="10,10,10,10"
                       Padding="0">
                     <Image Grid.Row="0" Grid.Column="0" Grid.RowSpan="2"
-                           Source="Virgen_del_Cisne.png"
+                           Source="{Binding user}"
                                Aspect="AspectFit"/>
-                    <Label Text="{Binding NameNegocio}" Grid.Row="0"
+                    <Label Text="{Binding UserRegister.NegocioUser}" Grid.Row="0"
                            Grid.Column="1" FontAttributes="Bold"
                            TextColor="Black" FontSize="20"
                            HorizontalTextAlignment="Center"/>
-                    <Label Text="{Binding NameOwner}" Grid.Row="1" Grid.Column="1"
+                    <Label Text="{Binding UserRegister.NameUser}" Grid.Row="1" Grid.Column="1"
                            TextColor="Black" FontSize="15"
                            VerticalOptions="Center"/>
                 </Grid>
