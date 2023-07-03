@@ -97,7 +97,7 @@ namespace ReinadelCisne.ViewModels
             imageUser.Image.Source = ImageSource.FromStream(() => stream);
             imageUser.Name = "Image" + num;
             num++;
-            Image = imageUser.Image;  
+            Image = imageUser.Image;
             TranformImageByte(stremresp);
 
         });
@@ -109,8 +109,6 @@ namespace ReinadelCisne.ViewModels
                 await imageSource.CopyToAsync(memoryStream);
                 bytes = memoryStream.ToArray();
 
-                // Ahora tienes el arreglo de bytes (byte[]) de la imagen
-                // Puedes utilizarlo según tus necesidades
             }
         }
 
