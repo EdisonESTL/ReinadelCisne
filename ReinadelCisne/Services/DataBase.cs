@@ -75,10 +75,10 @@ namespace ReinadelCisne.Services
                 return _database.InsertAsync(Image);
             }
         }
-        public Task<UserPhotosModel> GetImageUser(UserModel user)
+        /*public Task<UserPhotosModel> GetImageUser(UserModel user)
         {
-            return _database.Table<UserPhotosModel>().FirstOrDefaultAsync(u => u.IdForeign == user.Id && u.StringForeign == "UserModel");
-        }
+            return _database.Table<UserPhotosModel>().FirstOrDefaultAsync(u => u.Name = user.NameUser);
+        }*/
         //Proceso Usuario
         public Task<UserModel> GetUser()
         {

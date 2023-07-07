@@ -30,6 +30,8 @@ namespace ReinadelCisne.Droid
             Window.SetStatusBarColor(Android.Graphics.Color.Argb(255, 0, 0, 0));
             Window.SetStatusBarColor(Android.Graphics.Color.ParseColor("#6CBD8D"));
 
+            /*base.OnCreate(bundle);
+            Xamarin.Essentials.Platform.Init(this, bundle);*/
             //DependencyService.Register<ITextToSpeechService, TextToSpeechServices>();
         }
         

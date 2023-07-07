@@ -15,6 +15,8 @@ namespace ReinadelCisne.Models
         public Image Image { get; set; }
 
         public string Name { get; set; }
+
+        public byte[] ByteImage { get; set; }
         public UserPhotosModel()
         {
             Image = new Image();

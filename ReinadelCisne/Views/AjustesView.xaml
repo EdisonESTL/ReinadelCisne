@@ -21,13 +21,13 @@
                    Padding="0">
                     <Image x:Name="image"
                            Aspect="Fill"
-                   Source="{Binding Image.Source}"/>
+                   Source="{Binding ImageU.Source}"/>
                 </Frame>
                 <Button Text="Actualizar foto de perfil"
                     Style="{StaticResource Button2}"
                         TextColor="DarkGreen"
                     HorizontalOptions="Center"
-                        Command="{Binding PhotoUpdate}"/>
+                        Command="{Binding SelectPhoto}"/>
                 <CollectionView ItemsSource="{Binding Fotos}" IsVisible="False">
                     <CollectionView.ItemTemplate>
                         <DataTemplate>
