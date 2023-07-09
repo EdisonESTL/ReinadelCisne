@@ -64,21 +64,10 @@ namespace ReinadelCisne.Services
                 return _database.InsertAsync(images);
             }
         }
-        public Task<int> SaveImage(UserPhotosModel Image)
+        public Task<ImagesAppModel> GetImageUser(UserModel user)
         {
-            if(Image.Id != 0)
-            {
-                return _database.UpdateAsync(Image);
-            }
-            else
-            {
-                return _database.InsertAsync(Image);
-            }
+            return _database.Table<ImagesAppModel>().Where(u => u.NameForeing == "UserModel" && u.IdForeing == user.Id).OrderByDescending(u => u.Id).FirstOrDefaultAsync();
         }
-        /*public Task<UserPhotosModel> GetImageUser(UserModel user)
-        {
-            return _database.Table<UserPhotosModel>().FirstOrDefaultAsync(u => u.Name = user.NameUser);
-        }*/
         //Proceso Usuario
         public Task<UserModel> GetUser()
         {

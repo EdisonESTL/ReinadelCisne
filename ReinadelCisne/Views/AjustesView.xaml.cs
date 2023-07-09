@@ -5,7 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
+using ReinadelCisne.ViewModels;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -30,6 +30,16 @@ namespace ReinadelCisne.Views
 
             (sender as Button).IsEnabled = true;
         }
+
+        /*protected override void OnAppearing()
+        {
+            base.OnAppearing();
+
+            if (BindingContext is AjustesVM viewModel)
+            {
+                viewModel.ChargeUser(); // Llamar al método Init() en el ViewModel
+            }
+        }*/
 
     }
 }

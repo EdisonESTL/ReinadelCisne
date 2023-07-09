@@ -11,11 +11,25 @@ using System.Text;
 using System.Web;
 using System.Windows.Input;
 using Xamarin.Forms;
+using System.IO;
 
 namespace ReinadelCisne.ViewModels
 {
     public class YintuVM : BaseVM
     {
+        private Image _imageU;
+        public Image ImageU
+        {
+            get => _imageU;
+            set
+            {
+                if (_imageU != value)
+                {
+                    _imageU = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
         private string _nameNegocio;
         public string NameNegocio
         {
@@ -67,6 +81,25 @@ namespace ReinadelCisne.ViewModels
         {
             var user = App.Database.GetUser();
             UserRegister = user.Result;
+
+            var imageUser = App.Database.GetImageUser(UserRegister).Result;
+
+            ImageU = new Image();
+
+            try
+            {
+
+                MemoryStream stream = new MemoryStream(imageUser.Image);
+                ImageU.Source = ImageSource.FromStream(() =>
+                {
+                    return new MemoryStream(imageUser.Image);
+                });
+                Console.WriteLine("debo carga la imagen");
+            }
+            catch(Exception exe)
+            {
+                Console.WriteLine(exe.Message);
+            }
         }
 
         private void Direcc(string textbtn)

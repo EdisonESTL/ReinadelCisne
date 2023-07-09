@@ -36,7 +36,7 @@
                       Margin="10,10,10,10"
                       Padding="0">
                     <Image Grid.Row="0" Grid.Column="0" Grid.RowSpan="2"
-                           Source="{Binding user}"
+                           Source="{Binding ImageU.Source}"
                                Aspect="AspectFit"/>
                     <Label Text="{Binding UserRegister.NegocioUser}" Grid.Row="0"
                            Grid.Column="1" FontAttributes="Bold"

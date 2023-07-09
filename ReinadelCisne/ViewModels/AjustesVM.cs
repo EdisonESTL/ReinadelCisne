@@ -96,90 +96,17 @@ namespace ReinadelCisne.ViewModels
            {
                Title = "selecciona una foto"
            });
-            var getPhotoStream = await photo.OpenReadAsync();
-            ImageU.Source = ImageSource.FromStream(() => getPhotoStream);
-            ImageU = ImageU;
-            await LoadPhotoAsynx(photo);
 
+           if(photo != null)
+            {
+                var getPhotoStream = await photo.OpenReadAsync();
+                ImageU.Source = ImageSource.FromStream(() => getPhotoStream);
+
+                var transformPhoto = await photo.OpenReadAsync();
+                TranformImageByte(transformPhoto);
+            }
         });
-
-        byte[] BytesImageUSer = new byte[10];
-        async Task LoadPhotoAsynx(FileResult photo)
-        {
-            // canceled
-            if (photo == null)
-            {
-                ImageU.Source = null;
-            }
-            // save the file into local storage
-            var newFile = Path.Combine(FileSystem.CacheDirectory, photo.FileName);
-            using (var stream = await photo.OpenReadAsync())
-            using (var newStream = File.OpenWrite(newFile))
-            {
-                await stream.CopyToAsync(newStream);
-                using (MemoryStream memoryStream = new MemoryStream())
-                {
-                    await stream.CopyToAsync(memoryStream);
-                    byte[] imageBytes = memoryStream.ToArray();
-                    //funciona
-                    //Sacar de la funcion imageBytes para poder guardar
-                }
-            }
-                
-            //ImageU = newFile;
-        }
-
-        public ICommand PhotoUpdate => new Command(async () =>
-        {
-            Stream stream = await DependencyService.Get<IPhotoPickerService>().GetImageStreamAsync();
-
-            if(stream != null)
-            {
-                var imageUser = new UserPhotosModel();
-                imageUser.Image.Source = ImageSource.FromStream(() => stream);
-                imageUser.Name = "Image" + num;
-                num++;
-                ImageUser = imageUser;
-                using (StreamReader writer = new StreamReader(stream))
-                {
-                    using (MemoryStream memoryStream = new MemoryStream())
-                    {
-                        await stream.CopyToAsync(memoryStream);
-                        byte[] imageBytes = memoryStream.ToArray();
-                        ImageUser.ByteImage = imageBytes;
-                    }
-                }
-                
-            }
-
-            /*
-            using (StreamReader writer = new StreamReader(stream))
-            {
-                using (MemoryStream memoryStream = new MemoryStream())
-                {
-                    await stream.CopyToAsync(memoryStream);
-                    byte[] imageBytes = memoryStream.ToArray();
-                    ImageUser.ByteImage = imageBytes;
-                }
-            }*/
-
-            //Image = imageUser.Image;
-
-            /*Image image = new Image();
-            using (StreamWriter writer = new StreamWriter(stream))
-{
-                using (MemoryStream memoryStream = new MemoryStream())
-                {
-                    await stream.CopyToAsync(memoryStream);
-                    byte[] imageBytes = memoryStream.ToArray();
-                    imageApp.Image = imageBytes;
-                    image.Source = ImageSource.FromStream(() => memoryStream);
-                }
-
-            }*/
-
-        });
-        public byte[] bytes;
+        private byte[] bytes;
         private async void TranformImageByte(Stream imageSource)
         {
             using (MemoryStream memoryStream = new MemoryStream())
@@ -191,74 +118,61 @@ namespace ReinadelCisne.ViewModels
 
         public ICommand Update => new Command(() =>
         {
-            /*await Shell.Current.DisplayAlert("si aca",
-                        "Usuario actualziado",
-                        "Ok1");*/
             UpdateUser();
         });
-        /*public ICommand PhotoUpdate2 => new Command(async () =>
-        {
-            var mediaPicker = DependencyService.Get<IMediaPicker>();
-            var file = await mediaPicker.SelectPhotoAsync();
-            Image = ImageSource.FromFile(file.Path);
-        });*/
-        //public Stream stream;
-        public AjustesVM()
+        
+        public AjustesVM() 
         {
             ImageU = new Image();
 
             ChargeUser();
         }
 
-        private void ChargeUser()
+        public void ChargeUser()
         {
-            var user = App.Database.GetUser();
-            UserRegister = user.Result;
+            UserRegister = App.Database.GetUser().Result;
+            var imageUser = App.Database.GetImageUser(UserRegister).Result;
+
+            //ImageU = new Image();
+
             try
             {
+                
+                MemoryStream stream = new MemoryStream(imageUser.Image);
+                //stream.Write(imageUser.Image, 0, imageUser.Image.Length);
+                ImageU.Source = ImageSource.FromStream(() =>
+                {
+                    return new MemoryStream(imageUser.Image);
+                });
                 Console.WriteLine("debo carga la imagen");
-                /*var imageUser = App.Database.GetImageUser(user.Result);
-                ImageUser = imageUser.Result;*/
             }
             catch(Exception exe)
             {
                 Console.WriteLine(exe.Message);
             }
         }
-        /*public async byte[] imageToByteArray(Image image)
-        {
-            using (MemoryStream ms = new MemoryStream())
-            {
-                var stream = new MemoryStream();
-                var imageSource = (StreamImageSource)image.Source;
-
-                using (Stream imageStream = await imageSource.Stream(System.Threading.CancellationToken.None))
-                {
-                    await imageStream.CopyToAsync(ms);
-                    imageBytes = ms.ToArray();
-                }
-            }
-        }*/
+        
         private async void UpdateUser()
         {
             if (change)
             {
-                //Guardo registro
                 var ss = await App.Database.SaveUser(UserRegister);
-                //Conseguir foto
-                //var streamImage  = await DependencyService.Get<IPhotoPickerService>().GetImageStreamAsync();
-                //Guardo foto
+
+                var newImage = new ImagesAppModel();
+                newImage.IdForeing = UserRegister.Id;
+                newImage.NameForeing = "UserModel";
+                newImage.Image = bytes;
+                /*
                 imageApp.IdForeing = UserRegister.Id;
                 imageApp.NameForeing = "UserModel";
-
-                
-
-                await App.Database.SaveImageApp(imageApp);
+                imageApp.Image = bytes;
+                */
+                var aux = await App.Database.SaveImageApp(newImage);
                 await Shell.Current.DisplayAlert("Exito",
                         "Usuario actualizado",
                         "Ok1");
-                var use2r = App.Database.GetUser();
-                var UserRegister2 = use2r.Result;
+                ChargeUser();
+
             }
             if (!string.IsNullOrEmpty(NewPassword))
             {
@@ -267,32 +181,19 @@ namespace ReinadelCisne.ViewModels
                 await Shell.Current.DisplayAlert("Exito",
                         "Usuario actualziado",
                         "Ok2");
+                ChargeUser();
+
             }
-            if(!string.IsNullOrEmpty(NewPin))
+            if (!string.IsNullOrEmpty(NewPin))
             {
                 UserRegister.PinUser = NewPin;
                 await App.Database.SaveUser(UserRegister);
                 await Shell.Current.DisplayAlert("Exito",
                         "Usuario actualziado",
                         "Ok3");
+                ChargeUser();
+
             }
-
-            /*
-             */
-
-            /*using (MemoryStream ms = new MemoryStream())
-            {
-                var stream = new MemoryStream();
-                var imageSource = (StreamImageSource)Image.Source;
-
-                using (Stream imageStream = await imageSource.Stream(System.Threading.CancellationToken.None))
-                {
-                    await imageStream.CopyToAsync(ms);
-                    imageApp.Image = ms.ToArray();
-                }
-            }
-            */
-            //imageApp.Image = ImageSource.FromStream(() => new MemoryStream())
         }
 
 
