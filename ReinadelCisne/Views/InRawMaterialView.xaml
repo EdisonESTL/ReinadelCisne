@@ -15,35 +15,53 @@
     <ContentPage.Content>
         <ScrollView VerticalOptions="CenterAndExpand">
             <Grid RowDefinitions="Auto, Auto, Auto, Auto, Auto, Auto, Auto, Auto, Auto, Auto, Auto, Auto, Auto"
-              Margin="7">
-                <Label Text="Nuevo Material" 
-                   Grid.RowSpan="2" 
-                   VerticalOptions="Center"
-                   Style="{StaticResource LabelTittlesColLectionView}"
-                   FontSize="Subtitle"/>
-                <Label Text="Nuevo grupo" Grid.Row="1" Grid.Column="1" 
+              Margin="7"
+                  >
+                <StackLayout Grid.Row="0" Grid.Column="0">
+                    <Frame CornerRadius="100"
+                   WidthRequest="100"
+                   HeightRequest="100"
+                   HorizontalOptions="Center"
+                   BackgroundColor="Transparent"                       
+                   Padding="0">
+                        <Image x:Name="image"
+                           Aspect="AspectFill"
+                   Source="{Binding ImageRM.Source}"/>
+                    </Frame>
+                    <Button Text="Imagen"
+                    Style="{StaticResource Button1}"
+                        TextColor="Black"
+                            CornerRadius="30"
+                    HorizontalOptions="Center"
+                        Command="{Binding SelectPhoto}"/>
+                </StackLayout>
+                <StackLayout Grid.Row="0"
+                        Grid.Column="1"
+                             VerticalOptions="CenterAndExpand">
+                    <Label Text="Grupo" 
+                   Grid.Row="2" 
+                   Style="{StaticResource LabelCuentaVenta}"/>
+                    <Picker x:Name="grupos"
+                        BackgroundColor="White"
+                        
+                        ItemsSource="{Binding GroupsRMs}"
+                        ItemDisplayBinding="{Binding Description}"
+                        SelectedItem="{Binding GroupRM}"
+                        VerticalOptions="CenterAndExpand">
+                    </Picker>
+                    <Label Text="Nuevo grupo" 
                        TextDecorations="Underline"
                        HorizontalOptions="Center"
-                       VerticalOptions="Center"
                        BackgroundColor="Transparent"
                        FontSize="14" 
                        TextColor="{StaticResource MdPrimaryVariantColor}" 
                        FontAttributes="Bold,Italic"
                        Margin="3">
-                    <Label.GestureRecognizers>
-                        <TapGestureRecognizer Command="{Binding NewGrCommand}"/>
-                    </Label.GestureRecognizers>
-                </Label>
-                <Picker x:Name="grupos"
-                        Title="Grupo"
-                        BackgroundColor="White"
-                        Grid.Row="0"
-                        Grid.Column="1"
-                        ItemsSource="{Binding GroupsRMs}"
-                        ItemDisplayBinding="{Binding Description}"
-                        SelectedItem="{Binding GroupRM}">
-                </Picker>
-                
+                        <Label.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding NewGrCommand}"/>
+                        </Label.GestureRecognizers>
+                    </Label>
+                </StackLayout>  
 
                 <Label Text="Nombre" 
                    Grid.Row="2" 

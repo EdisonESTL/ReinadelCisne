@@ -5,9 +5,10 @@ using System.Text;
 using System.Web;
 using System.Windows.Input;
 using ReinadelCisne.Models;
+using ReinadelCisne.Auxiliars;
 using Xamarin.Forms;
 using System.Linq;
-
+using System.IO;
 
 namespace ReinadelCisne.ViewModels
 {
@@ -84,6 +85,7 @@ namespace ReinadelCisne.ViewModels
         public ObservableCollection<RawMaterialModel> RawMaterials { get; set; } = new ObservableCollection<RawMaterialModel>();
         public ObservableCollection<GroupsRMModel> GroupsRMs { get; set; } = new ObservableCollection<GroupsRMModel>();
         public ObservableCollection<KardexRMModel> KardexRMs { get; set; } = new ObservableCollection<KardexRMModel>();
+        public ObservableCollection<VistListRawMaterials> ListRawMaterialsComplete { get; set; } = new ObservableCollection<VistListRawMaterials>();
 
  
         public ICommand PerformSearch => new Command(() =>
@@ -113,8 +115,10 @@ namespace ReinadelCisne.ViewModels
 
         public ICommand EliminarCommand => new Command((obj) =>
         {
-            RawMaterialModel raw = obj as RawMaterialModel;
-            App.Database.DeleteRawMaterial(raw);
+            //RawMaterialModel raw = obj as RawMaterialModel;
+            VistListRawMaterials raw = obj as VistListRawMaterials;
+            
+            App.Database.DeleteRawMaterial(raw.Raw);
             ListRMs();
             Shell.Current.DisplayAlert("Elemento Eliminado", "Materia prima eliminada correctamente", "ok");
             
@@ -186,6 +190,7 @@ namespace ReinadelCisne.ViewModels
         private void ListRMs()
         {
             GroupSelected = null;
+            ListRawMaterialsComplete.Clear();
             RawMaterials.Clear();
 
             var resp = App.Database.GetKardexsRM().Result;
@@ -195,7 +200,7 @@ namespace ReinadelCisne.ViewModels
                 foreach (var obj in resp)
                 {
                     if (obj.SaldosRMs.Count > 0 && obj.RawMaterialModell != null) 
-                    {
+                    {                        
                         var respi = App.Database.GetSaldosxKardex(obj).Result;
                         var ord = respi.OrderByDescending(x => x.Date).FirstOrDefault();
 
@@ -203,8 +208,25 @@ namespace ReinadelCisne.ViewModels
                         rrm.CantidadRM = ord.Cantidad;
                         rrm.CostoRM = (float)ord.ValorUnitario;
                         rrm.TotalCost = (float)ord.SaldoTotal;
-
                         RawMaterials.Add(rrm);
+
+                        Image image = new Image();
+                        var ImageRM = App.Database.GetImageRawMaterial(rrm).Result;
+                        if(ImageRM.Image != null)
+                        {
+                            MemoryStream stream = new MemoryStream(ImageRM.Image);
+                            image.Source = ImageSource.FromStream(() =>
+                            {
+                                return new MemoryStream(ImageRM.Image);
+                            });
+                        }                        
+                        
+                        VistListRawMaterials vistList = new VistListRawMaterials
+                        {
+                            Raw = rrm,
+                            Image = image
+                        };
+                        ListRawMaterialsComplete.Add(vistList);
                     }                    
                 }
 

@@ -22,28 +22,6 @@ namespace ReinadelCisne
 
         void RegisterRoutes()
         {
-
-            #region Rutas Borrador
-            //Routes.Add("NewStock", typeof(StockView));
-            Routes.Add("GoRegistration", typeof(GoRegistrationView));
-            Routes.Add("GoRegistrationDetail", typeof(GoRegistrationDetail));
-            Routes.Add("GoRegistrationXcobrar", typeof(GoRegistartionXCobrarView));
-            Routes.Add("InRawMaterial", typeof(InRawMaterialView));
-            Routes.Add("InListRawMaterial", typeof(ListRawMaterialView));
-            Routes.Add("InWorkForce", typeof(InWorkForce));
-            Routes.Add("InOtherCost", typeof(InOtherCost));
-            //Routes.Add("NewShopping", typeof(ShoppingView));
-            
-            Routes.Add("ActivityRegistration", typeof(ActivityRegistrationView));
-            Routes.Add("RegisterUser", typeof(RegisterView));
-            Routes.Add("//Rini/RIngresoEgreso", typeof(IngresoEgresoView));
-            Routes.Add("//Rini/RReportes", typeof(ReportesView));
-            Routes.Add("//Rini/RAjustes", typeof(AjustesView));
-            Routes.Add("//Rini/RServicios/NewService", typeof(ServicesNewView));
-            Routes.Add("//Rini/RVentas", typeof(GoRegistrationView)); 
-            #endregion
-            /**************************************/
-
             //Rutas de Productos terminados
             Routes.Add("//Rini/Productos", typeof(StockRegistrationView));
             Routes.Add("//Rini/Productos/Ventas", typeof(GoRegistrationView));

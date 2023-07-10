@@ -29,23 +29,29 @@
                           Offset="1.1" />
                     </LinearGradientBrush>
                 </Frame.Background>
-                
-                <Grid RowSpacing="0" RowDefinitions="3*, *"
-                      ColumnDefinitions="*,*" 
-                      HorizontalOptions="CenterAndExpand"
-                      Margin="10,10,10,10"
-                      Padding="0">
-                    <Image Grid.Row="0" Grid.Column="0" Grid.RowSpan="2"
-                           Source="{Binding ImageU.Source}"
-                               Aspect="AspectFit"/>
-                    <Label Text="{Binding UserRegister.NegocioUser}" Grid.Row="0"
-                           Grid.Column="1" FontAttributes="Bold"
+
+                <StackLayout Orientation="Horizontal" Spacing="30" HorizontalOptions="CenterAndExpand">                    
+                    <StackLayout VerticalOptions="CenterAndExpand">
+                        <Label Text="{Binding UserRegister.NegocioUser}" Grid.Row="0"
+                           Grid.Column="0" FontAttributes="Bold"
                            TextColor="Black" FontSize="20"
                            HorizontalTextAlignment="Center"/>
-                    <Label Text="{Binding UserRegister.NameUser}" Grid.Row="1" Grid.Column="1"
+                        <Label Text="{Binding UserRegister.NameUser}" Grid.Row="1" Grid.Column="0"
                            TextColor="Black" FontSize="15"
                            VerticalOptions="Center"/>
-                </Grid>
+                    </StackLayout>
+                    <Frame CornerRadius="100"
+                       WidthRequest="100"
+                       HeightRequest="100"
+                       HorizontalOptions="Center"
+                       BackgroundColor="Transparent"                       
+                       Padding="0"
+                               Grid.Row="0" Grid.Column="1" Grid.RowSpan="2">
+                        <Image 
+                               Source="{Binding ImageU.Source}"
+                                   Aspect="AspectFill"/>
+                    </Frame>
+                </StackLayout>
             </Frame>
             
             <ScrollView Padding="0">

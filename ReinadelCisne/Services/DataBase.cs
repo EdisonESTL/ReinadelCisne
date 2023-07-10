@@ -68,6 +68,10 @@ namespace ReinadelCisne.Services
         {
             return _database.Table<ImagesAppModel>().Where(u => u.NameForeing == "UserModel" && u.IdForeing == user.Id).OrderByDescending(u => u.Id).FirstOrDefaultAsync();
         }
+        public Task<ImagesAppModel> GetImageRawMaterial(RawMaterialModel rawMaterial)
+        {
+            return _database.Table<ImagesAppModel>().Where(u => u.NameForeing == "RawMaterialModel" && u.IdForeing == rawMaterial.Id).OrderByDescending(u => u.Id).FirstOrDefaultAsync();
+        }
         //Proceso Usuario
         public Task<UserModel> GetUser()
         {

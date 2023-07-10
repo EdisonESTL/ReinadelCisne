@@ -31,6 +31,7 @@ namespace ReinadelCisne.ViewModels
             }
         }
         bool change = false;
+        bool changePassword = false;
 
         private UserModel _userRegister;
         public UserModel UserRegister
@@ -42,7 +43,7 @@ namespace ReinadelCisne.ViewModels
                 {
                     _userRegister = value;
                     OnPropertyChanged();
-                    change = true;
+                    changePassword = true;
                 }
             }
         }
@@ -60,6 +61,21 @@ namespace ReinadelCisne.ViewModels
             }
         }
 
+        private string _newPasswordClone;
+        public string NewPasswordClone
+        {
+            get => _newPasswordClone;
+            set
+            {
+                if (_newPasswordClone != value)
+                {
+                    _newPasswordClone = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+
         private string _newPin;
         public string NewPin
         {
@@ -73,23 +89,6 @@ namespace ReinadelCisne.ViewModels
                 }
             }
         }
-
-        private UserPhotosModel _imageUser;
-        public UserPhotosModel ImageUser
-        {
-            get => _imageUser;
-            set
-            {
-                if(_imageUser != value)
-                {
-                    _imageUser = value;
-                    OnPropertyChanged();
-                }
-            }
-        }
-        public ObservableCollection<UserPhotosModel> Fotos { get; set; } = new ObservableCollection<UserPhotosModel>();
-        private int num = 1;
-        ImagesAppModel imageApp = new ImagesAppModel();
         public ICommand SelectPhoto => new Command(async () =>
         {
            var photo = await MediaPicker.PickPhotoAsync(new MediaPickerOptions
@@ -133,13 +132,10 @@ namespace ReinadelCisne.ViewModels
             UserRegister = App.Database.GetUser().Result;
             var imageUser = App.Database.GetImageUser(UserRegister).Result;
 
-            //ImageU = new Image();
-
             try
             {
                 
                 MemoryStream stream = new MemoryStream(imageUser.Image);
-                //stream.Write(imageUser.Image, 0, imageUser.Image.Length);
                 ImageU.Source = ImageSource.FromStream(() =>
                 {
                     return new MemoryStream(imageUser.Image);
@@ -156,44 +152,52 @@ namespace ReinadelCisne.ViewModels
         {
             if (change)
             {
+                
                 var ss = await App.Database.SaveUser(UserRegister);
 
                 var newImage = new ImagesAppModel();
                 newImage.IdForeing = UserRegister.Id;
                 newImage.NameForeing = "UserModel";
                 newImage.Image = bytes;
-                /*
-                imageApp.IdForeing = UserRegister.Id;
-                imageApp.NameForeing = "UserModel";
-                imageApp.Image = bytes;
-                */
+
                 var aux = await App.Database.SaveImageApp(newImage);
-                await Shell.Current.DisplayAlert("Exito",
-                        "Usuario actualizado",
-                        "Ok1");
-                ChargeUser();
+
+                if(change != changePassword)
+                {
+                    await Shell.Current.DisplayAlert("Exito",
+                                            "Usuario actualizado",
+                                            "Ok");
+                }
+                
 
             }
-            if (!string.IsNullOrEmpty(NewPassword))
+            if (!string.IsNullOrEmpty(NewPassword) && changePassword)
             {
-                UserRegister.PasswordUser = NewPassword;
-                await App.Database.SaveUser(UserRegister);
-                await Shell.Current.DisplayAlert("Exito",
-                        "Usuario actualziado",
-                        "Ok2");
-                ChargeUser();
-
+                if(NewPassword == NewPasswordClone)
+                {
+                    UserRegister.PasswordUser = NewPassword;
+                    await App.Database.SaveUser(UserRegister);
+                    await Shell.Current.DisplayAlert("Éxito",
+                            "Usuario actualizado",
+                            "Ok");
+                }
+                else
+                {
+                    await Shell.Current.DisplayAlert("Error",
+                            "Las contraseñas no coinciden",
+                            "Ok");
+                }
             }
+
             if (!string.IsNullOrEmpty(NewPin))
             {
                 UserRegister.PinUser = NewPin;
                 await App.Database.SaveUser(UserRegister);
                 await Shell.Current.DisplayAlert("Exito",
-                        "Usuario actualziado",
-                        "Ok3");
-                ChargeUser();
-
+                        "Usuario actualizado",
+                        "Ok");
             }
+            ChargeUser();
         }
 
 

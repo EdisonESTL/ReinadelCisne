@@ -4,33 +4,10 @@
              xmlns:VM="clr-namespace:ReinadelCisne.ViewModels" 
              xmlns:controls="clr-namespace:ReinadelCisne.Services"
              x:Class="ReinadelCisne.Views.StockRegistrationView"
-             Title="Productos/Servicios">
+             Title="Productos terminados">
     <ContentPage.BindingContext>
         <VM:StockRegistrationVM/>
-    </ContentPage.BindingContext>    
-    <Shell.SearchHandler>
-        <controls:SearchProductos Placeholder="Buscar un producto" BackgroundColor="White"
-                                  TextColor="Black"
-                                  ShowsResults="True"
-                                  DisplayMemberName="NameProduct">
-            <controls:SearchProductos.ItemTemplate>
-                <DataTemplate>
-                    <Grid Padding="10"
-                          ColumnDefinitions="0.15*,0.85*"
-                          BackgroundColor="White">
-                        <Image Source="product.png"
-                               HeightRequest="40"
-                               WidthRequest="40" />
-                        <Label Grid.Column="1"
-                               Text="{Binding NameProduct}"
-                               Style="{StaticResource LabelTittles1}"
-                               FontAttributes="Bold"
-                               VerticalOptions="Center" />
-                    </Grid>
-                </DataTemplate>
-            </controls:SearchProductos.ItemTemplate>
-        </controls:SearchProductos>
-    </Shell.SearchHandler>
+    </ContentPage.BindingContext> 
     <Shell.BackButtonBehavior>
         <BackButtonBehavior
         Command="{Binding GoBackCommand}"

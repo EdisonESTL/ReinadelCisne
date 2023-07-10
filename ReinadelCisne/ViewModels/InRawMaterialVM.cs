@@ -7,11 +7,27 @@ using Xamarin.Forms;
 using ReinadelCisne.Models;
 using System.Collections.ObjectModel;
 using System.Web;
+using Xamarin.Essentials;
+using System.IO;
 
 namespace ReinadelCisne.ViewModels
 {
     public class InRawMaterialVM : BaseVM, IQueryAttributable
     {
+        private Image _imageRM;
+        public Image ImageRM
+        {
+            get => _imageRM;
+            set
+            {
+                if (_imageRM != value)
+                {
+                    _imageRM = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
         private string _id = "0";
         public string Id
         {
@@ -155,6 +171,32 @@ namespace ReinadelCisne.ViewModels
         public ObservableCollection<GroupsRMModel> GroupsRMs { get; set; } = new ObservableCollection<GroupsRMModel>();
         public ObservableCollection<UMedidasRMModel> UMedidasRMs { get; set; } = new ObservableCollection<UMedidasRMModel>();
 
+        public ICommand SelectPhoto => new Command(async () =>
+        {
+            var photo = await MediaPicker.PickPhotoAsync(new MediaPickerOptions
+            {
+                Title = "selecciona una foto"
+            });
+
+            if (photo != null)
+            {
+                ImageRM = new Image();
+                var getPhotoStream = await photo.OpenReadAsync();
+                ImageRM.Source = ImageSource.FromStream(() => getPhotoStream);
+
+                var transformPhoto = await photo.OpenReadAsync();
+                TranformImageByte(transformPhoto);
+            }
+        });
+        private byte[] bytes;
+        private async void TranformImageByte(Stream imageSource)
+        {
+            using (MemoryStream memoryStream = new MemoryStream())
+            {
+                await imageSource.CopyToAsync(memoryStream);
+                bytes = memoryStream.ToArray();
+            }
+        }
         public ICommand goback => new Command(() =>
                {
                    Shell.Current.GoToAsync("//Rini/RMateriaPrima");
@@ -264,12 +306,14 @@ namespace ReinadelCisne.ViewModels
 
                     App.Database.UpdateRealtionRawMat(rawMateriall);
 
-                    /*UMedidaRM.rawMaterialModels = new List<RawMaterialModel>() { rawMateriall };
-                    App.Database.UpdateRelationUMedidasRM(UMedidaRM);
-
-                    GroupRM.rawMaterialModels = new List<RawMaterialModel>() { rawMateriall };
-                    App.Database.UpdateRelationGroupRM(GroupRM);*/
-
+                    if (bytes.Length > 0)
+                    {
+                        ImagesAppModel images = new ImagesAppModel();
+                        images.IdForeing = rawMateriall.Id;
+                        images.NameForeing = "RawMaterialModel";
+                        images.Image = bytes;
+                        App.Database.SaveImageApp(images);
+                    }
                     ActualizarSaldos(rawMateriall);
                 }
                 else
@@ -290,11 +334,11 @@ namespace ReinadelCisne.ViewModels
 
                     App.Database.UpdateRealtionRawMat(rawMateriall);
 
-                   /* UMedidaRM.rawMaterialModels = new List<RawMaterialModel>() { rawMateriall };
-                    App.Database.UpdateRelationUMedidasRM(UMedidaRM);
-
-                    GroupRM.rawMaterialModels = new List<RawMaterialModel>() { rawMateriall };
-                    App.Database.UpdateRelationGroupRM(GroupRM);*/
+                    ImagesAppModel images = new ImagesAppModel();
+                    images.IdForeing = rawMateriall.Id;
+                    images.NameForeing = "RawMaterialModel";
+                    images.Image = bytes;
+                    App.Database.SaveImageApp(images);
 
                     CrearKardexRM(rawMateriall);
                 }                

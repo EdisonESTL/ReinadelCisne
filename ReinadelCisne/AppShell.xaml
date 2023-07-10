@@ -100,7 +100,7 @@
                 Icon="arbol.png">
         <ShellContent Title="Inicio" ContentTemplate="{DataTemplate views:YintuView}" Route="RYintuRoom"/>        
     </FlyoutItem>
-    
+    <!--
     <FlyoutItem Title="Productos" Route="Rprod"
                 Icon="inventory.png">
         <ShellContent Title="Productos"
@@ -132,8 +132,8 @@
                 Route="Rvent">
         <ShellContent ContentTemplate="{DataTemplate views:GoView}" Route="RGo"/>
     </FlyoutItem>
-    
-    <FlyoutItem Title="Perfil"
+    -->
+    <FlyoutItem Title="Ajustes de cuenta"
                 Icon="configg.png"
                 Route="Rcon">
         <ShellContent ContentTemplate="{DataTemplate views:AjustesView}" Route="RPerfil"/>
